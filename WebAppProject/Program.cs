@@ -1,3 +1,6 @@
+using DataAccessLibrary.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace WebAppProject
 {
     public class Program
@@ -7,7 +10,17 @@ namespace WebAppProject
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddDbContext<ESContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+            });
+            
+
             builder.Services.AddControllersWithViews();
+
+
+
 
             var app = builder.Build();
 
