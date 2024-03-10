@@ -4,7 +4,14 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public DateTime HireDate { get; set; }
 
+        public int? ManagerId { get; set; }
+        public Instructor? Manager { get; set; }
+
+        public int BranchId { get; set; }
         public Branch Branch { get; set; }
+        public ICollection<Student> Students { get; } = new HashSet<Student>();
+        public ICollection<DepartmentCourse> DepartmentCourses { get; } = new HashSet<DepartmentCourse>();
     }
 }

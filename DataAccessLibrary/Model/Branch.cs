@@ -4,7 +4,9 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        
-        public List<Department> Departments { get; set; }
+        public string Location { get; set; }
+
+        public ICollection<Department> Departments { get; } = new List<Department>();
+        public ICollection<Instructor> Instructors { get; } = new HashSet<Instructor>();
     }
 }

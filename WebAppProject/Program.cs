@@ -15,12 +15,9 @@ namespace WebAppProject
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
+
             
-
             builder.Services.AddControllersWithViews();
-
-
-
 
             var app = builder.Build();
 
