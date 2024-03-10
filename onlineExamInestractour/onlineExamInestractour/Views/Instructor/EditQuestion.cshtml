@@ -1,0 +1,105 @@
+﻿
+
+
+@model onlineExamInestractour.Models.Question
+
+@{
+    ViewData["Title"] = "Edit Question";
+}
+
+<h1>Edit Question</h1>
+
+<form asp-action="EditQuestion" asp-controller="Instructor" method="post">
+    <input type="hidden" asp-for="QuestionId" />
+
+    <div class="form-group">
+        <label asp-for="QuestionText"></label>
+        <input asp-for="QuestionText" class="form-control" />
+        <span asp-validation-for="QuestionText" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Type"></label>
+        <select id="questionType" asp-for="Type" class="form-control">
+            <option value="TrueOrFalse">True/False</option>
+            <option value="MultipleChoice">Multiple Choice</option>
+          
+        </select>
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Difficulty"></label>
+        <input asp-for="Difficulty" class="form-control" />
+        <span asp-validation-for="Difficulty" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Grade"></label>
+        <input asp-for="Grade" class="form-control" />
+        <span asp-validation-for="Grade" class="text-danger"></span>
+    </div>
+
+    <!-- Choices -->
+    <h3>Choices</h3>
+    @foreach (var choice in Model.Choices)
+    {
+        <div class="form-group">
+            <label>Choice Text</label>
+            <input name="choices[@choice.ChoiceId].ChoiceId" type="hidden" value="@choice.ChoiceId" />
+            <input name="choices[@choice.ChoiceId].Body" class="form-control" value="@choice.Body" />
+            <span asp-validation-for="choices[@choice.ChoiceId].Body" class="text-danger"></span>
+            <label>Is Correct?</label>
+            <input name="choices[@choice.ChoiceId].IsCorrect" type="checkbox" @(choice.IsCorrect ? "checked" : "") />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var questionTypeSelect = document.getElementById("questionType");
+            var choicesContainer = document.getElementById("choicesContainer");
+
+            questionTypeSelect.addEventListener("change", function () {
+                var type = this.value;
+                choicesContainer.innerHTML = ''; // Clear existing choices
+
+                if (type === 'TrueFalse') {
+                    // For True/False, add two choices
+                    addChoiceInput('True');
+                    addChoiceInput('False');
+                } else if (type === 'MultipleChoice') {
+                    // For Multiple Choice, add four choices
+                    for (var i = 1; i <= 4; i++) {
+                        addChoiceInput('Choice ' + i);
+                    }
+                }
+            });
+
+            function addChoiceInput(choiceName) {
+                var choiceDiv = document.createElement('div');
+                choiceDiv.classList.add('form-group');
+
+                var choiceLabel = document.createElement('label');
+                choiceLabel.textContent = choiceName;
+
+                var choiceInput = document.createElement('input');
+                choiceInput.type = 'text';
+                choiceInput.name = 'choices[]'; // Use array notation to ensure all choices are submitted
+                choiceInput.classList.add('form-control');
+                choiceInput.placeholder = choiceName;
+                choiceInput.required = true;
+
+                choiceDiv.appendChild(choiceLabel);
+                choiceDiv.appendChild(choiceInput);
+
+                choicesContainer.appendChild(choiceDiv);
+            }
+        });
+    </script>
+
+}
+
+

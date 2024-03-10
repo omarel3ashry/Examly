@@ -1,0 +1,32 @@
+﻿@model List<Course>
+
+<h1>Courses</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Course Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td>@course.CourseName</td>
+               
+               
+                <td>
+                    <a asp-action="Details" asp-route-id="@course.CourseId" class="btn btn-info">Info</a>
+                    <a asp-action="AssignInstructor" asp-route-id="@course.CourseId" class="btn btn-primary">Assign Instructor</a>
+                    <a asp-action="Remove" asp-route-id="@course.CourseId" class="btn btn-danger">Remove</a>
+                    @*  <form asp-action="Remove" asp-route-id="@course.CourseId" method="post" onsubmit="return confirm('Are you sure you want to remove this course?')">
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form> *@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="AddCourse" asp-route-id="Model.DepartementId"  class="btn btn-success">Add Course</a>
