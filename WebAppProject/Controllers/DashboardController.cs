@@ -6,30 +6,30 @@ namespace WebAppProject.Controllers
 {
     public class DashboardController : Controller
     {
-        IEnumerable<Branch> branshes = new List<Branch>()
-        { new Branch {BranchId=1 , Name = "Alex" }, new Branch { BranchId = 2, Name = "Smart" },
-         new Branch {BranchId=3 , Name = "New Capital" }, new Branch {BranchId=4 , Name = "Monofia" }};
+        IEnumerable<FakeBranch> branshes = new List<FakeBranch>()
+        { new FakeBranch {BranchId=1 , Name = "Alex" }, new FakeBranch { BranchId = 2, Name = "Smart" },
+         new FakeBranch {BranchId=3 , Name = "New Capital" }, new FakeBranch {BranchId=4 , Name = "Monofia" }};
 
-        IEnumerable<Instructor> instructors = new List<Instructor>()
+        IEnumerable<FakeInstructor> instructors = new List<FakeInstructor>()
         {
-            new Instructor {InstructorId=1, Name="Mohamed", BranchId = 1},
-            new Instructor {InstructorId=2, Name="Ahmed", BranchId = 1},
-            new Instructor {InstructorId=3, Name="Omar", BranchId = 2},
-            new Instructor {InstructorId=4, Name="Karim", BranchId = 2},
-            new Instructor {InstructorId=5, Name="Nourhan", BranchId = 3},
-            new Instructor {InstructorId=6, Name="Hossam", BranchId = 3},
-            new Instructor {InstructorId=7, Name="Aly", BranchId = 4},
+            new FakeInstructor {InstructorId=1, Name="Mohamed", BranchId = 1},
+            new FakeInstructor {InstructorId=2, Name="Ahmed", BranchId = 1},
+            new FakeInstructor {InstructorId=3, Name="Omar", BranchId = 2},
+            new FakeInstructor {InstructorId=4, Name="Karim", BranchId = 2},
+            new FakeInstructor {InstructorId=5, Name="Nourhan", BranchId = 3},
+            new FakeInstructor {InstructorId=6, Name="Hossam", BranchId = 3},
+            new FakeInstructor {InstructorId=7, Name="Aly", BranchId = 4},
 
         };
 
-        IEnumerable<Department> departments = new List<Department>()
+        IEnumerable<FakeDepartment> departments = new List<FakeDepartment>()
         {
-            new Department {DepartmentId=1 ,Name ="CS", BranchId = 1},
-            new Department {DepartmentId=2 ,Name ="SE", BranchId = 1},
-            new Department {DepartmentId=3 ,Name ="CS", BranchId = 2},
-            new Department {DepartmentId=4 ,Name ="SE", BranchId = 3},
-            new Department {DepartmentId=5 ,Name ="IT", BranchId = 2},
-            new Department {DepartmentId=6 ,Name ="AI", BranchId = 2},
+            new FakeDepartment {DepartmentId=1 ,Name ="CS", BranchId = 1},
+            new FakeDepartment {DepartmentId=2 ,Name ="SE", BranchId = 1},
+            new FakeDepartment {DepartmentId=3 ,Name ="CS", BranchId = 2},
+            new FakeDepartment {DepartmentId=4 ,Name ="SE", BranchId = 3},
+            new FakeDepartment {DepartmentId=5 ,Name ="IT", BranchId = 2},
+            new FakeDepartment {DepartmentId=6 ,Name ="AI", BranchId = 2},
         };
 
         public IActionResult Index()

@@ -130,9 +130,14 @@ namespace DataAccessLibrary.Repository
             return _context.Topics.Where(predicate).FirstOrDefaultAsync();
         }
 
-        List<Topic> IRepository<Topic>.SelectAll(Expression<Func<Topic, bool>> predicate)
+        public List<Topic> SelectAll(Expression<Func<Topic, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _context.Topics.Where(predicate).ToList();
+        }
+
+        public Task<List<Topic>> SelectAllAsync(Expression<Func<Topic, bool>> predicate)
+        {
+            return _context.Topics.Where(predicate).ToListAsync();
         }
     }
 }

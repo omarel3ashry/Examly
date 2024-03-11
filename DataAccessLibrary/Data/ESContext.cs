@@ -8,6 +8,7 @@ namespace DataAccessLibrary.Data
     public class ESContext : DbContext
     {
 
+        public DbSet<User> Users { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Instructor> Instructors { get; set; }

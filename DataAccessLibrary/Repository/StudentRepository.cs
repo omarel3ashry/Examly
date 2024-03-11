@@ -74,6 +74,16 @@ namespace DataAccessLibrary.Repository
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        public Student? GetByUserId(int userId)
+        {
+            return _context.Students.FirstOrDefault(e => e.UserId == userId);
+        }
+
+        public Task<Student?> GetByUserIdAsync(int userId)
+        {
+            return _context.Students.FirstOrDefaultAsync(e => e.UserId == userId);
+        }
+
         public int Add(Student entity)
         {
             _context.Students.Add(entity);
@@ -136,13 +146,55 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Students.Where(predicate).FirstOrDefault();
         }
-        public List<Student> SelectAll(Expression<Func<Student, bool>> predicate)
-        {
-            return _context.Students.Where(predicate).ToList();
-        }
+
         public Task<Student?> SelectAsync(Expression<Func<Student, bool>> predicate)
         {
             return _context.Students.Where(predicate).FirstOrDefaultAsync();
         }
+
+        public List<Student> SelectAll(Expression<Func<Student, bool>> predicate)
+        {
+            return _context.Students.Where(predicate).ToList();
+        }
+
+        public Task<List<Student>> SelectAllAsync(Expression<Func<Student, bool>> predicate)
+        {
+            return _context.Students.Where(predicate).ToListAsync();
+        }
+
+        public List<ExamChoices> GetStudentAnswers(int studentId, int examId)
+        {
+            var student = _context.Students
+                .Include(e => e.StudentAnswers.Where(e => e.ExamId == examId))
+                .ThenInclude(e => e.Choice)
+                .ThenInclude(e => e.Question)
+                .FirstOrDefault(e => e.Id == studentId);
+
+            var questionCorrectChoices = new List<Choice>();
+            var studentChoicesForQuestion = new List<Choice>();
+            var result = new List<ExamChoices>();
+
+            if (student != null)
+            {
+                var listOfChoices = student.StudentAnswers.Select(e => e.Choice);
+                foreach (var choice in listOfChoices)
+                {
+                    if (!result.Select(r => r.Question).Contains(choice.Question))
+                    {
+                        Question question = choice.Question;
+                        questionCorrectChoices = _context.Choices.Where(e => e.QuestionId == question.Id && e.IsCorrect).ToList();
+                        studentChoicesForQuestion = listOfChoices.Where(e => e.QuestionId == question.Id).ToList();
+                        result.Add(new ExamChoices
+                        {
+                            Question = choice.Question,
+                            CorrectChoices = questionCorrectChoices,
+                            StudentChoices = studentChoicesForQuestion
+                        });
+                    }
+                }
+            }
+            return result;
+        }
+
     }
 }

@@ -22,5 +22,6 @@ namespace DataAccessLibrary.Repository
         public T? Select(Expression<Func<T, bool>> predicate);
         public Task<T?> SelectAsync(Expression<Func<T, bool>> predicate);
         public List<T> SelectAll(Expression<Func<T, bool>> predicate);
+        public Task<List<T>> SelectAllAsync(Expression<Func<T, bool>> predicate);
     }
 }

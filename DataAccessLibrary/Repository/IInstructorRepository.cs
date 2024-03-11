@@ -1,10 +1,10 @@
 ﻿using DataAccessLibrary.Model;
-using System.Linq.Expressions;
 
 namespace DataAccessLibrary.Repository
 {
     public interface IInstructorRepository : IRepository<Instructor>
     {
-        
+        public Instructor? GetByUserId(int userId);
+        public Task<Instructor?> GetByUserIdAsync(int userId);
     }
 }

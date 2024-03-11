@@ -142,9 +142,14 @@ namespace DataAccessLibrary.Repository
             return _context.Courses.Where(predicate).FirstOrDefaultAsync();
         }
 
-        List<Course> IRepository<Course>.SelectAll(Expression<Func<Course, bool>> predicate)
+        public List<Course> SelectAll(Expression<Func<Course, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _context.Courses.Where(predicate).ToList();
+        }
+
+        public Task<List<Course>> SelectAllAsync(Expression<Func<Course, bool>> predicate)
+        {
+            return _context.Courses.Where(predicate).ToListAsync();
         }
     }
 }
