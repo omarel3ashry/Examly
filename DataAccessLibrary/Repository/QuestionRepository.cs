@@ -165,5 +165,10 @@ namespace DataAccessLibrary.Repository
             _context.Choices.AddRange(choices);
             return _context.SaveChangesAsync();
         }
+
+        List<Question> IRepository<Question>.SelectAll(Expression<Func<Question, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DataAccessLibrary.Data;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace DataAccessLibrary.Repository
@@ -162,6 +163,11 @@ namespace DataAccessLibrary.Repository
                 return await _context.SaveChangesAsync() == 1;
             }
             return false;
+        }
+
+        public List<Department> SelectAll(Expression<Func<Department, bool>> predicate)
+        {
+            return _context.Departments.Where(predicate).ToList();
         }
     }
 }

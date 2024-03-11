@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using DataAccessLibrary.Model;
+using System.Linq.Expressions;
 
 namespace DataAccessLibrary.Repository
 {
@@ -20,5 +21,6 @@ namespace DataAccessLibrary.Repository
         public Task<bool> DeleteAsync(int id);
         public T? Select(Expression<Func<T, bool>> predicate);
         public Task<T?> SelectAsync(Expression<Func<T, bool>> predicate);
+        public List<T> SelectAll(Expression<Func<T, bool>> predicate);
     }
 }

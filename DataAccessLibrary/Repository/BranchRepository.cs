@@ -133,5 +133,10 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Branches.Where(predicate).FirstOrDefaultAsync();
         }
+
+        List<Branch> IRepository<Branch>.SelectAll(Expression<Func<Branch, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

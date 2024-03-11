@@ -143,5 +143,10 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Exams.Where(predicate).FirstOrDefaultAsync();
         }
+
+        List<Exam> IRepository<Exam>.SelectAll(Expression<Func<Exam, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
