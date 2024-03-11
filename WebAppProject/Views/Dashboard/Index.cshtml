@@ -1,0 +1,214 @@
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    SelectList BranchesItems = new SelectList(Model.Branches, "BranchId", "Name");
+    SelectList InstructorsItems = new SelectList(Model.Instructors, "InstructorId", "Name");
+    SelectList DepartmentsItems = new SelectList(Model.Departments, "DepartmentId", "Name");
+}
+
+<h1>Dashboard</h1>
+<h3>Branch</h3>
+<div class="container row m-1">
+    <div class="form-group col-3">
+        <label class="control-label"> Name </label>
+        <select asp-for="BranchId" class="form-control" asp-items="BranchesItems">
+            <option value="-1">Select Branch</option>
+        </select>
+    </div>
+    <a asp-action="Create" asp-controller="Branch" class="btn btn-info m-2 col-2">Add</a>
+    <a id="BranchDetailsBtn" class="btn btn-primary m-2 col-2">Info</a>
+    <a id="BranchEditBtn" class="btn btn-success m-2 col-2"> Edit</a>
+    <a id="BranchDeleteBtn" class="btn btn-danger m-2 col-2">Delete</a>   
+</div>
+<h3>Instructor</h3>
+<div class="container row m-1">
+    <div class="form-group col-3">
+        <label class="control-label"> Name </label>
+        <select asp-for="InstructorId" class="form-control" asp-items="InstructorsItems">
+            <option value="-1">Select Instructor</option>
+        </select>
+    </div>
+    <a asp-action="Create" asp-controller="Instructor" class="btn btn-info m-2 col-2">Add</a>
+    <a id="InstructorDetailsBtn" class="btn btn-primary m-2 col-2">Info</a>
+    <a id="InstructorEditBtn" class="btn btn-success m-2 col-2"> Edit</a>
+    <a id="InstructorDeleteBtn" class="btn btn-danger m-2 col-2">Delete</a>
+</div>
+<h3>Department</h3>
+<div class="container row m-1">
+    <div class="form-group col-3">
+        <label class="control-label"> Name </label>
+        <select asp-for="DepartmentId" class="form-control" asp-items="DepartmentsItems">
+            <option value="-1">Select Department</option>
+        </select>
+    </div>
+    <a asp-action="Create" asp-controller="Department" class="btn btn-info m-2 col-2">Add</a>
+    <a id="DepartmentDetailsBtn" class="btn btn-primary m-2 col-2">Info</a>
+    <a id="DepartmentEditBtn" class="btn btn-success m-2 col-2"> Edit</a>
+    <a id="DepartmentDeleteBtn" class="btn btn-danger m-2 col-2">Delete</a>
+</div>
+<div class="container row m-5">
+    <a id="ManageManagertBtn" class="btn btn-primary m-auto col-4">Manage Department Manager</a>
+    <a id="ManageStudentsBtn" class="btn btn-primary m-auto col-4">Manage Department Students</a>
+</div>
+
+
+@section Scripts{
+    <script>
+        //Array of Btns Ids
+        const BtnIds = ["DetailsBtn", "EditBtn", "DeleteBtn"]
+        //method to change btn state (disabled or enabled)
+        function setBtnState(targetController, state) {
+            BtnIds.forEach(function (id) {
+                var element = document.getElementById(targetController+id);
+                if (element) {
+                    if (state) {
+                        element.classList.remove("disabled");
+                    }
+                    else{
+                        element.classList.add("disabled");
+                    }  
+                }
+            });
+
+        }
+        //method to update btns urls acording to selected bransh
+        function UpdateUrlState(targetController, targetId)
+                {
+            document.getElementById(targetId).addEventListener('change', function () {
+                var selectedId = this.value;
+                if (selectedId == -1) {
+                    setBtnState(targetController, false);
+                    setManageBtnState(targetId,false);
+                }
+                else{
+                    setBtnState(targetController, true);
+                    setManageBtnState(targetId, true);
+                    document.getElementById(targetController+"DetailsBtn").setAttribute("href", `/${targetController}/Details/${selectedId}`);
+                    document.getElementById(targetController+"EditBtn").setAttribute("href", `/${targetController}/Edit/${selectedId}`);
+                    document.getElementById(targetController+"DeleteBtn").setAttribute("href", `/${targetController}/Delete/${selectedId}`);
+                }              
+            });
+        }
+        //method to empty select list 
+        function EmptySelectList(targetId){
+            var selectElement = document.getElementById(targetId);
+
+            while (selectElement.childNodes.length > 2) {
+                selectElement.removeChild(selectElement.lastChild);
+            }
+        }
+        //methods to append options
+        function appendDepartmentOptions(datalist) {
+            var selectElement = document.getElementById("DepartmentId");
+            EmptySelectList("DepartmentId")
+
+            datalist.forEach(function (Item) {
+                var option = document.createElement("option");
+                option.value = Item.departmentId;
+                option.textContent = Item.name;
+                selectElement.appendChild(option);
+            });
+        };
+        function appendInstructorOptions(datalist) {
+            var selectElement = document.getElementById("InstructorId");
+            EmptySelectList("InstructorId");
+
+            datalist.forEach(function (Item) {
+                var option = document.createElement("option");
+                option.value = Item.instructorId;
+                option.textContent = Item.name;
+                selectElement.appendChild(option);
+            });
+        }
+        //method to update instructor and department select lists acording to selected bransh
+        function UpdateSelectLists () {
+            document.getElementById("BranchId").addEventListener("change", function () {
+                var selectedId = this.value;
+                if (selectedId == -1) {
+                    EmptySelectList("DepartmentId");
+                    EmptySelectList("InstructorId");
+                    setManageBtnState("DepartmentId", false);
+                    setManageBtnState("BranchId", false);
+
+                } else {
+                    $.ajax({
+                        url: "/Dashboard/GetLists?BranchId=" + selectedId,
+                        success: function (data) {
+                            console.log(data);
+                            appendDepartmentOptions(data.departmentList);
+                            appendInstructorOptions(data.instructorList);
+                        },
+                        error: function () {
+                            alert("Error in load result");
+                        }
+                    });
+                }
+            });
+        };
+        //method to change manage btn state (disabled or enabled)
+        function setManageBtnState(targetId, state) {
+            if (targetId == "BranchId") {
+                var element = document.getElementById("ManageManagertBtn");
+                if (element) {
+                    if (state) {
+                        element.classList.remove("disabled");
+                    }
+                    else {
+                        element.classList.add("disabled");
+                    }
+                }
+            }
+            else if (targetId == "DepartmentId") {
+                var element = document.getElementById("ManageStudentsBtn");
+                if (element) {
+                    if (state) {
+                        element.classList.remove("disabled");
+                    }
+                    else {
+                        element.classList.add("disabled");
+                    }
+                }
+
+            };
+
+        }
+        //method to add on click event 
+        function SetManageManagerOnClick() {
+            
+            document.getElementById("ManageManagertBtn").addEventListener('click', function () {
+                let selectedId = document.getElementById("BranchId").value;
+                this.setAttribute("href", `/Manage/DepartmentManager/${selectedId}`);   
+            });
+        };
+        function SetManageStudentOnClick() {
+           
+            document.getElementById("ManageStudentsBtn").addEventListener('click', function () {
+                let selectedId = document.getElementById("DepartmentId").value;
+                this.setAttribute("href", `/Manage/Students/${selectedId}`);
+            });
+        };
+
+        // Call Area
+
+        let Controller;
+        // Branch Area
+        Controller = "Branch";
+        setBtnState(Controller, false);
+        UpdateUrlState(Controller, "BranchId");
+        UpdateSelectLists();
+        // Instructor Area
+        Controller = "Instructor";
+        setBtnState(Controller, false);
+        UpdateUrlState(Controller, "InstructorId");
+        // department Area
+        Controller = "Department";
+        setBtnState(Controller, false);
+        UpdateUrlState(Controller, "DepartmentId");
+        // manage btns Area
+        setManageBtnState("DepartmentId", false);
+        setManageBtnState("BranchId", false);
+        SetManageManagerOnClick();
+        SetManageStudentOnClick();
+    </script>
+}
+
