@@ -1,6 +1,8 @@
 using DataAccessLibrary.Data;
 using DataAccessLibrary.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 
 namespace WebAppProject
 {
@@ -12,6 +14,7 @@ namespace WebAppProject
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
 
             builder.Services.AddDbContext<ESContext>(options =>
             {
@@ -28,6 +31,9 @@ namespace WebAppProject
             builder.Services.AddScoped<IChoiceRepository, ChoiceRepository>();
             builder.Services.AddScoped<IExamRepository, ExamRepository>();
 
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -42,7 +48,7 @@ namespace WebAppProject
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
