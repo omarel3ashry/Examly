@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using WebAppProject.Repository;
 
 namespace WebAppProject.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class ManageController : Controller
     {
         InstructorRepo _instructorRepo = new InstructorRepo();
@@ -13,9 +15,9 @@ namespace WebAppProject.Controllers
         {
             return View();
         }
-        public IActionResult DepartmentManager(int BranchId)
+        public IActionResult DepartmentManager(int id)
         {
-            var model=_instructorRepo.GetAllByBranchId(BranchId);
+            var model=_instructorRepo.GetAllByBranchId(id);
 
             return PartialView(model);
         }
@@ -26,9 +28,9 @@ namespace WebAppProject.Controllers
             _departmentRepo.Update(dept);
             return RedirectToAction("Index");
         }
-        public IActionResult Students(int deptId)
+        public IActionResult Students(int id)
         {
-            var model = _studentRepo.GetAllByDeptId(deptId);
+            var model = _studentRepo.GetAllByDeptId(id);
 
             return PartialView(model);
         }

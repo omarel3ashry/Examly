@@ -5,24 +5,28 @@ namespace WebAppProject.Repository
 {
     public class StudentRepo
     {
-        public List<Student> _students = [
-                new Student() { Id = 3, Name = "hassan" },
-            new Student() { Id = 2, Name = "loay" },
-            new Student() { Id = 5, Name = "madgy" },
-            new Student() { Id = 1, Name = "omar" }
-
-            ];
+        
        
-        public List<Student> GetAllByDeptId(int BranchId)
+        public List<Student> GetAllByDeptId(int deptId)
         {
 
 
-            return _students;
+            return Student.StudentDemo.FindAll(st=>st.DeptId==deptId);
         }
         public Student GetById(int id)
         {
 
-            return _students.Find(st => st.Id == id);
+            return Student.StudentDemo.Find(st => st.Id == id);
+        }
+        public Student GetByUserId(int userId)
+        {
+            return Student.StudentDemo.Find(st=>st.UserId==userId);
+        }
+        public void Add(Student student)
+        {
+            student.Id = Student.StudentDemo.Last().Id + 1;
+            student.User = User.UserDemo.Find(u => u.Id == student.UserId);
+            Student.StudentDemo.Add(student);
         }
         public void Update(Student student)
         {
@@ -36,7 +40,7 @@ namespace WebAppProject.Repository
 
         public void Delete(int stId)
         {
-            _students.Remove(GetById(stId));
+            Student.StudentDemo.Remove(GetById(stId));
         }
 
         public List<ChoiceQuestion> GetAnswers(int stId, int examId)

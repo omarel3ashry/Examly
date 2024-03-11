@@ -6,24 +6,21 @@ namespace WebAppProject.Repository
 
     public class InstructorRepo 
     {
-        List <Instructor> _instructors= [
-                
-            new Instructor() { Id = 65, Name = "Ahmed Karim" },
-            new Instructor() { Id = 52, Name = "Aly Mohamed" },
-            new Instructor() { Id = 65, Name = "Mohamed Samir" },
-            new Instructor() { Id = 52, Name = "Omar fares" }
-
-            ];
-        public List<Instructor> GetAllByBranchId(int BranchId)
+        
+        public List<Instructor> GetAllByBranchId(int branchId)
         {
             
             
-            return _instructors;
+            return Instructor.InstructorDemo.FindAll(ins=>ins.BranchId==branchId);
         }
         public Instructor GetById(int id)
         {
 
-            return _instructors.Find(dept=>dept.Id==id);
+            return Instructor.InstructorDemo.Find(ins=>ins.Id==id);
+        }public Instructor GetByUserId(int userId)
+        {
+
+            return Instructor.InstructorDemo.Find(ins=>ins.UserId==userId);
         }
 
         

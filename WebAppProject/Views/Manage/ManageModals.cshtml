@@ -1,5 +1,5 @@
-﻿<a class="btn btn-secondary" onclick="ManageDept(3)">Department Manager</a>
-<a class="btn btn-info" onclick="ManageStudents(2)" >Manage Students</a>
+﻿<a class="btn btn-secondary" id="ManageDept">Department Manager</a>
+<a class="btn btn-info" id="ManageStudents" >Manage Students</a>
 <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -18,15 +18,15 @@
 </div>
 <script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
 <script src="/lib/jquery/dist/jquery.js"></script>
-<script>
-    function ManageDept(BranchId) {
-        $("#content").load(`Manage/DepartmentManager/${BranchId}`)
-        $("#modal").modal('show');
-        $("#ModalLabel").text("Instructors List")
-    }function ManageStudents(Deptid) {
-        $("#content").load(`Manage/Students/${Deptid}`)
-        $("#modal").modal('show');
-        $("#ModalLabel").text("Students List")
-
-    }
+<script>  
+        $("#ManageDept").click(function () {
+            $("#content").load(`Manage/DepartmentManager/${ 1 }`)// replace by BranchId from select
+            $("#modal").modal('show');
+            $("#ModalLabel").text("Instructors List")
+        })
+        $("#ManageStudents").click(function () {
+            $("#content").load(`Manage/Students/${ 1 }`)// replace by DeptId from select
+            $("#modal").modal('show');
+            $("#ModalLabel").text("Students List")
+        })
 </script>
