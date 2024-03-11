@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace WebAppProject
 {
     public class Program
@@ -8,7 +10,7 @@ namespace WebAppProject
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -23,7 +25,7 @@ namespace WebAppProject
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
