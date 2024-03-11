@@ -21,7 +21,7 @@
     <div class="form-group">
         <label asp-for="Type"></label>
         <select id="questionType" asp-for="Type" class="form-control">
-            <option value="TrueOrFalse">True/False</option>
+            <option value="TrueFalse">TrueFalse</option>
             <option value="MultipleChoice">Multiple Choice</option>
           
         </select>
@@ -48,11 +48,16 @@
             <label>Choice Text</label>
             <input name="choices[@choice.ChoiceId].ChoiceId" type="hidden" value="@choice.ChoiceId" />
             <input name="choices[@choice.ChoiceId].Body" class="form-control" value="@choice.Body" />
-            <span asp-validation-for="choices[@choice.ChoiceId].Body" class="text-danger"></span>
-            <label>Is Correct?</label>
-            <input name="choices[@choice.ChoiceId].IsCorrect" type="checkbox" @(choice.IsCorrect ? "checked" : "") />
+            <span asp-validation-for="Choices[@choice.ChoiceId].Body" class="text-danger"></span>
+            <div class="form-check">
+                <input name="choices[@choice.ChoiceId].IsCorrect" id="isCorrect_@choice.ChoiceId" type="checkbox" class="form-check-input" @(choice.IsCorrect ? "checked" : "") />
+                <label class="form-check-label" for="isCorrect_@choice.ChoiceId">Is Correct?</label>
+            </div>
         </div>
     }
+
+
+
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
@@ -64,10 +69,10 @@
 
             questionTypeSelect.addEventListener("change", function () {
                 var type = this.value;
-                choicesContainer.innerHTML = ''; // Clear existing choices
+                // choicesContainer.innerHTML = ''; 
 
                 if (type === 'TrueFalse') {
-                    // For True/False, add two choices
+                   
                     addChoiceInput('True');
                     addChoiceInput('False');
                 } else if (type === 'MultipleChoice') {
@@ -87,7 +92,7 @@
 
                 var choiceInput = document.createElement('input');
                 choiceInput.type = 'text';
-                choiceInput.name = 'choices[]'; // Use array notation to ensure all choices are submitted
+                choiceInput.name = 'choices[]'; 
                 choiceInput.classList.add('form-control');
                 choiceInput.placeholder = choiceName;
                 choiceInput.required = true;

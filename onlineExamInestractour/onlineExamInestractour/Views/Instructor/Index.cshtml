@@ -22,7 +22,7 @@
                 <td>
                     <a asp-action="Info" asp-controller="Instructor" asp-route-id="@item.CourseId" class="btn btn-dark">Info</a>
                     |<a asp-action="QuestionBank" asp-controller="Instructor" asp-route-id="@item.CourseId" class="btn btn-dark">QuestionBank</a>
-                    |<a asp-action="AddExam" asp-controller="Instructor" class="btn btn-dark">AddExam</a>
+                    |<a asp-action="GenerateExam" asp-controller="Instructor" asp-route-id="@item.CourseId" class="btn btn-dark">AddExam</a>
                     |
 
                 </td>

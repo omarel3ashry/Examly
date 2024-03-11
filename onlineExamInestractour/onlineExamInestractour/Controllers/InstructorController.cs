@@ -3,18 +3,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using onlineExamInestractour.Models;
 using onlineExamInestractour.Repository;
+using onlineExamInestractour.ViewModels;
 
 namespace onlineExamInestractour.Controllers
 {
     public class InstructorController : Controller
     {
         IInstructorRepository instructorRepository;
-        public InstructorController(IInstructorRepository _instructorRepository)
+
+       
+        public InstructorController(IInstructorRepository _instructorRepository )
         {
             instructorRepository = _instructorRepository;
+           
         }
         public IActionResult Index()
         {
+            
             var instructor = instructorRepository.GetInstructors();
 
             if (instructor == null)
@@ -40,8 +45,9 @@ namespace onlineExamInestractour.Controllers
 
             return View(courseInfo);
         }
-        public IActionResult QuestionBank()
+        public IActionResult QuestionBank(int id)
         {
+            ViewBag.CourseId = id;
             var questions = instructorRepository.GetAllQuestions();
 
             if (questions == null)
@@ -52,20 +58,20 @@ namespace onlineExamInestractour.Controllers
             return View(questions);
         }
         [HttpGet]
-        public IActionResult AddQuestion()
+        public IActionResult AddQuestion(int id)
         {
-          
+            ViewBag.CourseId = id;
             return View();
         }
         [HttpPost]
         public IActionResult AddQuestion(int id,Question question, List<string> choices)
         {
-           
+           ViewBag.courseid=id;
             if (ModelState.IsValid)
             {
-                question.CourseId=id;
-                instructorRepository.AddQuestionWithChoices(id,question, choices);
-                return RedirectToAction("QuestionBank", new { id });
+                
+                instructorRepository.AddQuestionWithChoices(question, choices);
+                return RedirectToAction("QuestionBank");
             }
 
             return View(question);
@@ -116,6 +122,7 @@ namespace onlineExamInestractour.Controllers
         //-------------------------------------------------
         public IActionResult mangerindex()
         {
+            ViewBag.DepartementId = 1;
             var courses = instructorRepository.GetCourses();
             return View(courses);
         }
@@ -182,15 +189,48 @@ namespace onlineExamInestractour.Controllers
             if (ModelState.IsValid)
             {
                 instructorRepository.AddCourse(course);
-                return RedirectToAction("managerindex");
+                return RedirectToAction("mangerindex");
             }
             return View(course); 
         }
 
+        public IActionResult DeleteCourse(int id)
+        {
+            instructorRepository.Deletecourse(id);
+            return RedirectToAction("mangerindex");
+        }
 
+        //------------------AddExam------------------
+        [HttpGet]
+        public IActionResult GenerateExam(int courseId)
+        {
+            var course = instructorRepository.GetCourseById(courseId);
+            if (course == null)
+            {
+                return NotFound();
+            }
 
+            // Get questions for the course
+            var questions = instructorRepository.GetQuestionBank(courseId);
 
+            // Separate true/false and multiple choice questions
+            var trueFalseQuestions = questions.Where(q => q.Type == QuestionType.TrueFalse).ToList();
+            var multipleChoiceQuestions = questions.Where(q => q.Type == QuestionType.MultipleChoice).ToList();
 
+            // Shuffle the question
+            var random = new Random();
+            trueFalseQuestions = trueFalseQuestions.OrderBy(q => random.Next()).ToList();
+            multipleChoiceQuestions = multipleChoiceQuestions.OrderBy(q => random.Next()).ToList();
+
+            
+            var viewModel = new ExamViewModel
+            {
+                TrueFalseQuestions = trueFalseQuestions,
+                MultipleChoiceQuestions = multipleChoiceQuestions
+            };
+
+            return View(viewModel);
+        }
 
 
 

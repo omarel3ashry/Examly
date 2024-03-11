@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
+using NuGet.Protocol.Core.Types;
 using onlineExamInestractour.Models;
 using onlineExamInestractour.ViewModels;
 
@@ -15,17 +17,18 @@ namespace onlineExamInestractour.Repository
         Question GetQuestionById(int id);
         ICollection<Choice> GetChoicesForQuestion(int questionId);
         void AddQuestion(Question question);
-        void AddQuestionWithChoices(int id,Question question, List<string> choiceTexts);
+        void AddQuestionWithChoices(Question question, List<string> choiceTexts);
         void Deletequestion(int id);
-         IEnumerable<Question> GetAllQuestions();
+         List<Question> GetAllQuestions();
+        List<Question> GetRandomQuestions(int count);
         QuestionInfo GetQuestionInfo(int QuestionId);
         IEnumerable<Course> GetCourses();
         Course GetCourseById(int Id);
          void SaveChanges();
          Detialsviewmodel GetInfo(int CourseId);
          void AddCourse(Course course);
-
-
+        void Deletecourse(int id);
+      
     }
     public class InstructorRepo : IInstructorRepository
     {
@@ -95,7 +98,7 @@ namespace onlineExamInestractour.Repository
 
             return context.Choices.Where(c => c.QuestionId == questionId).ToList();
         }
-        public IEnumerable<Question> GetAllQuestions()
+        public List<Question> GetAllQuestions()
         {
             return context.Questions.ToList();
         }
@@ -111,9 +114,9 @@ namespace onlineExamInestractour.Repository
             context.Questions.Add(question);
             context.SaveChanges();
         }
-        public void AddQuestionWithChoices(int id,Question question, List<string> choiceTexts)
+        public void AddQuestionWithChoices(Question question, List<string> choiceTexts)
         {
-           question.CourseId = id;
+          // question.CourseId = id;
             var choices = new List<Choice>();
 
             // Create Choice objects from the choiceTexts
@@ -208,12 +211,29 @@ namespace onlineExamInestractour.Repository
 
             }
         }
+        public void Deletecourse(int id)
+        {
+            // Retrieve the question entity from the database
+            var courseToDelete = context.Courses.FirstOrDefault(q => q.CourseId == id);
+
+            if (courseToDelete != null)
+            {
+
+                context.Courses.Remove(courseToDelete);
+                context.SaveChanges();
+
+            }
+        }
         public void AddCourse(Course course)
         {
             context.Courses.Add(course);
             context.SaveChanges();
         }
 
+        public List<Question> GetRandomQuestions(int count)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
     

@@ -19,14 +19,12 @@
                 <td>
                     <a asp-action="Details" asp-route-id="@course.CourseId" class="btn btn-info">Info</a>
                     <a asp-action="AssignInstructor" asp-route-id="@course.CourseId" class="btn btn-primary">Assign Instructor</a>
-                    <a asp-action="Remove" asp-route-id="@course.CourseId" class="btn btn-danger">Remove</a>
-                    @*  <form asp-action="Remove" asp-route-id="@course.CourseId" method="post" onsubmit="return confirm('Are you sure you want to remove this course?')">
-                        <button type="submit" class="btn btn-danger">Remove</button>
-                    </form> *@
+                    <a asp-action="DeleteCourse" onclick="return confirm(' Are you sure ')" asp-route-id="@course.CourseId" class="btn btn-danger">Remove</a>
+                    
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a asp-action="AddCourse" asp-route-id="Model.DepartementId"  class="btn btn-success">Add Course</a>
+<a asp-action="AddCourse" asp-route-id="@ViewBag.DepartementId"  class="btn btn-success">Add Course</a>

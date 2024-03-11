@@ -6,8 +6,8 @@
 
 <h1>Add Question</h1>
 
-<form asp-action="AddQuestion" asp-controller="Instructor" asp-route-id="@Model.CourseId" method="post">
-    <input type="hidden" asp-for="CourseId"  />
+<form asp-action="AddQuestion" asp-controller="Instructor"  method="post">
+    <input type="hidden" asp-for="CourseId" value="@ViewBag.CourseId"  />
     <input type="hidden" asp-for="QuestionId" />
    
     <div class="form-group">
@@ -45,7 +45,7 @@
     </div>
 
 
-    <button  type="submit" asp-route-id="@Model.CourseId" class="btn btn-primary">Add Question</button>
+    <button  type="submit" asp-route-id="@ViewBag.courseid" class="btn btn-primary">Add Question</button>
 </form>
 @section Scripts {
     <script>
