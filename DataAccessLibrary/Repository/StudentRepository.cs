@@ -136,7 +136,10 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Students.Where(predicate).FirstOrDefault();
         }
-
+        public List<Student> SelectAll(Expression<Func<Student, bool>> predicate)
+        {
+            return _context.Students.Where(predicate).ToList();
+        }
         public Task<Student?> SelectAsync(Expression<Func<Student, bool>> predicate)
         {
             return _context.Students.Where(predicate).FirstOrDefaultAsync();

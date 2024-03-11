@@ -13,7 +13,7 @@ namespace WebAppProject.Repository
             
         }
 
-        internal int AddStudent(User user)
+        public int AddStudent(User user)
         {
             user.Id = User.UserDemo.Last().Id + 1;
             user.RoleId = 4;
