@@ -31,10 +31,11 @@ namespace WebAppProject.Controllers
 
         public IActionResult Privacy()
         {
-            Branch branch = _branchRepo.Select(e => e.Id == 2);
-            Department dept = new Department() { Name = "Another New Dept", BranchId = 2 };
-            _deptRepo.Add(dept);
-            return Content($"id={branch.Id} name={branch.Name} location={branch.Location}");
+            //Branch branch = _branchRepo.Select(e => e.Id == 2);
+            //Department dept = new Department() { Name = "Another New Dept", BranchId = 2 };
+            // _deptRepo.Add(dept);
+            //return Content($"id={branch.Id} name={branch.Name} location={branch.Location}");
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

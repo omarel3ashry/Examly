@@ -2,32 +2,37 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
+using System.Drawing;
 using WebAppProject.Repository;
+using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers
 {
     [Authorize(Roles ="Admin")]
     public class ManageController : Controller
     {
-        IInstructorRepository instructorRepository ;
-       
+        private readonly IInstructorRepository instructorRepository;     
         private readonly IDepartmentRepository departmentRepository;
         private readonly IStudentRepository studentRepository;
+        private readonly IBranchRepository branchRepository;
+        StudentRepo _studentrepo = new StudentRepo();
 
-        public ManageController(IInstructorRepository instructorRepository ,IDepartmentRepository departmentRepository,IStudentRepository studentRepository)
+        public ManageController(IInstructorRepository instructorRepository ,IDepartmentRepository departmentRepository,IStudentRepository studentRepository,IBranchRepository branchRepository)
         {
             this.instructorRepository = instructorRepository;
             this.departmentRepository = departmentRepository;
             this.studentRepository = studentRepository;
+            this.branchRepository = branchRepository;
         }
         public IActionResult Index()
         {
-            return View();
+            DashboardViewModel model = new DashboardViewModel() { Branches = branchRepository.GetAll() };
+            return View(model);
         }
         public IActionResult GetLists(int BranchId)
         {
-            var DepartmentList = departmentsRepository .OrderBy(d => d.Name).ToList();
-            var InstructorList = instructors.Where(i => i.BranchId == BranchId).OrderBy(i => i.Name).ToList();
+            var DepartmentList = departmentRepository.SelectAll(dept=>dept.BranchId==BranchId).OrderBy(dept => dept.Name);
+            var InstructorList = instructorRepository.SelectAll(ins=>ins.BranchId==BranchId).OrderBy(ins => ins.Name);
             return Ok(new { DepartmentList, InstructorList });
         }
         public IActionResult DepartmentManager(int id)
@@ -49,12 +54,12 @@ namespace WebAppProject.Controllers
         }
         public IActionResult StudentGrades(int stId)
         {
-            var model= studentRepository.GetGrades(stId);
+            var model= _studentrepo.GetGrades(stId);
             return View(model);
         }
         public IActionResult StudentAnswers(int stId,int examId)
         {
-            var model=studentRepository.GetAnswers(stId,examId);
+            var model=_studentrepo.GetAnswers(stId,examId);
             return View(model);
         }
         public IActionResult StudentDelete(int stId)

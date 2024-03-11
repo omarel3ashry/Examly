@@ -1,4 +1,4 @@
-﻿@model IEnumerable<StudentExam>
+﻿@model IEnumerable<ExamTaken>
 @{
     Layout = null;
 }
@@ -25,14 +25,14 @@
         </thead>
         <tbody>
             @if (Model.Count() > 0)
-                foreach (var studentExam in Model)
+                foreach (var examTaken in Model)
                 {
                     <tr>
-                        <td>@studentExam.Exam.course.CrsName</td>
-                        <td>@studentExam.Exam.Date</td>
-                        <td>@studentExam.Grade</td>
+                        <td>@examTaken.Exam.Course.Name</td>
+                        <td>@examTaken.Exam.ExamDate</td>
+                        <td>@examTaken.Grade</td>
                         <td>                           
-                            <a class="btn btn-info" asp-action="StudentAnswers" asp-controller="Manage" asp-route-stId="@studentExam.StudentId" asp-route-examId="@studentExam.ExamId">Answers</a>
+                            <a class="btn btn-info" asp-action="StudentAnswers" asp-controller="Manage" asp-route-stId="@examTaken.StudentId" asp-route-examId="@examTaken.ExamId">Answers</a>
                         </td>
                     </tr>
                 }

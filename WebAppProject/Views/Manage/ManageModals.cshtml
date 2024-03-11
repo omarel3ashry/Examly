@@ -20,12 +20,12 @@
 <script src="/lib/jquery/dist/jquery.js"></script>
 <script>  
         $("#ManageDept").click(function () {
-            $("#content").load(`Manage/DepartmentManager/${ 1 }`)// replace by BranchId from select
+        $("#content").load(`Manage/DepartmentManager/${document.getElementById("BranchId").value }`)// replace by BranchId from select
             $("#modal").modal('show');
             $("#ModalLabel").text("Instructors List")
         })
         $("#ManageStudents").click(function () {
-            $("#content").load(`Manage/Students/${ 1 }`)// replace by DeptId from select
+        $("#content").load(`Manage/Students/${document.getElementById("DepartmentId").value }`)// replace by DeptId from select
             $("#modal").modal('show');
             $("#ModalLabel").text("Students List")
         })

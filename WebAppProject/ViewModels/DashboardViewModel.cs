@@ -1,4 +1,4 @@
-﻿using WebAppProject.FakeModels;
+﻿using DataAccessLibrary.Model;
 
 namespace WebAppProject.ViewModels
 {
@@ -8,9 +8,9 @@ namespace WebAppProject.ViewModels
         public IEnumerable<Branch> Branches { get; set; }
 
         public int InstructorId { get; set; }
-        public IEnumerable<Instructor> Instructors { get; set; } = new List<Instructor>();
+        public IEnumerable<Instructor> Instructors { get; set; } 
 
         public int DepartmentId { get; set; }
-        public IEnumerable<Department> Departments { get; set; } = new List<Department>();
+        public IEnumerable<Department> Departments { get; set; } 
     }
 }
