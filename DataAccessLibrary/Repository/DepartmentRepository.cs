@@ -149,6 +149,7 @@ namespace DataAccessLibrary.Repository
             if (department != null)
             {
                 department.ManagerId = instructorId;
+                department.HireDate = DateTime.Now;
                 return _context.SaveChanges() == 1;
             }
             return false;
@@ -160,6 +161,7 @@ namespace DataAccessLibrary.Repository
             if (department != null)
             {
                 department.ManagerId = instructorId;
+                department.HireDate = DateTime.Now;
                 return await _context.SaveChangesAsync() == 1;
             }
             return false;
@@ -168,6 +170,11 @@ namespace DataAccessLibrary.Repository
         public List<Department> SelectAll(Expression<Func<Department, bool>> predicate)
         {
             return _context.Departments.Where(predicate).ToList();
+        }
+
+        public Task<List<Department>> SelectAllAsync(Expression<Func<Department, bool>> predicate)
+        {
+            return _context.Departments.Where(predicate).ToListAsync();
         }
     }
 }

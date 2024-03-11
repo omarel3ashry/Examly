@@ -79,6 +79,16 @@ namespace DataAccessLibrary.Repository
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        public Instructor? GetByUserId(int userId)
+        {
+            return _context.Instructors.FirstOrDefault(e => e.UserId == userId);
+        }
+
+        public Task<Instructor?> GetByUserIdAsync(int userId)
+        {
+            return _context.Instructors.FirstOrDefaultAsync(e => e.UserId == userId);
+        }
+
         public int Add(Instructor entity)
         {
             _context.Instructors.Add(entity);
@@ -141,16 +151,20 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Instructors.Where(predicate).FirstOrDefault();
         }
+
+        public Task<Instructor?> SelectAsync(Expression<Func<Instructor, bool>> predicate)
+        {
+            return _context.Instructors.Where(predicate).FirstOrDefaultAsync();
+        }
+
         public List<Instructor> SelectAll(Expression<Func<Instructor, bool>> predicate)
         {
             return _context.Instructors.Where(predicate).ToList();
         }
 
-        public Task<Instructor> SelectAsync(Expression<Func<Instructor, bool>> predicate)
+        public Task<List<Instructor>> SelectAllAsync(Expression<Func<Instructor, bool>> predicate)
         {
-            return _context.Instructors.Where(predicate).FirstOrDefaultAsync();
+            return _context.Instructors.Where(predicate).ToListAsync();
         }
-
-        
     }
 }

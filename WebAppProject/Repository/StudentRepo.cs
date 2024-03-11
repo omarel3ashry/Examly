@@ -46,7 +46,8 @@ namespace WebAppProject.Repository
         public List<ChoiceQuestion> GetAnswers(int stId, int examId)
         {
             List<ChoiceQuestion> result= new List<ChoiceQuestion>();// ChoiceQuestion : Question , CorrectChoices, StudentChoices
-            List<Choice> ExamChoices=StudentExamChoice.studentExamChoiceDemo.FindAll(sec => sec.StudentId == stId && sec.ExamId == examId).Select(sec=>sec.Choice).ToList();
+            List<Choice> ExamChoices=StudentExamChoice.studentExamChoiceDemo
+                .FindAll(sec => sec.StudentId == stId && sec.ExamId == examId).Select(sec=>sec.Choice).ToList();
             List<Choice> QuestionCorrectChoices;
             List<Choice> StudentChoicesForQuestion;
 

@@ -8,7 +8,7 @@ using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class ManageController : Controller
     {
         private readonly IInstructorRepository instructorRepository;     
@@ -37,18 +37,18 @@ namespace WebAppProject.Controllers
         }
         public IActionResult DepartmentManager(int id)
         {
-            var model=instructorRepository.SelectAll(e=>e.BranchId==id);
+            var model = _instructorRepo.SelectAll(e => e.BranchId == id);
             return PartialView(model);
         }
-        public IActionResult AssignManager(int deptId,int insId)
+        public IActionResult AssignManager(int deptId, int insId)
         {
 
-            departmentRepository.SetManager(deptId, insId);
+            _departmentRepo.SetManager(deptId, insId);
             return RedirectToAction("Index");
         }
         public IActionResult Students(int id)
         {
-            var model = studentRepository.SelectAll(st=>st.DepartmentId==id);
+            var model = _studentRepo.SelectAll(st => st.DepartmentId == id);
 
             return PartialView(model);
         }
@@ -57,7 +57,7 @@ namespace WebAppProject.Controllers
             var model= _studentrepo.GetGrades(stId);
             return View(model);
         }
-        public IActionResult StudentAnswers(int stId,int examId)
+        public IActionResult StudentAnswers(int stId, int examId)
         {
             var model=_studentrepo.GetAnswers(stId,examId);
             return View(model);

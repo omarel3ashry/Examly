@@ -1,10 +1,10 @@
 ﻿namespace WebAppProject.FakeModels
 {
-    public class Department
+    public class FakeDepartment
     {   
         public int DepartmentId { get; set; }
         public string Name { get; set; }
         public int BranchId { get; set; }
-        public Branch Branch { get; set; }
+        public FakeBranch Branch { get; set; }
     }
 }

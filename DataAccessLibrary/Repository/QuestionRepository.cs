@@ -166,9 +166,14 @@ namespace DataAccessLibrary.Repository
             return _context.SaveChangesAsync();
         }
 
-        List<Question> IRepository<Question>.SelectAll(Expression<Func<Question, bool>> predicate)
+        public List<Question> SelectAll(Expression<Func<Question, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _context.Questions.Where(predicate).ToList();
+        }
+
+        public Task<List<Question>> SelectAllAsync(Expression<Func<Question, bool>> predicate)
+        {
+            return _context.Questions.Where(predicate).ToListAsync();
         }
     }
 }
