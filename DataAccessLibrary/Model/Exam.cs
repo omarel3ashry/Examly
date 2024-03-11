@@ -6,6 +6,7 @@
         public string Title { get; set; }
         public DateTime ExamDate { get; set; }
         public int DurationInMinutes { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public int CourseId { get; set; }
         public Course Course { get; set; }

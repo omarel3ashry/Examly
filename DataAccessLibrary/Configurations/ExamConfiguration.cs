@@ -28,16 +28,11 @@ namespace DataAccessLibrary.Configurations
                 .WithMany(builder => builder.Exams)
                 .UsingEntity<ExamTaken>();
 
-            /*           builder.HasMany(e => e.Questions)
-                           .WithMany(e => e.Exams);*/
-
             builder.HasMany(e => e.Questions)
                 .WithMany(e => e.Exams)
                 .UsingEntity<ExamQuestion>(
                     r => r.HasOne<Question>().WithMany().HasForeignKey(e => e.QuestionId).OnDelete(DeleteBehavior.NoAction),
                     l => l.HasOne<Exam>().WithMany().HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.NoAction));
-
-
         }
     }
 }

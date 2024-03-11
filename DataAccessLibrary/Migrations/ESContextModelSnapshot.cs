@@ -45,6 +45,9 @@ namespace DataAccessLibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -72,6 +75,9 @@ namespace DataAccessLibrary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
@@ -101,6 +107,9 @@ namespace DataAccessLibrary.Migrations
                         .HasMaxLength(600)
                         .HasColumnType("nvarchar(600)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -124,6 +133,9 @@ namespace DataAccessLibrary.Migrations
 
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("ManagerId")
                         .HasColumnType("int");
@@ -181,6 +193,9 @@ namespace DataAccessLibrary.Migrations
                     b.Property<DateTime>("ExamDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -219,6 +234,9 @@ namespace DataAccessLibrary.Migrations
                     b.Property<int>("Grade")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("ExamId", "StudentId");
 
                     b.HasIndex("StudentId");
@@ -242,7 +260,7 @@ namespace DataAccessLibrary.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int>("BranchId")
+                    b.Property<int?>("BranchId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -257,6 +275,9 @@ namespace DataAccessLibrary.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(1)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -268,9 +289,16 @@ namespace DataAccessLibrary.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Instructors");
                 });
@@ -296,8 +324,11 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(2);
 
-                    b.Property<int>("InstructorId")
+                    b.Property<int?>("InstructorId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -316,6 +347,24 @@ namespace DataAccessLibrary.Migrations
                     b.ToTable("Questions");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Model.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Model.Student", b =>
                 {
                     b.Property<int>("Id")
@@ -332,7 +381,7 @@ namespace DataAccessLibrary.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -347,6 +396,9 @@ namespace DataAccessLibrary.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(1)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -358,9 +410,16 @@ namespace DataAccessLibrary.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Students");
                 });
@@ -393,6 +452,9 @@ namespace DataAccessLibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -401,6 +463,36 @@ namespace DataAccessLibrary.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Topics");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Model.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("CourseTopic", b =>
@@ -440,7 +532,7 @@ namespace DataAccessLibrary.Migrations
                     b.HasOne("DataAccessLibrary.Model.Instructor", "Manager")
                         .WithOne("ManagedDepartment")
                         .HasForeignKey("DataAccessLibrary.Model.Department", "ManagerId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Branch");
 
@@ -464,7 +556,7 @@ namespace DataAccessLibrary.Migrations
                     b.HasOne("DataAccessLibrary.Model.Instructor", "Instructor")
                         .WithMany("DepartmentCourses")
                         .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Course");
 
@@ -523,10 +615,16 @@ namespace DataAccessLibrary.Migrations
                     b.HasOne("DataAccessLibrary.Model.Branch", "Branch")
                         .WithMany("Instructors")
                         .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("DataAccessLibrary.Model.User", "User")
+                        .WithOne("Instructor")
+                        .HasForeignKey("DataAccessLibrary.Model.Instructor", "UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Branch");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Question", b =>
@@ -540,8 +638,7 @@ namespace DataAccessLibrary.Migrations
                     b.HasOne("DataAccessLibrary.Model.Instructor", "Instructor")
                         .WithMany("Questions")
                         .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Course");
 
@@ -553,10 +650,16 @@ namespace DataAccessLibrary.Migrations
                     b.HasOne("DataAccessLibrary.Model.Department", "Department")
                         .WithMany("Students")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("DataAccessLibrary.Model.User", "User")
+                        .WithOne("Student")
+                        .HasForeignKey("DataAccessLibrary.Model.Student", "UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Department");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.StudentAnswer", b =>
@@ -580,6 +683,16 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("Exam");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Model.User", b =>
+                {
+                    b.HasOne("DataAccessLibrary.Model.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Branch", b =>
@@ -629,9 +742,21 @@ namespace DataAccessLibrary.Migrations
                     b.Navigation("Choices");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Model.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Model.Student", b =>
                 {
                     b.Navigation("StudentAnswers");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Model.User", b =>
+                {
+                    b.Navigation("Instructor");
+
+                    b.Navigation("Student");
                 });
 #pragma warning restore 612, 618
         }

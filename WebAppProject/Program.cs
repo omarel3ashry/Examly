@@ -1,4 +1,5 @@
 using DataAccessLibrary.Data;
+using DataAccessLibrary.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebAppProject
@@ -10,14 +11,22 @@ namespace WebAppProject
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddControllersWithViews();
 
             builder.Services.AddDbContext<ESContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
 
-            
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<IInstructorRepository, InstructorRepository>();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+            builder.Services.AddScoped<ITopicRepository, TopicRepository>();
+            builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+            builder.Services.AddScoped<IChoiceRepository, ChoiceRepository>();
+            builder.Services.AddScoped<IExamRepository, ExamRepository>();
 
             var app = builder.Build();
 

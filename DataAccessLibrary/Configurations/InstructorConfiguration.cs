@@ -37,18 +37,22 @@ namespace DataAccessLibrary.Configurations
             builder.HasOne(e => e.Branch)
                 .WithMany(e => e.Instructors)
                 .HasForeignKey(e => e.BranchId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(e => e.ManagedDepartment)
                 .WithOne(e => e.Manager)
                 .HasForeignKey<Department>(e => e.ManagerId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasMany(e => e.Questions)
                 .WithOne(e => e.Instructor)
                 .HasForeignKey(e => e.InstructorId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.SetNull);
 
+            builder.HasOne(e => e.User)
+            .WithOne(e => e.Instructor)
+            .HasForeignKey<Instructor>(e => e.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

@@ -37,7 +37,12 @@ namespace DataAccessLibrary.Configurations
             builder.HasOne(e => e.Department)
                 .WithMany(e => e.Students)
                 .HasForeignKey(e => e.DepartmentId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasOne(e=>e.User)
+                .WithOne(e => e.Student)
+                .HasForeignKey<Student>(e => e.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

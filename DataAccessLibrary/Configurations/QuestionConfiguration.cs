@@ -36,8 +36,7 @@ namespace DataAccessLibrary.Configurations
             builder.HasOne(e => e.Instructor)
                 .WithMany(e => e.Questions)
                 .HasForeignKey(e => e.InstructorId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasMany(e => e.Exams)
                .WithMany(e => e.Questions)

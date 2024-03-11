@@ -23,7 +23,7 @@ namespace DataAccessLibrary.Configurations
             builder.HasOne(e => e.Instructor)
                 .WithMany(e => e.DepartmentCourses)
                 .HasForeignKey(e => e.InstructorId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.SetNull);
 
         }
     }

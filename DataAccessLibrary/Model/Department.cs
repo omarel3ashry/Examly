@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime HireDate { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public int? ManagerId { get; set; }
         public Instructor? Manager { get; set; }

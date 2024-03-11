@@ -9,9 +9,12 @@
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
-        public int BranchId { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
-        public Branch Branch { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; }
+        public int? BranchId { get; set; }
+        public Branch? Branch { get; set; }
         public Department? ManagedDepartment { get; set; }
         public ICollection<Question> Questions { get; } = new HashSet<Question>();
         public ICollection<DepartmentCourse> DepartmentCourses { get; } = new HashSet<DepartmentCourse>();
