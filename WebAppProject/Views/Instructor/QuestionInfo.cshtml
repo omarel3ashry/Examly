@@ -1,0 +1,22 @@
+﻿@model QuestionInfo
+@{
+    ViewData["Title"] = "QuestionInfo";
+}
+
+<h1>Question Info</h1>
+
+<div>
+
+    <p><strong>Course Name:</strong> @Model.CourseName</p>
+    <p><strong>Question Text:</strong> @Model.QuestionText</p>
+    @foreach (var choice in Model.Choices)
+    {
+        <div class="form-group">
+            <label>Choice</label>
+            <input type="text" class="form-control" value="@choice.Body" readonly />
+            <span class="text-danger">@choice.IsCorrect</span>
+        </div>
+    }
+    <p><strong>choices Type:</strong> @Model.Type</p>
+
+</div>

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Question>
+@{
+    ViewData["Title"] = "QuestionBank";
+}
+
+
+
+<h1>Question Bank</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Question</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var question in Model)
+        {
+            <tr>
+                <td>@question.QuestionText</td>
+                <td>
+                    <a asp-action="QuestionInfo" asp-controller="Instructor" asp-route-id="@question.QuestionId" class="btn btn-dark">Info</a>
+                    |<a asp-action="EditQuestion" asp-controller="Instructor" asp-route-id="@question.QuestionId" class="btn btn-dark">Edit</a>
+                    | <a asp-action="DeleteQuestion" asp-controller="Instructor" onclick="return confirm(' Are you sure ')" asp-route-id="@question.QuestionId" class="btn btn-danger">Delete</a>
+                    
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>
+ |<a asp-action="AddQuestion" asp-controller="Instructor" asp-route-id="@ViewBag.CourseId" class="btn btn-dark">Add</a></td>
+
