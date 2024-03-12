@@ -11,15 +11,15 @@ namespace onlineExamInestractour.Controllers
     {
         IInstructorRepository instructorRepository;
 
-       
-        public InstructorController(IInstructorRepository _instructorRepository )
+
+        public InstructorController(IInstructorRepository _instructorRepository)
         {
             instructorRepository = _instructorRepository;
-           
+
         }
         public IActionResult Index()
         {
-            
+
             var instructor = instructorRepository.GetInstructors();
 
             if (instructor == null)
@@ -32,7 +32,7 @@ namespace onlineExamInestractour.Controllers
 
                 return View(viewModel);
             }
-            
+
         }
         public IActionResult Info(int id)
         {
@@ -64,20 +64,20 @@ namespace onlineExamInestractour.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AddQuestion(int id,Question question, List<string> choices)
+        public IActionResult AddQuestion(int id, Question question, List<string> choices)
         {
-           ViewBag.courseid=id;
+            ViewBag.courseid = id;
             if (ModelState.IsValid)
             {
-                
+
                 instructorRepository.AddQuestionWithChoices(question, choices);
-                return RedirectToAction("QuestionBank");
+                return RedirectToAction("QuestionBank", new { id });
             }
 
             return View(question);
         }
 
-        
+
         [HttpGet]
         public IActionResult EditQuestion(int id)
         {
@@ -90,7 +90,7 @@ namespace onlineExamInestractour.Controllers
 
             return View(question);
 
-           
+
         }
 
         [HttpPost]
@@ -178,9 +178,9 @@ namespace onlineExamInestractour.Controllers
             return RedirectToAction("Details", new { id = Id });
         }
         [HttpGet]
-        public IActionResult AddCourse(int id )
+        public IActionResult AddCourse(int id)
         {
-          ViewBag. DepartmentId = id;
+            ViewBag.DepartmentId = id;
             return View();
         }
         [HttpPost]
@@ -191,7 +191,7 @@ namespace onlineExamInestractour.Controllers
                 instructorRepository.AddCourse(course);
                 return RedirectToAction("mangerindex");
             }
-            return View(course); 
+            return View(course);
         }
 
         public IActionResult DeleteCourse(int id)
@@ -222,7 +222,7 @@ namespace onlineExamInestractour.Controllers
             trueFalseQuestions = trueFalseQuestions.OrderBy(q => random.Next()).ToList();
             multipleChoiceQuestions = multipleChoiceQuestions.OrderBy(q => random.Next()).ToList();
 
-            
+
             var viewModel = new ExamViewModel
             {
                 TrueFalseQuestions = trueFalseQuestions,
