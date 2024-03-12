@@ -81,7 +81,7 @@
         </table>
 
         <h2>Answer the Questions</h2>
-        <form method="post" asp-controller="ExamQuestions" asp-action="ExamResults">
+        <form id="examForm" method="post" asp-controller="ExamQuestions" asp-action="ExamResults">
             @for (int i = 0; i < Model[0].Questions.Count; i++)
             {
                 <h3>@(i + 1). @Model[0].Questions[i].Text</h3>
@@ -94,15 +94,35 @@
                 <input type="hidden" name="Questions[@i].CorrectAnswer" value="@Model[0].Questions[i].CorrectAnswer" />
                 <hr />
             }
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="alert alert-danger" role="alert">
-                    @TempData["ErrorMessage"]
-                </div>
-            }
-
+            <div class="error-message"></div>
             <button type="submit">Submit Exam</button>
         </form>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // When the document is fully loaded
+        $(document).ready(function () {
+            // When the exam form is submitted
+            $('#examForm').submit(function (event) {
+                var unanswered = false; // Flag to track if any question is unanswered
+
+                // Check if all questions are answered
+                $('input[type="radio"]').each(function () { // Iterate over each radio input
+                    var questionIndex = $(this).attr('name').split('[')[1].split(']')[0]; // Extract the question index
+                    var isChecked = $('input[name="Questions[' + questionIndex + '].UserAnswer"]:checked').length > 0; // Check if any radio button for this question is checked
+                    if (!isChecked) { // If no radio button is checked
+                        unanswered = true; // Set the unanswered flag to true
+                        return false; // Exit the loop early if any question is unanswered
+                    }
+                });
+
+                if (unanswered) { // If any question is unanswered
+                    event.preventDefault(); // Prevent form submission
+                    $('.error-message').text('Please answer all the questions.'); // Show error message
+                }
+            });
+        });
+    </script>
 </body>
 </html>

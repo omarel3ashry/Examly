@@ -97,29 +97,29 @@ namespace WebAppProject.Controllers
         }
         public IActionResult ExamResults(List<Question> questions)
         {
-            // Check if all questions are answered
-            bool allAnswered = true;
-            StringBuilder unansweredMessage = new StringBuilder();
-            int unansweredCount = 0;
-            for (int i = 0; i < questions.Count; i++)
-            {
-                if (string.IsNullOrEmpty(questions[i].UserAnswer))
-                {
-                    allAnswered = false;
-                    unansweredCount++;
-                    unansweredMessage.Append($"Question {i + 1} "); 
-                    if (unansweredCount < questions.Count - i)
-                    {
-                        unansweredMessage.Append(", ");
-                    }
-                }
-            }
+            //// Check if all questions are answered
+            //bool allAnswered = true;
+            //StringBuilder unansweredMessage = new StringBuilder();
+            //int unansweredCount = 0;
+            //for (int i = 0; i < questions.Count; i++)
+            //{
+            //    if (string.IsNullOrEmpty(questions[i].UserAnswer))
+            //    {
+            //        allAnswered = false;
+            //        unansweredCount++;
+            //        unansweredMessage.Append($"Question {i + 1} "); 
+            //        if (unansweredCount < questions.Count - i)
+            //        {
+            //            unansweredMessage.Append(", ");
+            //        }
+            //    }
+            //}
 
-            if (!allAnswered)
-            {
-                TempData["ErrorMessage"] = $"Please answer all the questions. You have not answered the following {unansweredCount} question(s): {unansweredMessage}";
-                return RedirectToAction("ExamQuestions");
-            }
+            //if (!allAnswered)
+            //{
+            //    TempData["ErrorMessage"] = $"Please answer all the questions. You have not answered the following {unansweredCount} question(s): {unansweredMessage}";
+            //    return RedirectToAction("ExamQuestions");
+            //}
 
             int score = 0;
             foreach (var question in questions)
