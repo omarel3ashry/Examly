@@ -29,25 +29,7 @@ namespace WebAppProject.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            DataAccessLibrary.Model.Branch branch = _branchRepo.Select(e => e.Id == 2);
-            DataAccessLibrary.Model.Department dept = new DataAccessLibrary.Model.Department() { Name = "Another New Dept", BranchId = 2 };
-            _deptRepo.Add(dept);
-
-
-            var student = _studentRepo.GetByIdWithIncludes(1);
-            var studentAnswers = student.StudentAnswers.Where(e => e.ExamId == 2).ToList();
-
-            foreach (var studentAnswer in studentAnswers)
-            {
-                var AllCorrectChoicesForThisQuestion = studentAnswer.Choice.Question.Choices.Where(e => e.IsCorrect);
-            }
-
-
-
-            return Content($"id={branch.Id} name={branch.Name} location={branch.Location}");
-        }
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

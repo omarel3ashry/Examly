@@ -8,6 +8,9 @@ namespace DataAccessLibrary.Configurations
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
+            builder.Property(e => e.Id)
+                .ValueGeneratedNever();
+
             builder.Property(e => e.Title)
                 .HasMaxLength(100)
                 .IsRequired();

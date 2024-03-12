@@ -2,63 +2,69 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
+using System.Drawing;
 using WebAppProject.Repository;
+using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class ManageController : Controller
     {
-        private readonly IInstructorRepository _instructorRepo;
-        private readonly IDepartmentRepository _departmentRepo;
-        private readonly IStudentRepository _studentRepo;
+        private readonly IInstructorRepository instructorRepository;     
+        private readonly IDepartmentRepository departmentRepository;
+        private readonly IStudentRepository studentRepository;
+        private readonly IBranchRepository branchRepository;
+        StudentRepo _studentrepo = new StudentRepo();
 
-        public ManageController(IInstructorRepository instructorRepository, IDepartmentRepository departmentRepository, IStudentRepository studentRepository)
+        public ManageController(IInstructorRepository instructorRepository ,IDepartmentRepository departmentRepository,IStudentRepository studentRepository,IBranchRepository branchRepository)
         {
-            this._instructorRepo = instructorRepository;
-            this._departmentRepo = departmentRepository;
-            this._studentRepo = studentRepository;
+            this.instructorRepository = instructorRepository;
+            this.departmentRepository = departmentRepository;
+            this.studentRepository = studentRepository;
+            this.branchRepository = branchRepository;
         }
         public IActionResult Index()
         {
-            return View();
+            DashboardViewModel model = new DashboardViewModel() { Branches = branchRepository.GetAll() };
+            return View(model);
         }
-       /* public IActionResult GetLists(int BranchId)
+        public IActionResult GetLists(int BranchId)
         {
-            var DepartmentList = departmentsRepository.OrderBy(d => d.Name).ToList();
-            var InstructorList = instructors.Where(i => i.BranchId == BranchId).OrderBy(i => i.Name).ToList();
+            var DepartmentList = departmentRepository.SelectAll(dept=>dept.BranchId==BranchId).OrderBy(dept => dept.Name);
+            var InstructorList = instructorRepository.SelectAll(ins=>ins.BranchId==BranchId).OrderBy(ins => ins.Name);
             return Ok(new { DepartmentList, InstructorList });
-        }*/
+        }
         public IActionResult DepartmentManager(int id)
         {
-            var model = _instructorRepo.SelectAll(e => e.BranchId == id);
+            var model =instructorRepository.SelectAll(e => e.BranchId == id);
             return PartialView(model);
         }
         public IActionResult AssignManager(int deptId, int insId)
         {
 
-            _departmentRepo.SetManager(deptId, insId);
+            departmentRepository.SetManager(deptId, insId);
             return RedirectToAction("Index");
         }
         public IActionResult Students(int id)
         {
-            var model = _studentRepo.SelectAll(st => st.DepartmentId == id);
+            var model =studentRepository.SelectAll(st => st.DepartmentId == id);
 
             return PartialView(model);
         }
-  /*      public IActionResult StudentGrades(int stId)
+        public IActionResult StudentGrades(int stId)
         {
-            var model = _studentRepo.GetGrades(stId);
+            var model= _studentrepo.GetGrades(stId);
             return View(model);
         }
         public IActionResult StudentAnswers(int stId, int examId)
         {
-            var model = _studentRepo.GetAnswers(stId, examId);
+            var model=_studentrepo.GetAnswers(stId,examId);
             return View(model);
-        }*/
+        }
         public IActionResult StudentDelete(int stId)
         {
-            _studentRepo.Delete(stId);
+            studentRepository.Delete(stId);
             return RedirectToAction("Index");
         }
 

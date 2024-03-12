@@ -20,7 +20,7 @@ namespace WebAppProject
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
-
+            
             builder.Services.AddScoped<IBranchRepository, BranchRepository>();
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IInstructorRepository, InstructorRepository>();
@@ -30,6 +30,7 @@ namespace WebAppProject
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
             builder.Services.AddScoped<IChoiceRepository, ChoiceRepository>();
             builder.Services.AddScoped<IExamRepository, ExamRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();

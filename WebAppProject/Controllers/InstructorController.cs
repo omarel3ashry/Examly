@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DataAccessLibrary.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppProject.Models;
 using WebAppProject.Repository;
@@ -8,11 +9,16 @@ namespace WebAppProject.Controllers
     [Authorize(Roles = "Instructor,Manager")]
     public class InstructorController : Controller
     {
-        InstructorRepo _instructorRepo = new InstructorRepo();
+        private readonly IInstructorRepository instructorRepository;
+        
+        public InstructorController(IInstructorRepository instructorRepository)
+        {
+            this.instructorRepository = instructorRepository;
+        }
         public IActionResult Index()
         {
             int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "id").Value);
-            var model = _instructorRepo.GetById(id);
+            var model = instructorRepository.GetById(id);
             return View(model);
         }
     }
