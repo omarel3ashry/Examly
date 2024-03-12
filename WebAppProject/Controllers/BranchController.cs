@@ -1,20 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccessLibrary.Model;
+using DataAccessLibrary.Repository;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WebAppProject.Models;
+
 
 
 namespace WebAppProject.Controllers
 {
     public class BranchController : Controller
     {
-        IEnumerable<Branch> branshes = Branch.BranchDemo;
+        
+        private readonly IBranchRepository branchRepository;
+
+        public BranchController(IBranchRepository branchRepository)
+        {
+            this.branchRepository = branchRepository;
+        }
         public IActionResult Index()
         {
             return View();
         }
         public IActionResult Details(int Id)
         {
-            Branch? model = branshes.SingleOrDefault(a => a.Id == Id);
+            Branch? model = branchRepository.GetById(Id);
             IActionResult actionResult = model != null ? View(model) : BadRequest();
             return actionResult;
         }
@@ -25,43 +33,42 @@ namespace WebAppProject.Controllers
         [HttpPost]
         public IActionResult Create(Branch Branch)
         {
-            Debug.WriteLine("From create " + Branch.Id);
-            Debug.WriteLine(Branch.Name);
-            int res = 1;
-            IActionResult actionResult = res > 0 ? RedirectToAction("Index", "Dashboard") : RedirectToAction("Create");
+            
+            int res = branchRepository.Add(Branch);
+            IActionResult actionResult = res > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
             return actionResult;
         }
 
         public IActionResult Edit(int Id)
         {
-            Branch? model = branshes.SingleOrDefault(a => a.Id == Id);
+            Branch? model = branchRepository.GetById(Id);
             IActionResult actionResult = model != null ? View(model) : BadRequest();
             return actionResult;
         }
         [HttpPost]
         public IActionResult Edit(Branch Branch,int Id)
         {
-            Branch old =  branshes.FirstOrDefault(a => a.Id == Id)!;
+            Branch old =  branchRepository.GetById(Id)!;
             old.Name = Branch.Name;
-            Debug.WriteLine("From Edit "+Id);
-            Debug.WriteLine(Branch.Name);
-            int res = 1;
-            IActionResult actionResult = res > 0 ? RedirectToAction("Index","Dashboard") : RedirectToAction("Edit");
+       
+            bool res = branchRepository.Update(old);
+            IActionResult actionResult = res ? RedirectToAction("Index","Manage") : RedirectToAction("Edit");
             return actionResult;
         }
 
         public IActionResult Delete(int Id)
         {
-            Debug.WriteLine("From delete View " + Id);
-            Branch? model = branshes.SingleOrDefault(a => a.Id == Id);
+            
+            Branch? model = branchRepository.GetById(Id);
             IActionResult actionResult = model != null ? View(model) : BadRequest();
             return actionResult;
         }
         [HttpPost]
-        public IActionResult Delete(Branch Branch, int Id)
+        public IActionResult Delete(Branch Branch)
         {
-            Debug.WriteLine("From delete " + Id);
-            return RedirectToAction("Index", "Dashboard");
+            Debug.WriteLine(Branch.Id);
+            branchRepository.Delete(Branch.Id);
+            return RedirectToAction("Index", "Manage");
         }
 
 

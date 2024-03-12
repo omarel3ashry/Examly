@@ -1,9 +1,9 @@
 ﻿@model DashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
-    SelectList BranchesItems = new SelectList(Model.Branches, "BranchId", "Name");
-    SelectList InstructorsItems = new SelectList(Model.Instructors, "InstructorId", "Name");
-    SelectList DepartmentsItems = new SelectList(Model.Departments, "DepartmentId", "Name");
+    SelectList BranchesItems = new SelectList(Model.Branches, "Id", "Name");
+    SelectList InstructorsItems = new SelectList(Model.Instructors, "Id", "Name");
+    SelectList DepartmentsItems = new SelectList(Model.Departments, "Id", "Name");
 }
 
 <h1>Dashboard</h1>
@@ -131,7 +131,7 @@
 
                 } else {
                     $.ajax({
-                        url: "/Dashboard/GetLists?BranchId=" + selectedId,
+                        url: "/Manage/GetLists?BranchId=" + selectedId,
                         success: function (data) {
                             console.log(data);
                             appendDepartmentOptions(data.departmentList);

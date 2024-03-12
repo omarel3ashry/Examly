@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using DataAccessLibrary.Model;
+using DataAccessLibrary.Repository;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebAppProject.Models;
+
 using WebAppProject.Repository;
 using WebAppProject.ViewModels;
 
@@ -10,28 +12,42 @@ namespace WebAppProject.Controllers
 {
     public class AccountController : Controller
     {
-        UserRepo _userRepo= new UserRepo();
-        StudentRepo _studentRepo= new StudentRepo();
-        DepartmentRepo _departmentRepo= new DepartmentRepo();
-        BranchRepo _branchRepo= new BranchRepo();
-        InstructorRepo _instructorRepo= new InstructorRepo();
+       
+        private readonly IUserRepository userRepository;
+        private readonly IStudentRepository studentRepository;
+        private readonly IDepartmentRepository departmentRepository;
+        private readonly IBranchRepository branchRepository;
+        private readonly IInstructorRepository instructorRepository;
+
+        public AccountController(IUserRepository userRepository,
+            IStudentRepository studentRepository,
+            IDepartmentRepository departmentRepository,
+            IBranchRepository branchRepository,
+            IInstructorRepository instructorRepository)
+        {
+            this.userRepository = userRepository;
+            this.studentRepository = studentRepository;
+            this.departmentRepository = departmentRepository;
+            this.branchRepository = branchRepository;
+            this.instructorRepository = instructorRepository;
+        }
         public IActionResult Register()
         {
-            ViewBag.Branches = _branchRepo.GetAll();
+            ViewBag.Branches = branchRepository.GetAll();
             return View();
         }
         [HttpPost]
         public IActionResult Register(Register registerInfo) 
         { 
-            User user = new User { Email = registerInfo.Email, Password = registerInfo.Password};
-            int userId= _userRepo.AddStudent(user);
-            Student student= new Student { Name=registerInfo.Name,DeptId=int.Parse(registerInfo.DeptId),UserId=userId};
-            _studentRepo.Add(student);
+            User user = new User { Email = registerInfo.Email, Password = registerInfo.Password,RoleId=4};
+            int userId= userRepository.Add(user);
+            Student student= new Student { Name=registerInfo.Name,DepartmentId=int.Parse(registerInfo.DeptId),UserId=userId};
+            studentRepository.Add(student);
             return RedirectToAction("Login"); 
         }
         public IActionResult Departments(int id)
         {
-            var model= _departmentRepo.GetAllByBranchId(id);
+            var model= departmentRepository.SelectAll(dept=>dept.BranchId==id);
             return PartialView(model);
         }
         public IActionResult Login()
@@ -41,13 +57,13 @@ namespace WebAppProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(User LoginInfo)
         {
-            User user = _userRepo.CheckUser(LoginInfo);
+            User user = userRepository.CheckUser(LoginInfo.Email,LoginInfo.Password);
             if (user==null)
             {
                 ModelState.AddModelError("", "Username OR Password Invalid");
                 return View(LoginInfo);
             }
-            string role = user.Role.Name;
+            string role = user.Role.Title;
             Claim roleClaim = new Claim(ClaimTypes.Role, role);
             ClaimsIdentity identity = new ClaimsIdentity("Cookies");
             identity.AddClaim(roleClaim);
@@ -56,7 +72,7 @@ namespace WebAppProject.Controllers
             int id;
             if (role == "Student")
             {
-                id = _studentRepo.GetByUserId(user.Id).Id;
+                id = studentRepository.GetByUserId(user.Id).Id;
                 controller = "Student";
             }
             else if(role == "Admin")
@@ -66,7 +82,7 @@ namespace WebAppProject.Controllers
             }
             else 
             {
-                id= _instructorRepo.GetByUserId(user.Id).Id;
+                id= instructorRepository.GetByUserId(user.Id).Id;
                 controller = "Instructor";
             }
             Claim idClaim = new Claim("id", id.ToString());

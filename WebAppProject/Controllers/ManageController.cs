@@ -37,18 +37,18 @@ namespace WebAppProject.Controllers
         }
         public IActionResult DepartmentManager(int id)
         {
-            var model = _instructorRepo.SelectAll(e => e.BranchId == id);
+            var model =instructorRepository.SelectAll(e => e.BranchId == id);
             return PartialView(model);
         }
         public IActionResult AssignManager(int deptId, int insId)
         {
 
-            _departmentRepo.SetManager(deptId, insId);
+            departmentRepository.SetManager(deptId, insId);
             return RedirectToAction("Index");
         }
         public IActionResult Students(int id)
         {
-            var model = _studentRepo.SelectAll(st => st.DepartmentId == id);
+            var model =studentRepository.SelectAll(st => st.DepartmentId == id);
 
             return PartialView(model);
         }
