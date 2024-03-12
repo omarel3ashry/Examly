@@ -28,7 +28,7 @@
         public Difficulty Difficulty { get; set; }
         public Grade Grade { get; set; }
         public ICollection<Choice> ?Choices { get; set; }
-
+        public ICollection<ExamQuestions> ExamsQuestions { get; set; }
         public int CourseId { get; set; }
         public Course ?Course { get; set; }
     }

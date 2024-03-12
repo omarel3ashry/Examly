@@ -6,10 +6,11 @@
      
         public int CourseId { get; set; }
         public Course Course { get; set; }
-        public ICollection<Question> Questions { get; set; }
+        public ICollection<ExamQuestions> ExamsQuestions { get; set; }
+
         public Exam()
         {
-            Questions  = new List<Question>();
+            ExamsQuestions = new List<ExamQuestions>();
         }
     }
 }

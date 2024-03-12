@@ -12,6 +12,7 @@ namespace onlineExamInestractour.Models
         public DbSet<Question> Questions { get; set; }
         public DbSet<Choice> Choices { get; set; }
         public DbSet<Exam> Exams { get; set; }
+        public DbSet<ExamQuestions> ExamsQuestions { get; set; }
         public ExamDbContext()
         {
 
@@ -24,6 +25,21 @@ namespace onlineExamInestractour.Models
         {
             optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=OnlineExamentionSystem;Integrated Security=True;Encrypt=True;Trust Server Certificate=True");
             base.OnConfiguring(optionsBuilder);
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ExamQuestions>()
+                .HasKey(eq => new { eq.ExamId, eq.QuestionId });
+
+            modelBuilder.Entity<ExamQuestions>()
+                .HasOne(eq => eq.Exam)
+                .WithMany(e => e.ExamsQuestions)
+                .HasForeignKey(eq => eq.ExamId);
+
+            modelBuilder.Entity<ExamQuestions>()
+                .HasOne(eq => eq.Question)
+                .WithMany(q => q.ExamsQuestions)
+                .HasForeignKey(eq => eq.QuestionId);
         }
     }
 }
