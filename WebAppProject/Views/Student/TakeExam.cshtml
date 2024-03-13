@@ -1,5 +1,7 @@
-﻿@model List<ExamQuestions>
-
+﻿@model ExamViewModel
+@{
+    List<Question> questions = Model.Exam.Questions.OrderBy(e => e.Type).ToList();
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,40 +70,60 @@
                 <th>Total Grade</th>
                 <th>Duration</th>
             </tr>
-            @foreach (var course in Model)
-            {
+    
                 <tr>
-                    <td>@course.Department</td>
-                    <td>@course.CourseName</td>
-                    <td>@course.InstructorName</td>
-                    <td>@course.TotalGrade</td>
-                    <td>@course.DurationInHours hr</td>
+                    <td>@Model.DepartmentCourse.Department.Name</td>
+                    <td>@Model.DepartmentCourse.Course.Name</td>
+                    <td>@Model.DepartmentCourse.Instructor.Name</td>
+                    <td>@Model.TotalGrade</td>
+                    <td>@Model.Exam.DurationInMinutes Minutes</td>
                 </tr>
-            }
+            
         </table>
 
         <h2>Answer the Questions</h2>
-        <form id="examForm" method="post" asp-controller="ExamQuestions" asp-action="ExamResults">
-            @for (int i = 0; i < Model[0].Questions.Count; i++)
+        <form id="examForm" method="post" asp-controller="Student" asp-action="SubmitExam">
+            @for (int i = 0; i < questions.Count; i++)
             {
-                <h3>@(i + 1). @Model[0].Questions[i].Text</h3>
-                @for (int j = 0; j < Model[0].Questions[i].Options.Count; j++)
+                <h3>@(i + 1). @questions[i].Text</h3>
+                if (questions[i].Type == 2)// true or false
                 {
-                    <input type="radio" name="Questions[@i].UserAnswer" value="@Model[0].Questions[i].Options[j]" /> @Model[0].Questions[i].Options[j]
-                    <br />
+                    @for (int j = 0; j < 2; j++)
+                    {
+                        <input type="radio" id="@questions[i].Choices.ElementAt(j).Id" value="@questions[i].Choices.ElementAt(j).Id" />
+                        <label for="@questions[i].Choices.ElementAt(j).Id">@questions[i].Choices.ElementAt(j).Text </label>
+
+                    }
                 }
-                <input type="hidden" name="Questions[@i].Text" value="@Model[0].Questions[i].Text" />
-                <input type="hidden" name="Questions[@i].CorrectAnswer" value="@Model[0].Questions[i].CorrectAnswer" />
+                else
+                {
+                    @for (int j = 0; j < 4; j++)
+                    {
+                        <input type="checkbox" id="@questions[i].Choices.ElementAt(j).Id" value="@questions[i].Choices.ElementAt(j).Id" />
+                        <label for="@questions[i].Choices.ElementAt(j).Id">@questions[i].Choices.ElementAt(j).Text </label>
+                    }
+                }
+                <br />
                 <hr />
+                
+
+
             }
+            <input type="hidden" name="examId" value="@Model.Exam.Id" />
             <div class="error-message"></div>
             <button type="submit">Submit Exam</button>
         </form>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script>
-        // When the document is fully loaded
+        $("#examForm").submit((e)=>{        
+            $("input:checked").each((index,input)=>{
+                console.log(index);
+                input.name = `choices[${index}].Id`;
+            })
+        })
+        /*/ When the document is fully loaded
         $(document).ready(function () {
             // When the exam form is submitted
             $('#examForm').submit(function (event) {
@@ -122,7 +144,7 @@
                     $('.error-message').text('Please answer all the questions.'); // Show error message
                 }
             });
-        });
+        });*/
     </script>
 </body>
 </html>

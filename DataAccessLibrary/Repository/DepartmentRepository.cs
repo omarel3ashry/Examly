@@ -145,12 +145,15 @@ namespace DataAccessLibrary.Repository
 
         public bool SetManager(int departmentId, int? instructorId)
         {
+            
             var department = _context.Departments.Find(departmentId);
             if (department != null)
             {
+                Instructor ins= _context.Instructors.Include(e => e.User).FirstOrDefault(e => e.Id == instructorId && !e.IsDeleted);
+                ins.User.RoleId = 2;
                 department.ManagerId = instructorId;
                 department.HireDate = DateTime.Now;
-                return _context.SaveChanges() == 1;
+                return _context.SaveChanges() > 1;
             }
             return false;
         }

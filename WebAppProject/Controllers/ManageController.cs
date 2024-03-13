@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using System.Drawing;
-using WebAppProject.Repository;
 using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers
@@ -15,14 +14,20 @@ namespace WebAppProject.Controllers
         private readonly IDepartmentRepository departmentRepository;
         private readonly IStudentRepository studentRepository;
         private readonly IBranchRepository branchRepository;
-        StudentRepo _studentrepo = new StudentRepo();
+        private readonly IExamTakenRepository examTaken;
+        
 
-        public ManageController(IInstructorRepository instructorRepository ,IDepartmentRepository departmentRepository,IStudentRepository studentRepository,IBranchRepository branchRepository)
+        public ManageController(IInstructorRepository instructorRepository ,
+            IDepartmentRepository departmentRepository,
+            IStudentRepository studentRepository,
+            IBranchRepository branchRepository,
+            IExamTakenRepository examTaken)
         {
             this.instructorRepository = instructorRepository;
             this.departmentRepository = departmentRepository;
             this.studentRepository = studentRepository;
             this.branchRepository = branchRepository;
+            this.examTaken = examTaken;
         }
         public IActionResult Index()
         {
@@ -54,12 +59,12 @@ namespace WebAppProject.Controllers
         }
         public IActionResult StudentGrades(int stId)
         {
-            var model= _studentrepo.GetGrades(stId);
+            var model = examTaken.GetAllByStudentIdWithIncludes(stId);
             return View(model);
         }
         public IActionResult StudentAnswers(int stId, int examId)
         {
-            var model=_studentrepo.GetAnswers(stId,examId);
+            var model=studentRepository.GetStudentAnswers(stId,examId);
             return View(model);
         }
         public IActionResult StudentDelete(int stId)

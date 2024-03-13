@@ -1,4 +1,4 @@
-﻿@model List<Exampass>
+﻿@model  StudentExamsViewModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -99,30 +99,9 @@
     </style>
 </head>
 <body>
-    <a asp-controller="Courses" asp-action="Coursedesc" class="button">Courses</a>
-    <a asp-controller="Exampass" asp-action="ExamPassed" class="button">Exams</a>
+    <a asp-controller="Student" asp-action="index" class="button">Courses</a>
+    <a asp-controller="Student" asp-action="Exams" class="button">Exams</a>
     <div class="container">
-        <h2>Passed Exams</h2>
-        <table>
-            <caption>Passed Exams</caption>
-            <tr>
-                <th>Exam Name</th>
-                <th>Date</th>
-                <th>Grades</th>
-            </tr>
-            @foreach (var exam in Model)
-            {
-                if (exam.Grades != null)
-                {
-                    <tr>
-                        <td>@exam.Name</td>
-                        <td>@exam.Date.ToShortDateString()</td>
-                        <td><button class="grades-button">@exam.Grades</button></td>
-                    </tr>
-                }
-            }
-        </table>
-
         <h2>Upcoming Exams</h2>
         <table>
             <caption>Upcoming Exams</caption>
@@ -131,30 +110,87 @@
                 <th>Date</th>
                 <th>Availability</th>
             </tr>
-            @foreach (var exam in Model)
-            {
-                if (exam.Grades == null)
+            @if (Model.CommingExams.Count() > 0)
+                @foreach (Exam commingExam in Model.CommingExams)
                 {
+
                     <tr>
-                        <td>@exam.Name</td>
-                        <td>@exam.Date.ToShortDateString()</td>
+                        <td>@commingExam.Course.Name | @commingExam.Title </td>
+                        <td>@commingExam.ExamDate</td>
                         <td>
-                            @if (exam.Available)
+                            @if (commingExam.ExamDate <= DateTime.Now)
                             {
-                                <form asp-controller="ExamQuestions" asp-action="ExamQuestions" method="get">
-                                    <input type="hidden" name="examName" value="@exam.Name" />
-                                    <button type="submit" class="grades-button">Take Exam</button>
-                                </form>
+                                <a asp-action="TakeExam" asp-controller="Student" asp-route-examId="@commingExam.Id" >Take Exam</a>                           
                             }
                             else
                             {
                                 <span class="not-available">Not available</span>
                             }
                         </td>
-                    </tr>
+                   </tr>
                 }
+            else
+            {
+                <tr>
+                    <td colspan="3">No Upcomming Exams </td>
+                </tr>
             }
         </table>
+        <h2>Passed Exams</h2>
+        <table>
+            <caption>Passed Exams</caption>
+            <tr>
+                <th>Exam Name</th>
+                <th>Date</th>
+                <th>Grades</th>
+                <th>Answers</th>
+            </tr>
+            @if (Model.ExamsTaken.Count() > 0)
+                foreach (var examTaken in Model.ExamsTaken)
+                {
+                    <tr>
+                        <td>@examTaken.Exam.Course.Name | @examTaken.Exam.Title</td>
+                        <td>@examTaken.Exam.ExamDate</td>
+                        <td>@examTaken.Grade</td>
+                        <td>
+                            <a class="btn btn-info" asp-action="Answers" asp-controller="Student" asp-route-stId="@examTaken.StudentId" asp-route-examId="@examTaken.ExamId">Answers</a>
+                        </td>
+                    </tr>
+                }
+            else
+            {
+                <tr>
+                    <td colspan="4">No Exams Taken Yet </td>
+                </tr>
+            }
+        </table>
+        <h2>Missed Exams</h2>
+        <table>
+            <caption>Missed Exams</caption>
+            <tr>
+                <th>Exam Name</th>
+                <th>Date</th>
+                <th>Grades</th>
+                
+            </tr>
+            @if (Model.MissedExams.Count() > 0)
+                foreach (var missedExam in Model.MissedExams)
+                {
+                    <tr>
+                        <td>@missedExam.Course.Name | @missedExam.Title</td>
+                        <td>@missedExam.ExamDate</td>
+                        <td>0</td>
+                        
+                    </tr>
+                }
+            else
+            {
+                <tr>
+                    <td colspan="3">No Missed Exams </td>
+                </tr>
+            }
+        </table>
+        
     </div>
 </body>
 </html>

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ExamChoices>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>StudentAnswers</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        .correct {
+            background-color: #90EE90;
+            color: green;
+        }
+
+        .incorrect {
+            background-color: #FFCCCC;
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+    <a class="btn btn-outline-info" asp-action="Index" asp-controller="Student">Back</a>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <td>Question</td>
+                <td>Answer</td>
+                <td>Correct Answer</td>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var ChoiceQuestion in Model)
+            {
+                <tr>
+                    <td>@ChoiceQuestion.Question.Text</td>
+                    <td class="@(ChoiceQuestion.CorrectChoices.Count== ChoiceQuestion.StudentChoices.FindAll(e=>e.IsCorrect).Count && ChoiceQuestion.CorrectChoices.Count== ChoiceQuestion.StudentChoices.Count ? "correct" : "incorrect")">
+                        
+
+                        @foreach (var choice in ChoiceQuestion.StudentChoices)
+                        {
+                            <span>@choice.Text </span>
+                        }
+                    </td>
+                    <td>
+                        @foreach (var choice in ChoiceQuestion.CorrectChoices)
+                        {
+                            <span>@choice.Text </span>
+                        }
+                    </td>
+
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</body>
+</html>

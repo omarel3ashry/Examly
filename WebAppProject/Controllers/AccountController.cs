@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-using WebAppProject.Repository;
+
 using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers
@@ -37,7 +37,7 @@ namespace WebAppProject.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Register(Register registerInfo) 
+        public IActionResult Register(RegisterViewModel registerInfo) 
         { 
             User user = new User { Email = registerInfo.Email, Password = registerInfo.Password,RoleId=4};
             int userId= userRepository.Add(user);

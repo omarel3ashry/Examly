@@ -1,6 +1,6 @@
 ﻿namespace WebAppProject.ViewModels
 {
-    public class Register
+    public class RegisterViewModel
     {
         public string Name { get; set; }
         public string Email { get; set; }

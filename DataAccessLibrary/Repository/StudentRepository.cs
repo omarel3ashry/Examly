@@ -201,6 +201,15 @@ namespace DataAccessLibrary.Repository
             }
             return result;
         }
-
+        public void AddStudentAnswers(int examId, int studentId, List<Choice> choices)
+        {
+            
+            foreach (Choice choice in choices)
+            {
+                StudentAnswer studentAnswer = new StudentAnswer { ExamId = examId, StudentId = studentId,ChoiceId=choice.Id };
+                _context.StudentAnswers.Add(studentAnswer);
+            }
+            _context.SaveChanges();
+        }
     }
 }
