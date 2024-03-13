@@ -16,7 +16,7 @@
         public int? BranchId { get; set; }
         public Branch? Branch { get; set; }
         public Department? ManagedDepartment { get; set; }
-        public ICollection<Question> Questions { get; } = new HashSet<Question>();
-        public ICollection<DepartmentCourse> DepartmentCourses { get; } = new HashSet<DepartmentCourse>();
+        public ICollection<Question> Questions { get; } = new List<Question>();
+        public ICollection<DepartmentCourse> DepartmentCourses { get; } = new List<DepartmentCourse>();
     }
 }

@@ -1,4 +1,4 @@
-﻿@model QuestionInfo
+﻿@model QuestionViewModel
 @{
     ViewData["Title"] = "QuestionInfo";
 }
@@ -7,16 +7,27 @@
 
 <div>
 
-    <p><strong>Course Name:</strong> @Model.CourseName</p>
-    <p><strong>Question Text:</strong> @Model.QuestionText</p>
-    @foreach (var choice in Model.Choices)
+    <p><strong>Course Name:</strong> @Model.Course?.Name</p>
+    <p><strong>Question Text:</strong> @Model.Text</p>
+    <p><strong>choices Type:</strong> @(Model.Type == 1 ? "MCQ" : "True or False")</p>
+    @if (Model.Choices.Count>1)
+    {
+        @foreach (var choice in Model.Choices)
+        {
+            <div class="form-group">
+                <label>Choice</label>
+                <input type="text" class="form-control" value="@choice.Text" readonly />
+                <span class="@(@choice.IsCorrect ? "text-info" : "text-danger")">@choice.IsCorrect</span>
+            </div>
+        }
+    }
+    else
     {
         <div class="form-group">
             <label>Choice</label>
-            <input type="text" class="form-control" value="@choice.Body" readonly />
-            <span class="text-danger">@choice.IsCorrect</span>
+            <input type="text" class="form-control" value="@Model.Choices[0].Text" readonly />
         </div>
     }
-    <p><strong>choices Type:</strong> @Model.Type</p>
+
 
 </div>

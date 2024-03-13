@@ -1,4 +1,4 @@
-﻿@model List<InstructorViewModel>
+﻿@model IEnumerable<DataAccessLibrary.Model.DepartmentCourse>
 @{
     ViewData["Title"] = "Index";
 }
@@ -17,8 +17,8 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.DepartmentName</td>
-                <td>@item.CourseName</td>
+                <td>@item.Department.Name</td>
+                <td>@item.Course.Name</td>
                 <td>
                     <a asp-action="Info" asp-controller="Instructor" asp-route-id="@item.CourseId" class="btn btn-dark">Info</a>
                     |<a asp-action="QuestionBank" asp-controller="Instructor" asp-route-id="@item.CourseId" class="btn btn-dark">QuestionBank</a>

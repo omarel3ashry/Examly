@@ -13,7 +13,7 @@
         public Course Course { get; set; }
         public int? InstructorId { get; set; }
         public Instructor? Instructor { get; set; }
-        public ICollection<Choice> Choices { get; } = new HashSet<Choice>();
-        public ICollection<Exam> Exams { get; } = new HashSet<Exam>();
+        public ICollection<Choice> Choices { get; } = new List<Choice>();
+        public ICollection<Exam> Exams { get; } = new List<Exam>();
     }
 }

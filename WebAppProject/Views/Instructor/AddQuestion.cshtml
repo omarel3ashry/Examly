@@ -1,4 +1,4 @@
-﻿@model Question
+﻿@model QuestionViewModel
 
 @{
     ViewData["Title"] = "Add Question";
@@ -6,90 +6,41 @@
 
 <h1>Add Question</h1>
 
-<form asp-action="AddQuestion" asp-controller="Instructor"  method="post">
-    <input type="hidden" asp-for="CourseId" value="@ViewBag.CourseId"  />
-    <input type="hidden" asp-for="QuestionId" />
-   
-    <div class="form-group">
-        <label asp-for="QuestionText">Question Text</label>
-        <input asp-for="QuestionText" class="form-control" />
-        @* <span asp-validation-for="QuestionText" class="text-danger"></span> *@
-    </div>
+<form asp-action="AddQuestion" asp-controller="Instructor" method="post">
+
+    <input type="hidden" asp-for="InstructorId" value="@ViewBag.InstructorId" />
+    <input type="hidden" asp-for="CourseId" value="@ViewBag.CourseId" />
 
     <div class="form-group">
         <label asp-for="Type">Question Type</label>
-        <select id="questionType" asp-for="Type" class="form-control">
-            <option value="TrueFalse">TrueFalse</option>
-            <option value="MultipleChoice">MultipleChoice</option>
+        <select asp-for="Type" id="questionType" class="form-control">
+            <option value="1">Multiple Choice</option>
+            <option value="2">True/Fasle</option>
         </select>
-
-       
     </div>
 
-    <div class="form-group">
-        <label asp-for="Difficulty">Difficulty</label>
-        <input asp-for="Difficulty" class="form-control" />
-        <span asp-validation-for="Difficulty" class="text-danger"></span>
-    </div>
+    <partial name="QuestionPartial" />
 
-    <div class="form-group">
-        <label asp-for="Grade">Grade</label>
-        <input asp-for="Grade" class="form-control" />
-        
-    </div>
-
-    <!-- Choices -->
-    <h3>Choices</h3>
-    <div id="choicesContainer">
-        <!-- Choices will be dynamically added here -->
-    </div>
-
-
-    <button  type="submit" asp-route-id="@ViewBag.courseid" class="btn btn-primary">Add Question</button>
+    <button type="submit" asp-route-id="@ViewBag.Courseid" class="btn btn-primary">Add Question</button>
 </form>
+
+<script src="/lib/jquery/dist/jquery.js"></script>
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var questionTypeSelect = document.getElementById("questionType");
-            var choicesContainer = document.getElementById("choicesContainer");
+            $("#choicesContainer").load("/Instructor/AddChoices/1");
 
             questionTypeSelect.addEventListener("change", function () {
                 var type = this.value;
-                choicesContainer.innerHTML = ''; // Clear existing choices
-
-                if (type === 'TrueFalse') {
-                    // For True/False, add two choices
-                    addChoiceInput('True');
-                    addChoiceInput('False');
-                } else if (type === 'MultipleChoice') {
-                    // For Multiple Choice, add four choices
-                    for (var i = 1; i <= 4; i++) {
-                        addChoiceInput('Choice ' + i);
-                    }
+                if (type === '1') {
+                    $("#choicesContainer").load("/Instructor/AddChoices/1");
+                } else if (type === '2') {
+                    $("#choicesContainer").load("/Instructor/AddChoices/2");
                 }
             });
-
-            function addChoiceInput(choiceName) {
-                var choiceDiv = document.createElement('div');
-                choiceDiv.classList.add('form-group');
-
-                var choiceLabel = document.createElement('label');
-                choiceLabel.textContent = choiceName;
-
-                var choiceInput = document.createElement('input');
-                choiceInput.type = 'text';
-                choiceInput.name = 'choices[]'; // Use array notation to ensure all choices are submitted
-                choiceInput.classList.add('form-control');
-                choiceInput.placeholder = choiceName;
-                choiceInput.required = true;
-
-                choiceDiv.appendChild(choiceLabel);
-                choiceDiv.appendChild(choiceInput);
-
-                choicesContainer.appendChild(choiceDiv);
-            }
         });
     </script>
 
-    }
+}
 

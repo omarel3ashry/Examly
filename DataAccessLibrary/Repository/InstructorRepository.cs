@@ -23,6 +23,50 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Instructors.Where(e => !e.IsDeleted).ToListAsync();
         }
+
+        public int? GetInstIdByUserId(int userId)
+        {
+            return _context.Instructors.FirstOrDefault(e => e.UserId == userId)?.Id;
+        }
+
+        public IQueryable<Instructor?> GetByUserIdWithCourses(int userId)
+        {
+            return _context.Instructors
+                .Include(e => e.DepartmentCourses).ThenInclude(e => e.Course)
+                .Include(e => e.DepartmentCourses).ThenInclude(e => e.Department)
+                .Where(e => !e.IsDeleted && e.UserId == userId);
+        }
+
+        public List<Question> GetAllQuestions(int userId)
+        {
+            var question = _context.Instructors
+                            .Include(e => e.Questions.Where(e => !e.IsDeleted))
+                            .ThenInclude(e => e.Choices)
+                            .FirstOrDefault(e => !e.IsDeleted && e.UserId == userId)?
+                            .Questions;
+
+            return question?.ToList() ?? new List<Question>();
+        }
+
+        public List<Question> GetCourseQuestions(int userId, int courseId)
+        {
+            var question = _context.Instructors
+                .Include(e => e.Questions.Where(e => !e.IsDeleted && e.CourseId == courseId))
+                .ThenInclude(e => e.Choices)
+                .FirstOrDefault(e => !e.IsDeleted && e.UserId == userId)?
+                .Questions;
+
+            return question?.ToList() ?? new List<Question>();
+        }
+
+        public int AddQuestion(Question entity)
+        {
+            //var choices = entity.Choices;
+            _context.Questions.Add(entity);
+            _context.SaveChanges();
+            return entity.Id;
+        }
+
         public List<Instructor> GetAllWithIncludes()
         {
             return _context.Instructors

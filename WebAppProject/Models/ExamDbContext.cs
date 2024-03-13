@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace WebAppProject.Models
@@ -42,4 +42,4 @@ namespace WebAppProject.Models
                 .HasForeignKey(eq => eq.QuestionId);
         }
     }
-}
+}*/

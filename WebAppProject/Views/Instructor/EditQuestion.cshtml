@@ -1,7 +1,4 @@
-﻿
-
-
-@model Question
+﻿@model QuestionViewModel
 
 @{
     ViewData["Title"] = "Edit Question";
@@ -10,58 +7,28 @@
 <h1>Edit Question</h1>
 
 <form asp-action="EditQuestion" asp-controller="Instructor" method="post">
-    <input type="hidden" asp-for="QuestionId" />
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <input type="hidden" asp-for="InstructorId" value="@Model.InstructorId" />
+    <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
 
-    <div class="form-group">
-        <label asp-for="QuestionText"></label>
-        <input asp-for="QuestionText" class="form-control" />
-        <span asp-validation-for="QuestionText" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Type"></label>
-        <select id="questionType" asp-for="Type" class="form-control">
-            <option value="TrueFalse">TrueFalse</option>
-            <option value="MultipleChoice">Multiple Choice</option>
-          
-        </select>
-        <span asp-validation-for="Type" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Difficulty"></label>
-        <input asp-for="Difficulty" class="form-control" />
-        <span asp-validation-for="Difficulty" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Grade"></label>
-        <input asp-for="Grade" class="form-control" />
-        <span asp-validation-for="Grade" class="text-danger"></span>
-    </div>
-
-    <!-- Choices -->
-    <h3>Choices</h3>
-    @foreach (var choice in Model.Choices)
+    <h5>Type: </h5>
+    @if (Model.Choices.Count > 1)
     {
-        <div class="form-group">
-            <label>Choice Text</label>
-            <input name="choices[@choice.ChoiceId].ChoiceId" type="hidden" value="@choice.ChoiceId" />
-            <input name="choices[@choice.ChoiceId].Body" class="form-control" value="@choice.Body" />
-            <span asp-validation-for="Choices[@choice.ChoiceId].Body" class="text-danger"></span>
-            <div class="form-check">
-                <input name="choices[@choice.ChoiceId].IsCorrect" id="isCorrect_@choice.ChoiceId" type="checkbox" class="form-check-input" @(choice.IsCorrect ? "checked" : "") />
-                <label class="form-check-label" for="isCorrect_@choice.ChoiceId">Is Correct?</label>
-            </div>
-        </div>
+        <label>MCQ Question</label>
+        <partial name="QuestionPartial" />
+        <partial name="MCQChoicesPartial" />
     }
-
-
-
+    else
+    {
+        <label>TF Question</label>
+        <partial name="QuestionPartial" />
+        <partial name="TFChoicesPartial" />
+    }
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
-@section Scripts {
+
+@* @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var questionTypeSelect = document.getElementById("questionType");
@@ -69,10 +36,10 @@
 
             questionTypeSelect.addEventListener("change", function () {
                 var type = this.value;
-                // choicesContainer.innerHTML = ''; 
+                // choicesContainer.innerHTML = '';
 
                 if (type === 'TrueFalse') {
-                   
+
                     addChoiceInput('True');
                     addChoiceInput('False');
                 } else if (type === 'MultipleChoice') {
@@ -92,7 +59,7 @@
 
                 var choiceInput = document.createElement('input');
                 choiceInput.type = 'text';
-                choiceInput.name = 'choices[]'; 
+                choiceInput.name = 'choices[]';
                 choiceInput.classList.add('form-control');
                 choiceInput.placeholder = choiceName;
                 choiceInput.required = true;
@@ -105,6 +72,6 @@
         });
     </script>
 
-}
+} *@
 
 

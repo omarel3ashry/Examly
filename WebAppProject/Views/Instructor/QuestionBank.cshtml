@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Question>
+﻿@model IEnumerable<DataAccessLibrary.Model.Question>
 @{
     ViewData["Title"] = "QuestionBank";
 }
@@ -18,14 +18,14 @@
         @foreach (var question in Model)
         {
             <tr>
-                <td>@question.QuestionText</td>
+                <td>@question.Text</td>
                 <td>
-                    <a asp-action="QuestionInfo" asp-controller="Instructor" asp-route-id="@question.QuestionId" class="btn btn-dark">Info</a>
-                    |<a asp-action="EditQuestion" asp-controller="Instructor" asp-route-id="@question.QuestionId" class="btn btn-dark">Edit</a>
-                    | <a asp-action="DeleteQuestion" asp-controller="Instructor" onclick="return confirm(' Are you sure ')" asp-route-id="@question.QuestionId" class="btn btn-danger">Delete</a>
-                    
+                    <a asp-action="QuestionInfo" asp-route-id="@question.Id" class="btn btn-dark">Info</a>
+                    |<a asp-action="EditQuestion" asp-route-id="@question.Id" class="btn btn-dark">Edit</a>
+                    | <a asp-action="DeleteQuestion" onclick="return confirm(' Are you sure ')" asp-route-id="@question.CourseId" asp-route-qId="@question.Id" class="btn btn-danger">Delete</a>
+
                 </td>
-                
+
             </tr>
         }
     </tbody>
