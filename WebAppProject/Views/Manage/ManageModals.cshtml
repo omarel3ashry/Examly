@@ -20,7 +20,7 @@
 <script src="/lib/jquery/dist/jquery.js"></script>
 <script>  
         $("#ManageDept").click(function () {
-        $("#content").load(`Manage/DepartmentManager/${document.getElementById("BranchId").value }`)// replace by BranchId from select
+        $("#content").load(`Manage/DepartmentManager?branchId=${document.getElementById("BranchId").value}&deptId=${document.getElementById("DepartmentId").value}`)// replace by BranchId from select
             $("#modal").modal('show');
             $("#ModalLabel").text("Instructors List")
         })

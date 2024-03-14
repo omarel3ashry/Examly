@@ -179,7 +179,7 @@ namespace DataAccessLibrary.Repository
             var questionCorrectChoices = new List<Choice>();
             var studentChoicesForQuestion = new List<Choice>();
             var result = new List<ExamChoices>();
-
+            bool isQuestionCorrect;
             if (student != null)
             {
                 var listOfChoices = student.StudentAnswers.Select(e => e.Choice);
@@ -190,11 +190,14 @@ namespace DataAccessLibrary.Repository
                         Question question = choice.Question;
                         questionCorrectChoices = _context.Choices.Where(e => e.QuestionId == question.Id && e.IsCorrect).ToList();
                         studentChoicesForQuestion = listOfChoices.Where(e => e.QuestionId == question.Id).ToList();
+                        isQuestionCorrect=  questionCorrectChoices.Count == studentChoicesForQuestion.Count 
+                                         && questionCorrectChoices.Count == studentChoicesForQuestion.FindAll(e => e.IsCorrect).Count;
                         result.Add(new ExamChoices
                         {
                             Question = choice.Question,
                             CorrectChoices = questionCorrectChoices,
-                            StudentChoices = studentChoicesForQuestion
+                            StudentChoices = studentChoicesForQuestion,
+                            IsCorrect = isQuestionCorrect
                         });
                     }
                 }

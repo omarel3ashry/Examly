@@ -34,15 +34,17 @@ namespace WebAppProject.Controllers
             DashboardViewModel model = new DashboardViewModel() { Branches = branchRepository.GetAll() };
             return View(model);
         }
+      
         public IActionResult GetLists(int BranchId)
         {
             var DepartmentList = departmentRepository.SelectAll(dept=>dept.BranchId==BranchId).OrderBy(dept => dept.Name);
             var InstructorList = instructorRepository.SelectAll(ins=>ins.BranchId==BranchId).OrderBy(ins => ins.Name);
             return Ok(new { DepartmentList, InstructorList });
         }
-        public IActionResult DepartmentManager(int id)
+        public IActionResult DepartmentManager(int branchId,int deptId)
         {
-            var model =instructorRepository.SelectAll(e => e.BranchId == id);
+            ViewBag.DepartmentId = deptId;
+            var model =instructorRepository.SelectAll(e => e.BranchId == branchId);
             return PartialView(model);
         }
         public IActionResult AssignManager(int deptId, int insId)

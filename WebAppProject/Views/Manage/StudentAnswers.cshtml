@@ -2,9 +2,7 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -15,12 +13,10 @@
             background-color: #90EE90;
             color: green;
         }
-
         .incorrect {
             background-color: #FFCCCC;
             color: red;
         }
-
     </style>
 </head>
 <body>
@@ -28,37 +24,32 @@
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <td>Question</td>
+                <td>Question (grade)</td>
                 <td>Answer</td>
-                <td>Correct Answer</td>
-                
+                <td>Correct Answer</td> 
             </tr>
         </thead>
         <tbody>
-            
                 @foreach (var ChoiceQuestion in Model)
                 {
                     <tr>
-                        <td>@ChoiceQuestion.Question.Text</td>
-                        <td class="@(ChoiceQuestion.CorrectChoices.Count== ChoiceQuestion.StudentChoices.Count ? "correct" : "incorrect")">
->
-                            
+                        <td>@ChoiceQuestion.Question.Text (@ChoiceQuestion.Question.Grade)</td>
+                        <td class="@(ChoiceQuestion.IsCorrect? "correct" : "incorrect")">
                                @foreach (var choice in ChoiceQuestion.StudentChoices)
                                 {
-                                    <span>@choice.Text </span>
+                                    <span>@choice.Text</span>
+                                    <br />
                                 }    
                         </td>
                         <td>
                             @foreach (var choice in ChoiceQuestion.CorrectChoices)
                             {
-                                <span>@choice.Text </span>
+                                <span>@choice.Text</span>
+                                <br />
                             }
                         </td>
-                        
-                       
                     </tr>
                 }
-            
         </tbody>
     </table>
 </body>

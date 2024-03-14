@@ -1,6 +1,7 @@
 ﻿@model ExamViewModel
 @{
-    List<Question> questions = Model.Exam.Questions.OrderBy(e => e.Type).ToList();
+    List<Question> mcqQuestions = Model.Exam.Questions.Where(e => e.Type == 1).ToList();
+    List<Question> tfQuestions = Model.Exam.Questions.Where(e => e.Type == 2).ToList();
 }
 <!DOCTYPE html>
 <html>
@@ -70,7 +71,6 @@
                 <th>Total Grade</th>
                 <th>Duration</th>
             </tr>
-    
                 <tr>
                     <td>@Model.DepartmentCourse.Department.Name</td>
                     <td>@Model.DepartmentCourse.Course.Name</td>
@@ -80,34 +80,37 @@
                 </tr>
             
         </table>
-
         <h2>Answer the Questions</h2>
         <form id="examForm" method="post" asp-controller="Student" asp-action="SubmitExam">
-            @for (int i = 0; i < questions.Count; i++)
+            @if (mcqQuestions.Count > 0)
             {
-                <h3>@(i + 1). @questions[i].Text</h3>
-                if (questions[i].Type == 2)// true or false
+                <h2>T/F Questions:</h2>
+                @for (int i = 0; i < tfQuestions.Count; i++)
                 {
-                    @for (int j = 0; j < 2; j++)
+                    <h3>@(i + 1). @tfQuestions[i].Text</h3>
+                    foreach (var choice in tfQuestions[i].Choices)
                     {
-                        <input type="radio" id="@questions[i].Choices.ElementAt(j).Id" value="@questions[i].Choices.ElementAt(j).Id" />
-                        <label for="@questions[i].Choices.ElementAt(j).Id">@questions[i].Choices.ElementAt(j).Text </label>
-
+                        <input type="radio" id="@choice.Id" name="tfChoices[@i].Id" value="@choice.Id" />
+                        <label for="@choice.Id">@choice.Text </label>
                     }
+                    <br />
+                    <hr />
                 }
-                else
+            }
+            @if (mcqQuestions.Count > 0)
+            {
+                <h2>MCQ Questions:</h2>
+                @for (int i = 0; i < mcqQuestions.Count; i++)
                 {
-                    @for (int j = 0; j < 4; j++)
+                    <h3>@(i + 1). @mcqQuestions[i].Text</h3>
+                    foreach(var choice in mcqQuestions[i].Choices)
                     {
-                        <input type="checkbox" id="@questions[i].Choices.ElementAt(j).Id" value="@questions[i].Choices.ElementAt(j).Id" />
-                        <label for="@questions[i].Choices.ElementAt(j).Id">@questions[i].Choices.ElementAt(j).Text </label>
+                        <input type="checkbox" id="@choice.Id" value="@choice.Id" />
+                        <label for="@choice.Id">@choice.Text </label>
                     }
+                    <br />
+                    <hr />
                 }
-                <br />
-                <hr />
-                
-
-
             }
             <input type="hidden" name="examId" value="@Model.Exam.Id" />
             <div class="error-message"></div>
@@ -117,10 +120,10 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script>
-        $("#examForm").submit((e)=>{        
-            $("input:checked").each((index,input)=>{
+        $("#examForm").submit((e)=>{
+            $("input[type=checkbox]:checked").each((index,input)=>{
                 console.log(index);
-                input.name = `choices[${index}].Id`;
+                input.name = `mcqChoices[${index}].Id`;
             })
         })
         /*/ When the document is fully loaded
