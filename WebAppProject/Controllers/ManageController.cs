@@ -1,4 +1,5 @@
-﻿using DataAccessLibrary.Repository;
+﻿using DataAccessLibrary.Model;
+using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
@@ -36,9 +37,9 @@ namespace WebAppProject.Controllers
         }
       
         public IActionResult GetLists(int BranchId)
-        {
-            var DepartmentList = departmentRepository.SelectAll(dept=>dept.BranchId==BranchId).OrderBy(dept => dept.Name);
-            var InstructorList = instructorRepository.SelectAll(ins=>ins.BranchId==BranchId).OrderBy(ins => ins.Name);
+        {   
+            var DepartmentList = departmentRepository.SelectAll(dept=>dept.BranchId==BranchId).Select(e => new { e.Id, e.Name }).OrderBy(e=>e.Name);          
+            var InstructorList = instructorRepository.SelectAll(e=>e.BranchId==BranchId).Select(e => new { e.Id, e.Name }).OrderBy(e => e.Name);                 
             return Ok(new { DepartmentList, InstructorList });
         }
         public IActionResult DepartmentManager(int branchId,int deptId)
@@ -53,11 +54,11 @@ namespace WebAppProject.Controllers
             departmentRepository.SetManager(deptId, insId);
             return RedirectToAction("Index");
         }
-        public IActionResult Students(int id)
+        public IActionResult Students(int deptId)
         {
-            var model =studentRepository.SelectAll(st => st.DepartmentId == id);
-
-            return PartialView(model);
+            var model =studentRepository.SelectAll(st => st.DepartmentId == deptId);
+            return View(model);
+            
         }
         public IActionResult StudentGrades(int stId)
         {
