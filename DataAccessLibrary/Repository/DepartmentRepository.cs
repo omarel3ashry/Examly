@@ -13,6 +13,7 @@ namespace DataAccessLibrary.Repository
         {
             _context = context;
         }
+
         public List<Department> GetAll()
         {
             return _context.Departments.Where(e => !e.IsDeleted).ToList();
@@ -46,7 +47,25 @@ namespace DataAccessLibrary.Repository
 
         public Department? GetById(int id)
         {
-            return _context.Departments.Find(id);
+            return _context.Departments.FirstOrDefault(e => !e.IsDeleted && e.Id == id);
+        }
+
+        public Department? GetByIdCoursesIncluded(int id)
+        {
+            return _context.Departments
+                .Include(e => e.DepartmentCourses).ThenInclude(e => e.Course)
+                .Include(e => e.DepartmentCourses).ThenInclude(e => e.Instructor)
+                .FirstOrDefault(e => !e.IsDeleted && e.Id == id);
+        }
+
+        public DepartmentCourse? GetDeptCourseWithIncludes(int crsId, int deptId)
+        {
+            return _context.DepartmentCourses
+                            .Include(e => e.Course)
+                            .Include(e => e.Instructor)
+                            .Include(e => e.Department)
+                            .ThenInclude(e => e.Branch)
+                            .FirstOrDefault(e => e.CourseId == crsId && e.DepartmentId == deptId);
         }
 
         public async Task<Department?> GetByIdAsync(int id)
@@ -98,6 +117,24 @@ namespace DataAccessLibrary.Repository
             return false;
         }
 
+        public int AddDepartmentCourses(List<DepartmentCourse> deptCourses)
+        {
+            _context.DepartmentCourses.AddRange(deptCourses);
+            return _context.SaveChanges();
+        }
+
+        public bool UpdateDeptCourseInstructor(int deptId, int crsId, int newInstId)
+        {
+            var deptCourse = _context.DepartmentCourses
+                .FirstOrDefault(e => e.DepartmentId == deptId && e.CourseId == crsId);
+            if (deptCourse != null)
+            {
+                deptCourse.InstructorId = newInstId;
+                return _context.SaveChanges() == 1;
+            }
+            return false;
+        }
+
         public async Task<bool> UpdateAsync(Department entity)
         {
             if (entity != null)
@@ -114,6 +151,19 @@ namespace DataAccessLibrary.Repository
             if (department != null)
             {
                 department.IsDeleted = true;
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool DeleteDeptCourse(int deptId, int crsId)
+        {
+            var deptCourse = _context.DepartmentCourses
+                   .FirstOrDefault(e => e.DepartmentId == deptId && e.CourseId == crsId);
+            if (deptCourse != null)
+            {
+                _context.DepartmentCourses.Remove(deptCourse);
                 _context.SaveChanges();
                 return true;
             }

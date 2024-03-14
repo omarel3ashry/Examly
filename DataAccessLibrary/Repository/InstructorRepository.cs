@@ -203,7 +203,7 @@ namespace DataAccessLibrary.Repository
 
         public List<Instructor> SelectAll(Expression<Func<Instructor, bool>> predicate)
         {
-            return _context.Instructors.Where(predicate).ToList();
+            return _context.Instructors.Where(e => !e.IsDeleted).Where(predicate).ToList();
         }
 
         public Task<List<Instructor>> SelectAllAsync(Expression<Func<Instructor, bool>> predicate)

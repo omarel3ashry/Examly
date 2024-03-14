@@ -13,6 +13,7 @@ namespace DataAccessLibrary.Repository
         {
             _context = context;
         }
+
         public List<Course> GetAll()
         {
             return _context.Courses.Where(e => !e.IsDeleted).ToList();
@@ -22,6 +23,7 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Courses.Where(e => !e.IsDeleted).ToListAsync();
         }
+
         public List<Course> GetAllWithIncludes()
         {
             return _context.Courses
@@ -130,6 +132,19 @@ namespace DataAccessLibrary.Repository
                 return true;
             }
             return false;
+        }
+
+        public List<Course> GetCoursesNotInDepartment(int deptId)
+        {
+            return _context.Courses
+                            .Where(course => !course.IsDeleted &&
+                                             !_context.DepartmentCourses
+                                              .Any(
+                                                    dc => dc.CourseId == course.Id &&
+                                                    dc.DepartmentId == deptId
+                                                  )
+                                  )
+                            .ToList();
         }
 
         public Course? Select(Expression<Func<Course, bool>> predicate)

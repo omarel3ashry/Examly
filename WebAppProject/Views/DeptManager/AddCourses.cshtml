@@ -1,0 +1,33 @@
+﻿@model List<AddCourseViewModel>
+
+@{
+    ViewData["Title"] = "Add Course";
+}
+
+<h1>Add Course</h1>
+
+
+
+
+<form asp-action="AddCourses" method="post">
+    @*  <input type="hidden" asp-for="DepartmentId" value="@ViewBag.DepartmentId" /> *@
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        <div class="form-group">
+            <input type="hidden" asp-for="@Model[i].Id" value="@Model.ElementAt(i).Id" />
+            <input type="hidden" asp-for="@Model[i].Name" value="@Model[i].Name" />
+            <label>@Model[i].Name</label>
+            <input type="checkbox" class="btn-check" id="btn-check-outlined@(i)" asp-for="@Model[i].WantToAdd">
+            <label class="btn btn-outline-primary" for="btn-check-outlined@(i)" asp-for="@Model[i].WantToAdd">Add</label>
+            <br />
+        </div>
+    }
+    <br />
+    <button type="submit" asp-route-id="@ViewBag.DepartmentId" class="btn btn-primary">Add Course</button>
+</form>
+@* <script src="~/lib/jquery/dist/jquery.js"></script>
+@section Scripts {
+    <script>
+    $("[name='my-checkbox']").bootstrapSwitch();
+    </script>
+} *@

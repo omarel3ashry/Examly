@@ -1,0 +1,47 @@
+﻿@model DataAccessLibrary.Model.Department
+
+<h1>Courses</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Course Name</th>
+            <th>Instructor</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.DepartmentCourses.Count == 0)
+        {
+            <tr><td colspan="3">Currently no courses in the department</td></tr>
+        }
+        else
+        {
+            foreach (var deptCourse in Model.DepartmentCourses)
+            {
+                <tr>
+                    <td>@deptCourse.Course.Name</td>
+                    <td>@(deptCourse.Instructor?.Name ?? "Not Assigned")</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@deptCourse.CourseId" class="btn btn-info">Info</a>
+                        <button onclick="showDialog(@deptCourse.CourseId)" class="btn btn-primary">Assign Instructor</button>
+                        @* <a asp-action="AssignInstructor" asp-route-id="@deptCourse.CourseId" class="btn btn-primary">Assign Instructor</a> *@
+                        <a asp-action="DeleteCourse" onclick="return confirm(' Are you sure ')" asp-route-id="@deptCourse.CourseId" class="btn btn-danger">Remove</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<a asp-action="AddCourses" asp-route-id="@Model.Id" class="btn btn-success">Add Course</a>
+
+<div id="div-id">
+</div>
+<script>
+    function showDialog(id) {
+        $("#div-id").load(`/DeptManager/AssignInstructor/${id}`, function () {
+            $("#modal-id").modal('show')
+        });
+    }
+</script>
