@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 using WebAppProject.Models;
 using WebAppProject.ViewModels;
 
@@ -29,7 +30,13 @@ namespace WebAppProject.Controllers
         }
 
         public IActionResult Index()
-        {
+        {     
+            if(User.Identity.IsAuthenticated)
+            {
+                string role= User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)!.Value;
+                string controller = role == "Admin" ? "Manage" : role == "Student" ? "Student" : "Instructor";
+                return RedirectToAction("Index", controller);
+            }
             return View();
         }
 

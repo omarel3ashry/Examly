@@ -1,0 +1,24 @@
+﻿@model Course
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">ID: <strong> @Model.Id</strong> </p>
+                    <p class="card-text">Name: <strong>@Model.Name </strong></p>
+                    <p class="card-text">Description: <strong>@Model.Description </strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div
+<div>
+    <a asp-action="Index" asp-controller="Course" class="btn btn-warning">Back to List</a>
+     <a asp-action="Edit" asp-controller="Course" asp-route-Id="@Model.Id" class="btn btn-success">Edit</a>
+   <a asp-action="Delete" asp-controller="Course" asp-route-Id="@Model.Id" class="btn btn-danger">Delete</a>
+</div>

@@ -1,0 +1,199 @@
+﻿@model  StudentExamsViewModel
+@{
+    ViewData["Title"] = "E-Exam | Exams";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* .container {
+                            max-width: 800px;
+                            margin: 0 auto;
+                        } */
+
+        h2 {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+            .button:hover {
+                background-color: darkred;
+                color: white; 
+            }
+
+        .grades-button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            border: 1px solid #28a745;
+            outline: none;
+        }
+
+            .grades-button:hover {
+                background-color: darkred;
+                color: white; 
+            }
+
+            .grades-button:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+                border-color: #ccc;
+            }
+
+        .not-available {
+            color: #999;
+        }
+
+        /* .button:hover:not(.grades-button) {
+            background-color: darkred;
+            color: white;
+        } */
+    </style>
+</head>
+<body>
+    <a asp-controller="Student" asp-action="index" class="button">Courses</a>
+    <a asp-controller="Student" asp-action="Exams" class="button">Exams</a>
+    <div class="container">
+        <h2>Upcoming Exams</h2>
+        <table>
+            <caption>Upcoming Exams</caption>
+            <tr>
+                <th>Exam Name</th>
+                <th>Date</th>
+                <th>Availability</th>
+            </tr>
+            @if (Model.CommingExams.Count() > 0)
+                @foreach (Exam commingExam in Model.CommingExams)
+                {
+
+                    <tr>
+                        <td>@commingExam.Course.Name | @commingExam.Title </td>
+                        <td>@commingExam.ExamDate</td>
+                        <td>
+                            @if (commingExam.ExamDate <= DateTime.Now)
+                            {
+                                <a asp-action="TakeExam" asp-controller="Student" asp-route-examId="@commingExam.Id" >Take Exam</a>                           
+                            }
+                            else
+                            {
+                                <span class="not-available">Not available</span>
+                            }
+                        </td>
+                   </tr>
+                }
+            else
+            {
+                <tr>
+                    <td colspan="3">No Upcomming Exams </td>
+                </tr>
+            }
+        </table>
+        <h2>Passed Exams</h2>
+        <table>
+            <caption>Passed Exams</caption>
+            <tr>
+                <th>Exam Name</th>
+                <th>Date</th>
+                <th>Grades</th>
+                <th>Answers</th>
+            </tr>
+            @if (Model.ExamsTaken.Count() > 0)
+                foreach (var examTaken in Model.ExamsTaken)
+                {
+                    <tr>
+                        <td>@examTaken.Exam.Course.Name | @examTaken.Exam.Title</td>
+                        <td>@examTaken.Exam.ExamDate</td>
+                        <td>@examTaken.Grade</td>
+                        <td>
+                            <a class="btn btn-info" asp-action="Answers" asp-controller="Student" asp-route-stId="@examTaken.StudentId" asp-route-examId="@examTaken.ExamId">Answers</a>
+                        </td>
+                    </tr>
+                }
+            else
+            {
+                <tr>
+                    <td colspan="4">No Exams Taken Yet </td>
+                </tr>
+            }
+        </table>
+        <h2>Missed Exams</h2>
+        <table>
+            <caption>Missed Exams</caption>
+            <tr>
+                <th>Exam Name</th>
+                <th>Date</th>
+                <th>Grades</th>
+                
+            </tr>
+            @if (Model.MissedExams.Count() > 0)
+                foreach (var missedExam in Model.MissedExams)
+                {
+                    <tr>
+                        <td>@missedExam.Course.Name | @missedExam.Title</td>
+                        <td>@missedExam.ExamDate</td>
+                        <td>0</td>
+                        
+                    </tr>
+                }
+            else
+            {
+                <tr>
+                    <td colspan="3">No Missed Exams </td>
+                </tr>
+            }
+        </table>
+        
+    </div>
+</body>
+</html>

@@ -58,10 +58,12 @@ namespace DataAccessLibrary.Repository
         public Exam? GetByIdWithIncludes(int id)
         {
             return _context.Exams
-                    .Include(e => e.Course)
-                    .Include(e => e.Questions)
-                    .ThenInclude(e => e.Choices)
-                    .FirstOrDefault(e => e.Id == id);
+                .Include(e => e.Course)
+                .Include(e => e.Questions)
+                .ThenInclude(e=>e.Choices)
+                .Include(e => e.Students)
+                .Include(e => e.StudentAnswers)
+                .FirstOrDefault(e => e.Id == id);
         }
 
         public List<ExamTaken> GetExamGradesWithIncludes(int examId)
