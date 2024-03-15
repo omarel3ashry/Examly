@@ -1,7 +1,6 @@
 ﻿using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebAppProject.Repository;
 
 namespace WebAppProject.Controllers
 {

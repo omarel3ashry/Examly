@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using System.Drawing;
-using WebAppProject.Repository;
 using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers
@@ -15,7 +14,6 @@ namespace WebAppProject.Controllers
         private readonly IDepartmentRepository departmentRepository;
         private readonly IStudentRepository studentRepository;
         private readonly IBranchRepository branchRepository;
-        StudentRepo _studentrepo = new StudentRepo();
 
         public ManageController(IInstructorRepository instructorRepository ,IDepartmentRepository departmentRepository,IStudentRepository studentRepository,IBranchRepository branchRepository)
         {
@@ -31,8 +29,8 @@ namespace WebAppProject.Controllers
         }
         public IActionResult GetLists(int BranchId)
         {
-            var DepartmentList = departmentRepository.SelectAll(dept=>dept.BranchId==BranchId).OrderBy(dept => dept.Name);
-            var InstructorList = instructorRepository.SelectAll(ins=>ins.BranchId==BranchId).OrderBy(ins => ins.Name);
+            var DepartmentList = departmentRepository.SelectAll(dept=>dept.BranchId==BranchId).Select(e=> new {e.Id, e.Name}).OrderBy(dept => dept.Name);
+            var InstructorList = instructorRepository.SelectAll(ins=>ins.BranchId==BranchId).Select(e => new { e.Id, e.Name }).OrderBy(ins => ins.Name);
             return Ok(new { DepartmentList, InstructorList });
         }
         public IActionResult DepartmentManager(int id)
@@ -54,13 +52,13 @@ namespace WebAppProject.Controllers
         }
         public IActionResult StudentGrades(int stId)
         {
-            var model= _studentrepo.GetGrades(stId);
-            return View(model);
+            
+            return View();
         }
         public IActionResult StudentAnswers(int stId, int examId)
         {
-            var model=_studentrepo.GetAnswers(stId,examId);
-            return View(model);
+            
+            return View();
         }
         public IActionResult StudentDelete(int stId)
         {

@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-
-using WebAppProject.Repository;
 using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers

@@ -103,7 +103,7 @@
 
             datalist.forEach(function (Item) {
                 var option = document.createElement("option");
-                option.value = Item.departmentId;
+                option.value = Item.id;
                 option.textContent = Item.name;
                 selectElement.appendChild(option);
             });
@@ -114,7 +114,7 @@
 
             datalist.forEach(function (Item) {
                 var option = document.createElement("option");
-                option.value = Item.instructorId;
+                option.value = Item.id;
                 option.textContent = Item.name;
                 selectElement.appendChild(option);
             });
@@ -137,7 +137,8 @@
                             appendDepartmentOptions(data.departmentList);
                             appendInstructorOptions(data.instructorList);
                         },
-                        error: function () {
+                        error: function (data) {
+                            console.log(data);
                             alert("Error in load result");
                         }
                     });
@@ -204,10 +205,10 @@
         setBtnState(Controller, false);
         UpdateUrlState(Controller, "DepartmentId");
         // manage btns Area
-        setManageBtnState("DepartmentId", false);
-        setManageBtnState("BranchId", false);
-        SetManageManagerOnClick();
-        SetManageStudentOnClick();
+        // setManageBtnState("DepartmentId", false);
+        // setManageBtnState("BranchId", false);
+        // SetManageManagerOnClick();
+        // SetManageStudentOnClick();
     </script>
 }
 

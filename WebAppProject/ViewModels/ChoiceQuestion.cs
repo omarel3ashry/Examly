@@ -1,4 +1,4 @@
-﻿using WebAppProject.Models;
+﻿using DataAccessLibrary.Model;
 
 namespace WebAppProject.ViewModels
 {

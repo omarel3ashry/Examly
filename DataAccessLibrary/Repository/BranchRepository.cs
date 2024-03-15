@@ -68,7 +68,6 @@ namespace DataAccessLibrary.Repository
 
         public int Add(Branch entity)
         {
-            entity.Location = "sedi bishr";
             _context.Branches.Add(entity);
             _context.SaveChanges();
             return entity.Id;
