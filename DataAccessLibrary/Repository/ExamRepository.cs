@@ -58,12 +58,32 @@ namespace DataAccessLibrary.Repository
         public Exam? GetByIdWithIncludes(int id)
         {
             return _context.Exams
-                .Include(e => e.Course)
-                .Include(e => e.Questions)
-                .Include(e => e.Students)
-                .Include(e => e.StudentAnswers)
-                .FirstOrDefault(e => e.Id == id);
+                    .Include(e => e.Course)
+                    .Include(e => e.Questions)
+                    .ThenInclude(e => e.Choices)
+                    .FirstOrDefault(e => e.Id == id);
         }
+
+        public List<ExamTaken> GetExamGradesWithIncludes(int examId)
+        {
+            return _context.ExamsTaken
+                        .Include(e => e.Exam)
+                        .Include(e => e.Student)
+                        .Where(e => !e.IsDeleted && e.ExamId == examId)
+                        .ToList();
+        }
+
+/*        public Exam? GetExamWithStdAnswersIncluded(int examId, int stdId)
+        {
+            return _context.Exams
+                            .Include(e=>e.Course)
+                            .Include(e=>e.Questions)
+                                .ThenInclude(e=>e.Choices)
+                            .Include(e => e.StudentAnswers.Where(e=>e.StudentId==stdId))
+                                .ThenInclude(e=>e.Choice)
+                            .Where(e=>!e.IsDeleted&&e.Id == examId)
+                            .FirstOrDefault();
+        }*/
 
         public Task<Exam?> GetByIdWithIncludesAsync(int id)
         {

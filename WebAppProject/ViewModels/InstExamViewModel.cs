@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebAppProject.ViewModels
 {
-    public class ExamViewModel
+    public class InstExamViewModel
     {
         public int Id { get; set; }
         public int CourseId { get; set; }
@@ -22,13 +22,13 @@ namespace WebAppProject.ViewModels
         public string? CourseName { get; set; }
         public List<QuestionViewModel>? Questions { get; set; }
 
-        public ExamViewModel()
+        public InstExamViewModel()
         {
             Title = string.Empty;
             ExamDate = DateTime.Now;
         }
 
-        public ExamViewModel(Exam entity)
+        public InstExamViewModel(Exam entity)
         {
             Id = entity.Id;
             CourseId = entity.CourseId;
@@ -52,7 +52,8 @@ namespace WebAppProject.ViewModels
                 CourseId = CourseId,
                 ExamDate = ExamDate,
                 DurationInMinutes = DurationInMinutes,
-                Title = Title ?? string.Empty
+                Title = Title ?? string.Empty,
+                TotalGrade = TotalGrade
             };
             if (Questions != null)
             {

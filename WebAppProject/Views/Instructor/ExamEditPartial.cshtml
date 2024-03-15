@@ -1,0 +1,21 @@
+﻿@model InstExamViewModel
+
+    <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
+
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" value="@Model.Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ExamDate">Date</label>
+        <input asp-for="ExamDate" value="@Model.ExamDate" class="form-control" />
+        <span asp-validation-for="ExamDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DurationInMinutes">Duration in minutes</label>
+        <input asp-for="DurationInMinutes" value="@Model.DurationInMinutes" class="form-control" />
+        <span asp-validation-for="DurationInMinutes" class="text-danger"></span>
+    </div>
+   
+

@@ -11,15 +11,18 @@ namespace WebAppProject.Controllers
         private readonly IInstructorRepository _instructorRepo;
         private readonly IExamRepository _examRepo;
         private readonly IQuestionRepository _questionRepo;
+        private readonly IStudentRepository _studentRepo;
         private Random _random;
 
         public InstructorController(IInstructorRepository instructorRepo,
                                     IExamRepository examRepo,
-                                    IQuestionRepository questionRepo)
+                                    IQuestionRepository questionRepo,
+                                    IStudentRepository studentRepo)
         {
             _instructorRepo = instructorRepo;
             _examRepo = examRepo;
             _questionRepo = questionRepo;
+            _studentRepo = studentRepo;
             _random = new Random();
         }
 
@@ -171,7 +174,7 @@ namespace WebAppProject.Controllers
                 // TODO: user proper page
                 return NotFound();
             }
-            var model = new ExamViewModel() { CourseId = id };
+            var model = new InstExamViewModel() { CourseId = id };
             var questions = _questionRepo.GetInstQuestions(id, instructorId ?? 0);
             model.TotalMCQ = questions.Where(e => e.Type == QType.MCQ).Count();
             model.TotalTF = questions.Where(e => e.Type == QType.TrueFalse).Count();
@@ -179,7 +182,7 @@ namespace WebAppProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult MakeExam(ExamViewModel model)
+        public IActionResult MakeExam(InstExamViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -234,7 +237,7 @@ namespace WebAppProject.Controllers
                     // TODO: replace this with (invalid operation)
                     return NotFound();
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("ShowExams");
             }
             return View(model);
         }
@@ -244,6 +247,65 @@ namespace WebAppProject.Controllers
             List<Exam> examsDto = _instructorRepo.GetExamsWithIncludes(2);
 
             var model = new ExamListsViewModel(examsDto);
+            return View(model);
+        }
+
+        public IActionResult ExamInfo(int id)
+        {
+            // TODO: remove static instructor id
+            Exam? examDto = _examRepo.GetByIdWithIncludes(id);
+            if (examDto == null)
+            {
+                // TODO: user proper page
+                return NotFound();
+            }
+            var model = new InstExamViewModel(examDto);
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ExamEdit(int id)
+        {
+            // TODO: remove static instructor id
+            Exam? examDto = _examRepo.GetByIdWithIncludes(id);
+            if (examDto == null)
+            {
+                // TODO: user proper page
+                return NotFound();
+            }
+            var model = new InstExamViewModel(examDto);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ExamEdit(InstExamViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                Exam examDto = model.ToExamDTO(isNew: false);
+                bool success = _examRepo.Update(examDto);
+                return success ? RedirectToAction("ShowExams") : View(model);
+            }
+
+            return View(model);
+        }
+
+        public IActionResult ExamDelete(int id)
+        {
+            _examRepo.Delete(id);
+            return RedirectToAction("ShowExams");
+        }
+
+        public IActionResult ExamGrades(int id)
+        {
+            List<ExamTaken> examsTaken = _examRepo.GetExamGradesWithIncludes(id);
+            return View(examsTaken);
+        }
+
+        public IActionResult StudentAnswers(int examId, int stdId)
+        {
+            var model = _studentRepo.GetStudentAnswers(stdId, examId);
             return View(model);
         }
     }
