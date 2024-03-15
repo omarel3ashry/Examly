@@ -40,6 +40,10 @@ namespace WebAppProject.Controllers
             User user = new User { Email = registerInfo.Email, Password = registerInfo.Password,RoleId=4};
             int userId= userRepository.Add(user);
             Student student= new Student { Name=registerInfo.Name,DepartmentId=int.Parse(registerInfo.DeptId),UserId=userId};
+            // TODO: add these attributes to the view
+            student.Address = "sede beshrrrrrr";
+            student.Gender = "m";
+            student.Phone = "23453245";
             studentRepository.Add(student);
             return RedirectToAction("Login"); 
         }

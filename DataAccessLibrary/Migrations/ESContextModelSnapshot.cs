@@ -34,7 +34,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("TopicsId");
 
-                    b.ToTable("CourseTopic", (string)null);
+                    b.ToTable("CourseTopic");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Branch", b =>
@@ -60,7 +60,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Branches", (string)null);
+                    b.ToTable("Branches");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Choice", b =>
@@ -91,7 +91,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Choices", (string)null);
+                    b.ToTable("Choices");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Course", b =>
@@ -117,7 +117,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Department", b =>
@@ -153,7 +153,7 @@ namespace DataAccessLibrary.Migrations
                         .IsUnique()
                         .HasFilter("[ManagerId] IS NOT NULL");
 
-                    b.ToTable("Departments", (string)null);
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.DepartmentCourse", b =>
@@ -173,7 +173,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("DepartmentCourses", (string)null);
+                    b.ToTable("DepartmentCourses");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Exam", b =>
@@ -208,7 +208,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Exams", (string)null);
+                    b.ToTable("Exams");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.ExamQuestion", b =>
@@ -223,7 +223,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("ExamQuestions", (string)null);
+                    b.ToTable("ExamQuestions");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.ExamTaken", b =>
@@ -244,7 +244,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("ExamsTaken", (string)null);
+                    b.ToTable("ExamsTaken");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Instructor", b =>
@@ -297,7 +297,7 @@ namespace DataAccessLibrary.Migrations
                         .IsUnique()
                         .HasFilter("[UserId] IS NOT NULL");
 
-                    b.ToTable("Instructors", (string)null);
+                    b.ToTable("Instructors");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Question", b =>
@@ -343,7 +343,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Role", b =>
@@ -358,7 +358,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role", (string)null);
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Student", b =>
@@ -411,7 +411,7 @@ namespace DataAccessLibrary.Migrations
                         .IsUnique()
                         .HasFilter("[UserId] IS NOT NULL");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.StudentAnswer", b =>
@@ -431,7 +431,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("ExamId");
 
-                    b.ToTable("StudentAnswers", (string)null);
+                    b.ToTable("StudentAnswers");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.Topic", b =>
@@ -452,7 +452,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Topics", (string)null);
+                    b.ToTable("Topics");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.User", b =>
@@ -482,7 +482,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("CourseTopic", b =>

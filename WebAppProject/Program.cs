@@ -1,8 +1,7 @@
 using DataAccessLibrary.Data;
 using DataAccessLibrary.Repository;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using WebAppProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace WebAppProject

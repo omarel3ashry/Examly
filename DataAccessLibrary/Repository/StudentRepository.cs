@@ -85,7 +85,7 @@ namespace DataAccessLibrary.Repository
         }
 
         public int Add(Student entity)
-        {           
+        {
             _context.Students.Add(entity);
             _context.SaveChanges();
             return entity.Id;

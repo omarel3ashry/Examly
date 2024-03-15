@@ -3,11 +3,9 @@ using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppProject.ViewModels;
-using System.Security.Claims;
 
 namespace WebAppProject.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class InstructorController : Controller
     {
 
@@ -21,18 +19,12 @@ namespace WebAppProject.Controllers
                                     IExamRepository examRepo,
                                     IQuestionRepository questionRepo,
                                     IStudentRepository studentRepo)
-        private readonly IInstructorRepository instructorRepository;
-        private readonly IBranchRepository branchRepository;
-        
-        public InstructorController(IInstructorRepository instructorRepository, IBranchRepository branchRepository)
         {
             _instructorRepo = instructorRepo;
             _examRepo = examRepo;
             _questionRepo = questionRepo;
             _studentRepo = studentRepo;
             _random = new Random();
-            this.instructorRepository = instructorRepository;
-            this.branchRepository = branchRepository;
         }
 
         public IActionResult Index()
@@ -170,8 +162,6 @@ namespace WebAppProject.Controllers
             _questionRepo.Delete(qId);
             return RedirectToAction("QuestionBank", new { id });
         }
-
-        ////------------------AddExam------------------
 
         [HttpGet]
         public IActionResult MakeExam(int id)
@@ -316,48 +306,6 @@ namespace WebAppProject.Controllers
         {
             var model = _studentRepo.GetStudentAnswers(stdId, examId);
             return View(model);
-        }
-        [HttpPost]
-        public IActionResult Create(Instructor Instructor)
-        {
-
-            int res = instructorRepository.Add(Instructor);
-            IActionResult actionResult = res > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
-            return actionResult;
-        }
-
-        public IActionResult Edit(int Id)
-        {
-            IActionResult actionResult = BadRequest();
-            List<Branch> branches = branchRepository.GetAll();
-            Instructor? Instructor = instructorRepository.GetByIdWithIncludes(Id);
-            if (Instructor != null)
-            {
-                var model = new InstructorWithBranchesViewModel() { Instructor = Instructor, Branches = branches };
-                actionResult = View(model);
-            }
-            return actionResult;
-        }
-        [HttpPost]
-        public IActionResult Edit(Instructor Instructor , int Id)
-        {
-            Instructor.Id = Id;
-            bool res = instructorRepository.Update(Instructor);
-            IActionResult actionResult = res ? RedirectToAction("Index", "Manage") : RedirectToAction("Edit");
-            return actionResult;
-        }
-
-        public IActionResult Delete(int Id)
-        {
-            Instructor? model = instructorRepository.GetById(Id);
-            IActionResult actionResult = model != null ? View(model) : BadRequest();
-            return actionResult;
-        }
-        [HttpPost]
-        public IActionResult Delete(Instructor Instructor)
-        {
-            instructorRepository.Delete(Instructor.Id);
-            return RedirectToAction("Index", "Manage");
         }
     }
 }
