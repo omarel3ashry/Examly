@@ -1,0 +1,33 @@
+﻿@model Instructor
+@{
+    ViewData["Title"] = "Details";
+    string gender = Model.Gender == "m" ? "Male" : "Female";
+    string department = Model.ManagedDepartment?.Name ?? "No Department";
+}
+
+<h1>Details</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Name</h5>
+                    <p class="card-text">ID: <strong> @Model.Id</strong> </p>
+                    <p class="card-text">Age: @Model.Age</p>
+                    <p class="card-text">Gender: @gender</p>
+                    <p class="card-text">Phone: @Model.Phone</p>
+                    <p class="card-text">Email: @Model.Email</p>
+                    <p class="card-text">Address: @Model.Address</p>
+                    <p class="card-text">Branch: @Model.Branch?.Name</p>
+                    <p class="card-text">Manage Department: @department</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div
+<div>
+    <a asp-action="Index" asp-controller="Manage" class="btn btn-warning">Back to Dashboard</a>
+     <a asp-action="Edit" asp-controller="Instructor" asp-route-Id="@Model.Id" class="btn btn-success">Edit</a>
+   <a asp-action="Delete" asp-controller="Instructor" asp-route-Id="@Model.Id" class="btn btn-danger">Delete</a>
+</div>

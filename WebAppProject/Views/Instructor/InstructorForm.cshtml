@@ -1,0 +1,59 @@
+﻿@model InstructorWithBranchesViewModel
+
+@{
+    SelectList BranchesItems = new SelectList(Model.Branches, "Id", "Name");
+    SelectList GenderItems = new SelectList(Model.GenderOptions, "Value", "Text");
+}
+
+<h4>Instructor</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Instructor.Name" class="control-label"></label>
+                <input asp-for="Instructor.Name" class="form-control" />
+                <span asp-validation-for="Instructor.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Instructor.Age" class="control-label"></label>
+                <input asp-for="Instructor.Age" class="form-control" />
+                <span asp-validation-for="Instructor.Age" class="text-danger"></span>
+            </div>
+            <div class="form-group col-3">
+                <label asp-for="Instructor.Gender" class="control-label"></label>
+                <select asp-for="Instructor.Gender" class="form-control" asp-items="GenderItems">
+                    <option value="">Select Gender</option>
+                </select>
+                <span asp-validation-for="Instructor.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Instructor.Email" class="control-label"></label>
+                <input asp-for="Instructor.Email" class="form-control" />
+                <span asp-validation-for="Instructor.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Instructor.Address" class="control-label"></label>
+                <input asp-for="Instructor.Address" class="form-control" />
+                <span asp-validation-for="Instructor.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Instructor.Phone" class="control-label"></label>
+                <input asp-for="Instructor.Phone" class="form-control" />
+                <span asp-validation-for="Instructor.Phone" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-3">
+                <label class="control-label"> Branch  </label>
+                <select asp-for="Instructor.BranchId" class="form-control" asp-items="BranchesItems">
+                    <option value="-1">Select Branch</option>
+                </select>
+                <span asp-validation-for="Instructor.BranchId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Confirm" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

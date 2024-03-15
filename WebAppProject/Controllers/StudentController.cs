@@ -2,9 +2,7 @@
 using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebAppProject.Models;
 using WebAppProject.ViewModels;
-
 
 
 namespace WebAppProject.Controllers

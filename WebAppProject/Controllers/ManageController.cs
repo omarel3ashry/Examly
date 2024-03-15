@@ -17,7 +17,6 @@ namespace WebAppProject.Controllers
         private readonly IBranchRepository branchRepository;
         private readonly IExamTakenRepository examTaken;
         
-
         public ManageController(IInstructorRepository instructorRepository ,
             IDepartmentRepository departmentRepository,
             IStudentRepository studentRepository,
@@ -37,9 +36,9 @@ namespace WebAppProject.Controllers
         }
       
         public IActionResult GetLists(int BranchId)
-        {   
-            var DepartmentList = departmentRepository.SelectAll(dept=>dept.BranchId==BranchId).Select(e => new { e.Id, e.Name }).OrderBy(e=>e.Name);          
-            var InstructorList = instructorRepository.SelectAll(e=>e.BranchId==BranchId).Select(e => new { e.Id, e.Name }).OrderBy(e => e.Name);                 
+        {
+            var DepartmentList = departmentRepository.SelectAll(dept=>dept.BranchId==BranchId).Select(e=> new {e.Id, e.Name}).OrderBy(dept => dept.Name);
+            var InstructorList = instructorRepository.SelectAll(ins=>ins.BranchId==BranchId).Select(e => new { e.Id, e.Name }).OrderBy(ins => ins.Name);
             return Ok(new { DepartmentList, InstructorList });
         }
         public IActionResult DepartmentManager(int branchId,int deptId)

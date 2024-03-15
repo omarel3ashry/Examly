@@ -1,4 +1,4 @@
-﻿@model Branch
+﻿@model Course
 @{
     ViewData["Title"] = "Details";
 }
@@ -11,14 +11,14 @@
                 <div class="card-body">
                     <p class="card-text">ID: <strong> @Model.Id</strong> </p>
                     <p class="card-text">Name: <strong>@Model.Name </strong></p>
-                    <p class="card-text">Location: <strong>@Model.Location </strong></p>
+                    <p class="card-text">Description: <strong>@Model.Description </strong></p>
                 </div>
             </div>
         </div>
     </div>
 </div
 <div>
-    <a asp-action="Index" asp-controller="Manage" class="btn btn-warning">Back to Dashboard</a>
-     <a asp-action="Edit" asp-controller="Branch" asp-route-Id="@Model.Id" class="btn btn-success">Edit</a>
-   <a asp-action="Delete" asp-controller="Branch" asp-route-Id="@Model.Id" class="btn btn-danger">Delete</a>
+    <a asp-action="Index" asp-controller="Course" class="btn btn-warning">Back to List</a>
+     <a asp-action="Edit" asp-controller="Course" asp-route-Id="@Model.Id" class="btn btn-success">Edit</a>
+   <a asp-action="Delete" asp-controller="Course" asp-route-Id="@Model.Id" class="btn btn-danger">Delete</a>
 </div>
