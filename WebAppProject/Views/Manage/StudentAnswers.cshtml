@@ -1,50 +1,55 @@
-﻿@model IEnumerable<ChoiceQuestion>
+﻿@model IEnumerable<ExamChoices>
 @{
-    Layout = null;
+    ViewData["Title"] = "Dashboard | Answers";
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>StudentAnswers</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        .correct {
+            background-color: #90EE90;
+            color: green;
+        }
+        .incorrect {
+            background-color: #FFCCCC;
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <a class="btn btn-outline-info" asp-action="Index" asp-controller="Manage">Back</a>
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <td>Question</td>
+                <td>Question (grade)</td>
                 <td>Answer</td>
-                <td>Correct Answer</td>
-                
+                <td>Correct Answer</td> 
             </tr>
         </thead>
         <tbody>
-            
                 @foreach (var ChoiceQuestion in Model)
                 {
                     <tr>
-                        <td>@ChoiceQuestion.Question.Text</td>
-                        <td>
+                        <td>@ChoiceQuestion.Question.Text (@ChoiceQuestion.Question.Grade)</td>
+                        <td class="@(ChoiceQuestion.IsCorrect? "correct" : "incorrect")">
                                @foreach (var choice in ChoiceQuestion.StudentChoices)
                                 {
-                            <span>@choice.Text </span>
+                                    <span>@choice.Text</span>
+                                    <br />
                                 }    
                         </td>
                         <td>
                             @foreach (var choice in ChoiceQuestion.CorrectChoices)
                             {
-                            <span>@choice.Text </span>
+                                <span>@choice.Text</span>
+                                <br />
                             }
                         </td>
-                        
-                       
                     </tr>
                 }
-            
         </tbody>
     </table>
 </body>

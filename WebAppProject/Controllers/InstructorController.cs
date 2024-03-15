@@ -3,6 +3,7 @@ using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppProject.ViewModels;
+using System.Security.Claims;
 
 namespace WebAppProject.Controllers
 {
@@ -31,6 +32,7 @@ namespace WebAppProject.Controllers
         {
             List<Branch> branches = branchRepository.GetAll();
             var model = new InstructorWithBranchesViewModel() { Branches = branches};
+
             return View(model);
         }
         [HttpPost]

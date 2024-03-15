@@ -47,8 +47,23 @@
     <a id="DepartmentDeleteBtn" class="btn btn-danger m-2 col-2">Delete</a>
 </div>
 <div class="container row m-5">
-    <partial name="ManageModals" />
-    <a class="btn btn-info" asp-action="Logout" asp-controller="Account">Logout</a>
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ModalLabel">Instructors List</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="content">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="btn btn-info" id="ManageManagertBtn">Department Manager</a>
+    <a class="btn btn-info" id="ManageStudentsBtn">Manage Students</a>
 </div>
 
 
@@ -174,17 +189,17 @@
         }
         //method to add on click event
         function SetManageManagerOnClick() {
-
             document.getElementById("ManageManagertBtn").addEventListener('click', function () {
-                let selectedId = document.getElementById("BranchId").value;
-                this.setAttribute("href", `/Manage/DepartmentManager/${selectedId}`);
+                let selectedBranchId = document.getElementById("BranchId").value;
+                let selectedDeptId = document.getElementById("DepartmentId").value;
+                $("#content").load(`Manage/DepartmentManager?branchId=${selectedBranchId}&deptId=${selectedDeptId}`)
+                $("#modal").modal('show');
             });
         };
         function SetManageStudentOnClick() {
-
             document.getElementById("ManageStudentsBtn").addEventListener('click', function () {
                 let selectedId = document.getElementById("DepartmentId").value;
-                this.setAttribute("href", `/Manage/Students/${selectedId}`);
+                this.setAttribute("href", `/Manage/Students?deptId=${selectedId}`);
             });
         };
 

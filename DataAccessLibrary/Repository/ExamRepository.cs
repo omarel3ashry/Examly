@@ -60,6 +60,7 @@ namespace DataAccessLibrary.Repository
             return _context.Exams
                 .Include(e => e.Course)
                 .Include(e => e.Questions)
+                .ThenInclude(e=>e.Choices)
                 .Include(e => e.Students)
                 .Include(e => e.StudentAnswers)
                 .FirstOrDefault(e => e.Id == id);
@@ -153,5 +154,7 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Exams.Where(predicate).ToListAsync();
         }
+
+        
     }
 }

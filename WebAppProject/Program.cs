@@ -2,6 +2,8 @@ using DataAccessLibrary.Data;
 using DataAccessLibrary.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using WebAppProject.Models;
+
 
 
 namespace WebAppProject
@@ -21,8 +23,9 @@ namespace WebAppProject
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
             
-            builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+            builder.Services.AddScoped<IBranchRepository, BranchRepository>();           
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<IDepartmentCourseRepository, DepartmentCourseRepository>();
             builder.Services.AddScoped<IInstructorRepository, InstructorRepository>();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
@@ -30,9 +33,8 @@ namespace WebAppProject
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
             builder.Services.AddScoped<IChoiceRepository, ChoiceRepository>();
             builder.Services.AddScoped<IExamRepository, ExamRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-
+            builder.Services.AddScoped<IExamTakenRepository, ExamTakenRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();           
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
             var app = builder.Build();

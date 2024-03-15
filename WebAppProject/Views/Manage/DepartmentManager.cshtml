@@ -15,7 +15,7 @@
                     <td>@instructor.Id</td>
                     <td>@instructor.Name</td>
                     <td>
-                        <a class="btn btn-info" asp-action="AssignManager" asp-controller="Manage" asp-route-deptId="3" asp-route-insId="@instructor.Id">Assign Manager</a>
+                        <a class="btn btn-info" asp-action="AssignManager" asp-controller="Manage" asp-route-deptId="@ViewBag.DepartmentId" asp-route-insId="@instructor.Id">Assign Manager</a>
                     </td>
                 </tr>
             }

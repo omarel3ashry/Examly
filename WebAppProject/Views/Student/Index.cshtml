@@ -1,53 +1,165 @@
-﻿@model Student
-
+﻿@model IEnumerable<Course>
 @{
-    Layout = null;
+    ViewData["Title"] = "E-Exam";
 }
+@section Styles {
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
 
-<!DOCTYPE html>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <title>Index</title>
-</head>
-<body>
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
 
-<div>
-    <h4>Student</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DepartmentId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DepartmentId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
-    <a class="btn btn-info" asp-action="Logout" asp-controller="Account">Logout</a>
-</body>
-</html>
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+            .button.info-button {
+                background-color: #007bff;
+            }
+
+            .button:hover {
+                background-color: darkred;
+                color: white;
+            }
+
+        /* Centered alert */
+        .alert-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            visibility: hidden;
+        }
+
+        .alert-box {
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 80%;
+            text-align: center;
+        }
+
+        .alert-message {
+            font-size: 18px;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        .close-button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+            .close-button:hover {
+                background-color: darkblue;
+            }
+
+        .show-alert {
+            visibility: visible;
+        }
+    </style>
+}
+    <button class="button">Courses</button>
+    <a asp-controller="Student" asp-action="Exams" class="button">Exams</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Course ID</th>
+                <th>Title</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model)
+            {
+                <tr>
+                    <td>@course.Id</td>
+                    <td>@course.Name</td>
+                    <td><button class="button info-button" data-description="@course.Description">Info</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Centered alert message -->
+    <div id="alert-container" class="alert-container">
+        <div class="alert-box">
+            <p id="alert-message" class="alert-message"></p>
+            <button onclick="hideAlert()" class="close-button">Close</button>
+        </div>
+    </div>
+@section Scripts {
+        <script>
+            var infoButtons = document.querySelectorAll('.info-button');
+
+            infoButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var description = this.getAttribute('data-description');
+                    showAlert(description);
+                });
+            });
+
+            function showAlert(message) {
+                var alertContainer = document.getElementById('alert-container');
+                var alertMessage = document.getElementById('alert-message');
+                alertMessage.innerText = message;
+                alertContainer.classList.add('show-alert');
+            }
+
+            function hideAlert() {
+                var alertContainer = document.getElementById('alert-container');
+                alertContainer.classList.remove('show-alert');
+            }
+        </script>
+}

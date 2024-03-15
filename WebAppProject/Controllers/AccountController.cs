@@ -35,7 +35,7 @@ namespace WebAppProject.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Register(Register registerInfo) 
+        public IActionResult Register(RegisterViewModel registerInfo) 
         { 
             User user = new User { Email = registerInfo.Email, Password = registerInfo.Password,RoleId=4};
             int userId= userRepository.Add(user);
@@ -94,7 +94,7 @@ namespace WebAppProject.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Login");
+            return RedirectToAction("Index","Home");
         }
     }
 }
