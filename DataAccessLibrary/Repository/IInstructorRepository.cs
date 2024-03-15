@@ -11,5 +11,6 @@ namespace DataAccessLibrary.Repository
         public List<Question> GetAllQuestions(int userId);
         public List<Question> GetCourseQuestions(int userId, int courseId);
         public int AddQuestion(Question entity);
+        public List<Exam> GetExamsWithIncludes(int instId);
     }
 }

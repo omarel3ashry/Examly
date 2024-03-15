@@ -1,6 +1,6 @@
 ﻿namespace WebAppProject.ViewModels
 {
-    public class GenerateExamviewmodel
+    public class GenerateExamViewModel
     {
             public int CourseId {  get; set; }
             //public int NumberOfQuestions { get; set; }

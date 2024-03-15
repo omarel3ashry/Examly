@@ -1,9 +1,6 @@
 ﻿using DataAccessLibrary.Model;
 using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Packaging;
-using System.Collections.Generic;
 using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers
@@ -12,13 +9,18 @@ namespace WebAppProject.Controllers
     {
 
         private readonly IInstructorRepository _instructorRepo;
+        private readonly IExamRepository _examRepo;
         private readonly IQuestionRepository _questionRepo;
+        private Random _random;
 
         public InstructorController(IInstructorRepository instructorRepo,
+                                    IExamRepository examRepo,
                                     IQuestionRepository questionRepo)
         {
             _instructorRepo = instructorRepo;
+            _examRepo = examRepo;
             _questionRepo = questionRepo;
+            _random = new Random();
         }
 
         public IActionResult Index()
@@ -50,7 +52,8 @@ namespace WebAppProject.Controllers
             var courseInfo = new CourseInfo()
             {
                 CourseName = deptCourse.Course.Name,
-                DepartmentName = deptCourse.Department.Name
+                DepartmentName = deptCourse.Department.Name,
+                CourseDescription = deptCourse.Course.Description
             };
             return View(courseInfo);
         }
@@ -83,7 +86,8 @@ namespace WebAppProject.Controllers
             ViewBag.Courseid = id;
             if (ModelState.IsValid)
             {
-                _instructorRepo.AddQuestion(questionVM.ToQuestionDTO());
+                var questionDto = questionVM.ToQuestionDTO();
+                _instructorRepo.AddQuestion(questionDto);
                 return RedirectToAction("QuestionBank", new { id });
             }
 
@@ -155,42 +159,93 @@ namespace WebAppProject.Controllers
             return RedirectToAction("QuestionBank", new { id });
         }
 
-        ////-------------------------------------------------
-
         ////------------------AddExam------------------
-        //[HttpGet]
-        //public IActionResult GenerateExam(int courseId)
-        //{
-        //    var course = _instructorRepository.GetCourseById(courseId);
-        //    if (course == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    // Get questions for the course
-        //    var questions = _instructorRepository.GetQuestionBank(courseId);
+        [HttpGet]
+        public IActionResult MakeExam(int id)
+        {
+            // TODO: remove static user id
+            var instructorId = _instructorRepo.GetInstIdByUserId(2);
+            if (instructorId == null || id == 0)
+            {
+                // TODO: user proper page
+                return NotFound();
+            }
+            var model = new ExamViewModel() { CourseId = id };
+            var questions = _questionRepo.GetInstQuestions(id, instructorId ?? 0);
+            model.TotalMCQ = questions.Where(e => e.Type == QType.MCQ).Count();
+            model.TotalTF = questions.Where(e => e.Type == QType.TrueFalse).Count();
+            return View(model);
+        }
 
-        //    // Separate true/false and multiple choice questions
-        //    var trueFalseQuestions = questions.Where(q => q.Type == QuestionType.TrueFalse).ToList();
-        //    var multipleChoiceQuestions = questions.Where(q => q.Type == QuestionType.MultipleChoice).ToList();
+        [HttpPost]
+        public IActionResult MakeExam(ExamViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // TODO: remove static user id
+                var instructorId = _instructorRepo.GetInstIdByUserId(2);
 
-        //    // Shuffle the question
-        //    var random = new Random();
-        //    trueFalseQuestions = trueFalseQuestions.OrderBy(q => random.Next()).ToList();
-        //    multipleChoiceQuestions = multipleChoiceQuestions.OrderBy(q => random.Next()).ToList();
+                if (instructorId == null)
+                {
+                    // TODO: replace this with (invalid user page)
+                    return NotFound();
+                }
 
+                QDifficulty difficultyDto = (QDifficulty)(int)model.ExamDifficulty;
+                var questions = _questionRepo.GetInstQuestions(model.CourseId, instructorId ?? 0, difficultyDto);
 
-        //    var viewModel = new ExamViewModel
-        //    {
-        //        TrueFalseQuestions = trueFalseQuestions,
-        //        MultipleChoiceQuestions = multipleChoiceQuestions
-        //    };
+                // Separate true/false and multiple choice questions
+                var mcqQuestions = questions.Where(q => q.Type == QType.MCQ)
+                                                       .OrderBy(q => _random.Next())
+                                                       .Take(model.NoOfMCQ)
+                                                       .ToList();
 
-        //    return View(viewModel);
-        //}
+                var tfQuestions = questions.Where(q => q.Type == QType.TrueFalse)
+                                                        .OrderBy(q => _random.Next())
+                                                        .Take(model.NoOfTF)
+                                                        .ToList();
 
+                var allQuestions = mcqQuestions.Concat(tfQuestions);
+                var examQuestions = new List<ExamQuestion>();
+                int totalGrade = 0;
 
+                Exam examDto = model.ToExamDTO();
+                int examId = _examRepo.Add(examDto);
 
+                if (examId == 0)
+                {
+                    // TODO: replace this with (invalid operation)
+                    return NotFound();
+                }
+
+                foreach (var question in allQuestions)
+                {
+                    examQuestions.Add(new ExamQuestion() { ExamId = examId, QuestionId = question.Id });
+                    totalGrade += question.Grade;
+                }
+
+                _examRepo.UpdateTotalGrade(examId, totalGrade);
+
+                bool questionAdded = _examRepo.AddExamQuestions(examQuestions);
+
+                if (!questionAdded)
+                {
+                    // TODO: replace this with (invalid operation)
+                    return NotFound();
+                }
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
+
+        public IActionResult ShowExams()
+        {
+            List<Exam> examsDto = _instructorRepo.GetExamsWithIncludes(2);
+
+            var model = new ExamListsViewModel(examsDto);
+            return View(model);
+        }
     }
 }
 

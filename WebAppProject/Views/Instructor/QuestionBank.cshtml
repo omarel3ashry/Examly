@@ -4,7 +4,6 @@
 }
 
 
-
 <h1>Question Bank</h1>
 
 <table class="table">
@@ -30,5 +29,9 @@
         }
     </tbody>
 </table>
- |<a asp-action="AddQuestion" asp-controller="Instructor" asp-route-id="@ViewBag.CourseId" class="btn btn-dark">Add</a></td>
+<br />
+<div class="d-flex fixed-bottom justify-content-center mb-5 pb-5">
+
+ <a asp-action="AddQuestion" asp-route-id="@ViewBag.CourseId" class="btn btn-dark col-2">Add</a></td>
+</div>
 

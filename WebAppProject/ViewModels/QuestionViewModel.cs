@@ -1,16 +1,26 @@
 ﻿using DataAccessLibrary.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebAppProject.ViewModels
 {
+    public enum QVMType
+    {
+        [Display(Name = "Multiple Choices")]
+        MCQ = 1,
+        [Display(Name = "True / False")]
+        TrueFalse = 2
+    }
+    public enum QVMDifficulty { Easy = 1, Medium = 2, Hard = 3 }
+
     public class QuestionViewModel
     {
         public int Id { get; set; }
         public int CourseId { get; set; }
         public int? InstructorId { get; set; }
         public string Text { get; set; }
-        public int Type { get; set; }
+        public QVMType Type { get; set; }
         public int Grade { get; set; }
-        public int Difficulty { get; set; }
+        public QVMDifficulty Difficulty { get; set; }
         public List<ChoiceViewModel> Choices { get; }
         public Course? Course { get; set; }
 
@@ -26,40 +36,40 @@ namespace WebAppProject.ViewModels
             CourseId = entity.CourseId;
             InstructorId = entity.InstructorId;
             Text = entity.Text ?? string.Empty;
-            Type = entity.Type;
+            Type = (QVMType)(int)entity.Type;
             Grade = entity.Grade;
-            Difficulty = entity.Difficulty;
+            Difficulty = (QVMDifficulty)(int)entity.Difficulty;
             Choices = new List<ChoiceViewModel>();
             Course = entity.Course;
-            foreach (var choice in entity.Choices)
+            foreach (var choiceDto in entity.Choices)
             {
                 Choices.Add(new ChoiceViewModel()
                 {
-                    Id = choice.Id,
-                    QuestionId = choice.QuestionId,
-                    Text = choice.Text,
-                    IsCorrect = choice.IsCorrect
+                    Id = choiceDto.Id,
+                    QuestionId = choiceDto.QuestionId,
+                    Text = choiceDto.Text,
+                    IsCorrect = choiceDto.IsCorrect
                 });
             }
         }
 
         public Question ToQuestionDTO(bool isNew = true)
         {
-            var question = new Question()
+            var questionDto = new Question()
             {
                 Id = isNew ? 0 : Id,
                 CourseId = CourseId,
                 InstructorId = InstructorId,
                 Text = Text,
-                Type = Type,
+                Type = (QType)(int)Type,
                 Grade = Grade,
-                Difficulty = Difficulty,
+                Difficulty = (QDifficulty)(int)Difficulty,
             };
             if (Choices.Count > 1)
             {
                 foreach (var choice in Choices)
                 {
-                    question.Choices.Add(new Choice()
+                    questionDto.Choices.Add(new Choice()
                     {
                         Id = isNew ? 0 : choice.Id,
                         QuestionId = choice.QuestionId,
@@ -70,7 +80,7 @@ namespace WebAppProject.ViewModels
             }
             else if (Choices.Count == 1)
             {
-                question.Choices.Add(new Choice()
+                questionDto.Choices.Add(new Choice()
                 {
                     Id = isNew ? 0 : Choices[0].Id,
                     QuestionId = Choices[0].QuestionId,
@@ -78,7 +88,7 @@ namespace WebAppProject.ViewModels
                     IsCorrect = Choices[0].Text.Equals("True")
                 });
             }
-            return question;
+            return questionDto;
         }
 
     }

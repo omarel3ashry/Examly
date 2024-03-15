@@ -1,0 +1,48 @@
+﻿@model ExamViewModel
+
+@{
+    ViewData["Title"] = "Make Exam";
+}
+
+<h1>Make Exam</h1>
+
+<form asp-action="MakeExam" method="post">
+
+    <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
+
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ExamDate">Date</label>
+        <input asp-for="ExamDate" class="form-control" />
+        <span asp-validation-for="ExamDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DurationInMinutes">Duration</label>
+        <input asp-for="DurationInMinutes" class="form-control" />
+        <span asp-validation-for="DurationInMinutes" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ExamDifficulty">Difficulty</label>
+        <select asp-for="ExamDifficulty" class="form-control"
+                asp-items="Html.GetEnumSelectList<QVMDifficulty>()">
+        </select>
+        <span asp-validation-for="ExamDifficulty" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NoOfMCQ">Number of MCQs - Total: @Model.TotalMCQ</label>
+        <input asp-for="NoOfMCQ" class="form-control" min="@(Model.TotalMCQ == 0 ? 0  :1)" max="@Model.TotalMCQ" />
+        <span asp-validation-for="NoOfMCQ" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NoOfTF">Number of MCQs - Total: @Model.TotalTF</label>
+        <input asp-for="NoOfTF" class="form-control" min="@(Model.TotalTF == 0 ? 0  :1)" max="@Model.TotalTF" />
+        <span asp-validation-for="NoOfTF" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" asp-route-id="@ViewBag.Courseid" class="btn btn-primary">Submit</button>
+</form>
+

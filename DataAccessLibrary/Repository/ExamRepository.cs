@@ -82,6 +82,23 @@ namespace DataAccessLibrary.Repository
             return entity.Id;
         }
 
+        public bool AddExamQuestions(List<ExamQuestion> examQuestions)
+        {
+            _context.ExamQuestions.AddRange(examQuestions);
+            return _context.SaveChanges() == examQuestions.Count;
+        }
+
+        public bool UpdateTotalGrade(int id, int totalGrade)
+        {
+            var entity = _context.Exams.FirstOrDefault(e => !e.IsDeleted && e.Id == id);
+            if (entity != null)
+            {
+                entity.TotalGrade = totalGrade;
+                return _context.SaveChanges() == 1;
+            }
+            return false;
+        }
+
         public async Task<int> AddAsync(Exam entity)
         {
             _context.Exams.Add(entity);

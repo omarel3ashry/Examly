@@ -9,5 +9,7 @@ namespace DataAccessLibrary.Repository
         public int AddChoices(List<Choice> choices);
         public Task<int> AddChoicesAsync(List<Choice> choices);
         public Question? GetByIdCourseIncluded(int id);
+        public List<Question> GetInstQuestions(int crsId, int instId);
+        public List<Question> GetInstQuestions(int crsId, int instId, QDifficulty difficulty);
     }
 }

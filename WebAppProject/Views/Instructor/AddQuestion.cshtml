@@ -13,9 +13,8 @@
 
     <div class="form-group">
         <label asp-for="Type">Question Type</label>
-        <select asp-for="Type" id="questionType" class="form-control">
-            <option value="1">Multiple Choice</option>
-            <option value="2">True/Fasle</option>
+        <select asp-for="Type" id="questionType" class="form-control"
+                asp-items="Html.GetEnumSelectList<QVMType>()">
         </select>
     </div>
 

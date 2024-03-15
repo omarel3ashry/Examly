@@ -25,6 +25,10 @@ namespace WebAppProject.Controllers
         {
             // TODO: get managed dept id , assuming this user manages deptNo 1
             var department = _deptRepo.GetByIdCoursesIncluded(1);
+            if (department == null)
+            {
+                return NotFound();
+            }
             return View(department);
         }
 

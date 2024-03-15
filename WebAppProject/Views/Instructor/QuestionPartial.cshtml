@@ -8,7 +8,9 @@
 
 <div class="form-group">
     <label asp-for="Difficulty">Difficulty</label>
-    <input asp-for="Difficulty" class="form-control" />
+    <select asp-for="Difficulty" class="form-control"
+            asp-items="Html.GetEnumSelectList<QVMDifficulty>()">
+    </select>
     <span asp-validation-for="Difficulty" class="text-danger"></span>
 </div>
 
@@ -18,7 +20,7 @@
     <span asp-validation-for="Grade" class="text-danger"></span>
 
 </div>
-
+<br />
 <h3>Choices</h3>
 <div id="choicesContainer">
 </div>

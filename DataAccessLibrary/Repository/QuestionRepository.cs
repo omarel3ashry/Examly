@@ -65,6 +65,23 @@ namespace DataAccessLibrary.Repository
                 .FirstOrDefault(e => !e.IsDeleted && e.Id == id);
         }
 
+        public List<Question> GetInstQuestions(int crsId, int instId)
+        {
+            return _context.Questions.Where(e => !e.IsDeleted)
+                                     .Where(e => e.CourseId == crsId && e.InstructorId == instId)
+                                     .Include(e => e.Choices)
+                                     .ToList();
+        } 
+
+        public List<Question> GetInstQuestions(int crsId, int instId, QDifficulty difficulty)
+        {
+            return _context.Questions.Where(e => !e.IsDeleted)
+                                     .Where(e => e.CourseId == crsId && e.InstructorId == instId)
+                                     .Where(e => e.Difficulty == difficulty)
+                                     .Include(e => e.Choices)
+                                     .ToList();
+        }
+
         public Question? GetByIdWithIncludes(int id)
         {
             return _context.Questions

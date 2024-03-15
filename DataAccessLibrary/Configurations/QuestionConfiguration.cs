@@ -18,14 +18,11 @@ namespace DataAccessLibrary.Configurations
             builder.Property(e => e.Grade)
                 .HasDefaultValue(2);
 
-            builder.Property(e => e.Difficulty)
-                .HasDefaultValue(1);
 
             builder.HasMany(e => e.Choices)
                 .WithOne(e => e.Question)
                 .HasForeignKey(e => e.QuestionId)
                 .IsRequired();
-
 
             builder.HasOne(e => e.Course)
                 .WithMany(e => e.Questions)
@@ -38,11 +35,13 @@ namespace DataAccessLibrary.Configurations
                 .HasForeignKey(e => e.InstructorId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasMany(e => e.Exams)
-               .WithMany(e => e.Questions)
-               .UsingEntity<ExamQuestion>(
-                   l => l.HasOne<Exam>().WithMany().HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.NoAction),
-                   r => r.HasOne<Question>().WithMany().HasForeignKey(e => e.QuestionId).OnDelete(DeleteBehavior.NoAction));
+            builder.Property(e => e.Type)
+                .HasDefaultValue(QType.MCQ)
+                .HasSentinel(QType.Unspecified);
+
+            builder.Property(e => e.Difficulty)
+                .HasDefaultValue(QDifficulty.Easy)
+                .HasSentinel(QDifficulty.Unspecified);
 
         }
     }

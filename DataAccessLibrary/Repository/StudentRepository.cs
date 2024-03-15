@@ -85,14 +85,8 @@ namespace DataAccessLibrary.Repository
         }
 
         public int Add(Student entity)
-        {
-            entity.Address = "ba7riiiii";
-            entity.Email = "omar";
-            entity.Gender = "f";
-            entity.Phone = "23453245";
-            
+        {           
             _context.Students.Add(entity);
-
             _context.SaveChanges();
             return entity.Id;
         }

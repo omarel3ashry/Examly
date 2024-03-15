@@ -61,10 +61,29 @@ namespace DataAccessLibrary.Repository
 
         public int AddQuestion(Question entity)
         {
-            //var choices = entity.Choices;
             _context.Questions.Add(entity);
             _context.SaveChanges();
             return entity.Id;
+        }
+
+        public List<Exam> GetExamsWithIncludes(int instId)
+        {
+            var exams = new List<Exam>();
+            var instructor = _context.Instructors
+                     .Include(e => e.DepartmentCourses)
+                        .ThenInclude(e => e.Course)
+                            .ThenInclude(e => e.Exams.Where(e => !e.IsDeleted))
+                                .ThenInclude(e => e.Questions)
+                     .Where(e => !e.IsDeleted && e.Id == instId)
+                     .FirstOrDefault();
+
+            if (instructor != null)
+                foreach (var deptCourse in instructor.DepartmentCourses)
+                {
+                    exams.AddRange(deptCourse.Course.Exams);
+                }
+
+            return exams;
         }
 
         public List<Instructor> GetAllWithIncludes()

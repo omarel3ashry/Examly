@@ -9,7 +9,7 @@
 
     <p><strong>Course Name:</strong> @Model.Course?.Name</p>
     <p><strong>Question Text:</strong> @Model.Text</p>
-    <p><strong>choices Type:</strong> @(Model.Type == 1 ? "MCQ" : "True or False")</p>
+    <p><strong>choices Type:</strong> @(Model.Type == QVMType.MCQ ? "Multiple Choices": " Ture / False")</p>
     @if (Model.Choices.Count>1)
     {
         @foreach (var choice in Model.Choices)
