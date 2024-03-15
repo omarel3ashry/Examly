@@ -1,11 +1,10 @@
 ﻿@model Instructor
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Instructor";
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -13,11 +12,18 @@
     <title>Index</title>
 </head>
 <body>
-
 <div>
-    <h4>Instructor</h4>
-    <hr />
+        @if (ViewBag.Role == "Manager")
+        {
+            <h4>Role : Manager Department Id= @Model.ManagedDepartment.Id </h4>
+        }
+        else
+        {
+            <h4>Role : Instructor </h4> 
+        }
+        <hr />
     <dl class="row">
+
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
         </dt>
@@ -30,12 +36,8 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
+        
     </dl>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
-    <a class="btn btn-info" asp-action="Logout" asp-controller="Account">Logout</a>
 </body>
 </html>

@@ -1,5 +1,8 @@
 ﻿@model ExamViewModel
 @{
+    
+    ViewData["Title"] = $"{@Model.DepartmentCourse.Course.Name} Exam";
+
     List<Question> mcqQuestions = Model.Exam.Questions.Where(e => e.Type == 1).ToList();
     List<Question> tfQuestions = Model.Exam.Questions.Where(e => e.Type == 2).ToList();
 }

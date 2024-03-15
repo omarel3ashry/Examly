@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<Course>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>List of Courses</title>
+@{
+    ViewData["Title"] = "E-Exam";
+}
+@section Styles {
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -66,7 +66,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); 
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 9999;
             visibility: hidden;
         }
@@ -109,8 +109,7 @@
             visibility: visible;
         }
     </style>
-</head>
-<body>
+}
     <button class="button">Courses</button>
     <a asp-controller="Student" asp-action="Exams" class="button">Exams</a>
     <table>
@@ -140,28 +139,27 @@
             <button onclick="hideAlert()" class="close-button">Close</button>
         </div>
     </div>
+@section Scripts {
+        <script>
+            var infoButtons = document.querySelectorAll('.info-button');
 
-    <script>
-        var infoButtons = document.querySelectorAll('.info-button');
-
-        infoButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                var description = this.getAttribute('data-description');
-                showAlert(description);
+            infoButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var description = this.getAttribute('data-description');
+                    showAlert(description);
+                });
             });
-        });
 
-        function showAlert(message) {
-            var alertContainer = document.getElementById('alert-container');
-            var alertMessage = document.getElementById('alert-message');
-            alertMessage.innerText = message;
-            alertContainer.classList.add('show-alert');
-        }
+            function showAlert(message) {
+                var alertContainer = document.getElementById('alert-container');
+                var alertMessage = document.getElementById('alert-message');
+                alertMessage.innerText = message;
+                alertContainer.classList.add('show-alert');
+            }
 
-        function hideAlert() {
-            var alertContainer = document.getElementById('alert-container');
-            alertContainer.classList.remove('show-alert');
-        }
-    </script>
-</body>
-</html>
+            function hideAlert() {
+                var alertContainer = document.getElementById('alert-container');
+                alertContainer.classList.remove('show-alert');
+            }
+        </script>
+}
