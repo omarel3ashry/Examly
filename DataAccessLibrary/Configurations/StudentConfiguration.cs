@@ -25,11 +25,6 @@ namespace DataAccessLibrary.Configurations
                 .IsUnicode(false)
                 .IsRequired();
 
-            builder.Property(e => e.Email)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .IsRequired();
-
             builder.Property(e => e.Address)
                 .HasMaxLength(200)
                 .IsRequired();

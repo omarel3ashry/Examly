@@ -18,6 +18,7 @@ namespace DataAccessLibrary.Data
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Exam> Exams { get; set; }
+        public DbSet<ExamQuestion> ExamQuestions { get; set; }
         public DbSet<ExamTaken> ExamsTaken { get; set; }
         public DbSet<Choice> Choices { get; set; }
         public DbSet<StudentAnswer> StudentAnswers { get; set; }

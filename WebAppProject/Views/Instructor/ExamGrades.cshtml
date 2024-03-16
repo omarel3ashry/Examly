@@ -1,0 +1,41 @@
+﻿@model IEnumerable<DataAccessLibrary.Model.ExamTaken>
+
+@{
+    ViewData["Title"] = "Exam Grades";
+}
+
+<h4>Exam Grades</h4>
+@if (Model != null && Model.Count() > 0)
+{
+    <p class="mb-0"><strong>Exam:</strong> @Model.ElementAt(0).Exam.Title</p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Grade</th>
+            <th>Answers</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var examTaken in Model)
+            {
+                <tr>
+                    <td>@examTaken.Student.Name</td>
+                    <td>
+                        <a asp-action="StudentAnswers" asp-route-examId="@examTaken.ExamId" asp-route-stdId="@examTaken.StudentId" class="btn btn-dark">Answers</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2">No grades for this exam!</td>
+            </tr>
+        }
+    </tbody>
+</table>

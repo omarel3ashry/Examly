@@ -1,0 +1,26 @@
+﻿@model QuestionViewModel
+
+<div class="form-group">
+    <label asp-for="Text">Question Text</label>
+    <input asp-for="Text" class="form-control" />
+    <span asp-validation-for="Text" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Difficulty">Difficulty</label>
+    <select asp-for="Difficulty" class="form-control"
+            asp-items="Html.GetEnumSelectList<QVMDifficulty>()">
+    </select>
+    <span asp-validation-for="Difficulty" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Grade">Grade</label>
+    <input asp-for="Grade" class="form-control" />
+    <span asp-validation-for="Grade" class="text-danger"></span>
+
+</div>
+<br />
+<h3>Choices</h3>
+<div id="choicesContainer">
+</div>

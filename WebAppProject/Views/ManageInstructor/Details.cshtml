@@ -16,7 +16,6 @@
                     <p class="card-text">Age: @Model.Age</p>
                     <p class="card-text">Gender: @gender</p>
                     <p class="card-text">Phone: @Model.Phone</p>
-                    <p class="card-text">Email: @Model.Email</p>
                     <p class="card-text">Address: @Model.Address</p>
                     <p class="card-text">Branch: @Model.Branch?.Name</p>
                     <p class="card-text">Manage Department: @department</p>
@@ -28,6 +27,6 @@
 </div
 <div>
     <a asp-action="Index" asp-controller="Manage" class="btn btn-warning">Back to Dashboard</a>
-     <a asp-action="Edit" asp-controller="Instructor" asp-route-Id="@Model.Id" class="btn btn-success">Edit</a>
-   <a asp-action="Delete" asp-controller="Instructor" asp-route-Id="@Model.Id" class="btn btn-danger">Delete</a>
+     <a asp-action="Edit" asp-controller="ManageInstructor" asp-route-Id="@Model.Id" class="btn btn-success">Edit</a>
+   <a asp-action="Delete" asp-controller="ManageInstructor" asp-route-Id="@Model.Id" class="btn btn-danger">Delete</a>
 </div>

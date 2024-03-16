@@ -1,0 +1,34 @@
+﻿@model QuestionViewModel
+@{
+    ViewData["Title"] = "QuestionInfo";
+}
+
+<h1>Question Info</h1>
+
+<div>
+
+    <p><strong>Course Name:</strong> @Model.Course?.Name</p>
+    <p><strong>Question Text:</strong> @Model.Text</p>
+    <p><strong>Question Difficulty:</strong> @Model.Difficulty</p>
+    <p><strong>Grade:</strong> @Model.Grade</p>
+    <p><strong>Choices Type:</strong> @(Model.Type == QVMType.MCQ ? "Multiple Choices" : " Ture / False")</p>
+    @if (Model.Choices.Count > 1)
+    {
+        @foreach (var choice in Model.Choices)
+        {
+            <div class="form-group">
+                <label>Choice</label>
+                <input type="text" class="form-control" value="@choice.Text" readonly />
+                <span class="@(@choice.IsCorrect ? "text-info" : "text-danger")">@(choice.IsCorrect ? "correct" : "incorrect")</span>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="form-group">
+            <label>Choice</label>
+            <input type="text" class="form-control" value="@Model.Choices[0].Text" readonly />
+        </div>
+    }
+
+</div>

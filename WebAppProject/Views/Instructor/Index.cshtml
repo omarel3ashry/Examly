@@ -1,43 +1,32 @@
-﻿@model Instructor
-
+﻿@model IEnumerable<DataAccessLibrary.Model.DepartmentCourse>
 @{
-    ViewData["Title"] = "Instructor";
+    ViewData["Title"] = "Index";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <title>Index</title>
-</head>
-<body>
-<div>
-        @if (ViewBag.Role == "Manager")
-        {
-            <h4>Role : Manager Department Id= @Model.ManagedDepartment.Id </h4>
-        }
-        else
-        {
-            <h4>Role : Instructor </h4> 
-        }
-        <hr />
-    <dl class="row">
+<h1>Courses Taught</h1>
 
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        
-    </dl>
-</div>
-</body>
-</html>
+<table class="table table-bordeded">
+    <thead>
+        <tr>
+            <th>Department Name</th>
+            <th>Course Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Department.Name</td>
+                <td>@item.Course.Name</td>
+                <td>
+                    <a asp-action="Info" asp-route-id="@item.CourseId" class="btn btn-dark">Info</a>
+                    <a asp-action="QuestionBank" asp-route-id="@item.CourseId" class="btn btn-dark">Question Bank</a>
+                    <a asp-action="MakeExam" asp-route-id="@item.CourseId" class="btn btn-dark">Make Exam</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

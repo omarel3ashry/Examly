@@ -22,6 +22,7 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Questions.Where(e => !e.IsDeleted).ToListAsync();
         }
+
         public List<Question> GetAllWithIncludes()
         {
             return _context.Questions
@@ -46,12 +47,39 @@ namespace DataAccessLibrary.Repository
 
         public Question? GetById(int id)
         {
-            return _context.Questions.Find(id);
+            return _context.Questions
+                        .Include(e => e.Choices)
+                        .FirstOrDefault(e => e.Id == id);
         }
 
         public async Task<Question?> GetByIdAsync(int id)
         {
             return await _context.Questions.FindAsync(id);
+        }
+
+        public Question? GetByIdCourseIncluded(int id)
+        {
+            return _context.Questions
+                .Include(e => e.Course)
+                .Include(e => e.Choices)
+                .FirstOrDefault(e => !e.IsDeleted && e.Id == id);
+        }
+
+        public List<Question> GetInstQuestions(int crsId, int instId)
+        {
+            return _context.Questions.Where(e => !e.IsDeleted)
+                                     .Where(e => e.CourseId == crsId && e.InstructorId == instId)
+                                     .Include(e => e.Choices)
+                                     .ToList();
+        } 
+
+        public List<Question> GetInstQuestions(int crsId, int instId, QDifficulty difficulty)
+        {
+            return _context.Questions.Where(e => !e.IsDeleted)
+                                     .Where(e => e.CourseId == crsId && e.InstructorId == instId)
+                                     .Where(e => e.Difficulty == difficulty)
+                                     .Include(e => e.Choices)
+                                     .ToList();
         }
 
         public Question? GetByIdWithIncludes(int id)
@@ -61,7 +89,7 @@ namespace DataAccessLibrary.Repository
                 .Include(e => e.Instructor)
                 .Include(e => e.Choices)
                 .Include(e => e.Exams)
-                .FirstOrDefault(e => e.Id == id);
+                .FirstOrDefault(e => !e.IsDeleted && e.Id == id);
         }
 
         public Task<Question?> GetByIdWithIncludesAsync(int id)
@@ -71,7 +99,7 @@ namespace DataAccessLibrary.Repository
                 .Include(e => e.Instructor)
                 .Include(e => e.Choices)
                 .Include(e => e.Exams)
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .FirstOrDefaultAsync(e => !e.IsDeleted && e.Id == id);
         }
 
         public int Add(Question entity)

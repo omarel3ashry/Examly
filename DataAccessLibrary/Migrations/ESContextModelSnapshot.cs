@@ -201,6 +201,9 @@ namespace DataAccessLibrary.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int?>("TotalGrade")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
@@ -220,7 +223,7 @@ namespace DataAccessLibrary.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("ExamQuestion");
+                    b.ToTable("ExamQuestions");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.ExamTaken", b =>
@@ -262,12 +265,6 @@ namespace DataAccessLibrary.Migrations
 
                     b.Property<int?>("BranchId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Gender")
                         .IsRequired()
@@ -336,7 +333,9 @@ namespace DataAccessLibrary.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("Id");
 
@@ -380,12 +379,6 @@ namespace DataAccessLibrary.Migrations
 
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Gender")
                         .IsRequired()

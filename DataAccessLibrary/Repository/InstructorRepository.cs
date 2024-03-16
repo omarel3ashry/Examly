@@ -23,6 +23,69 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Instructors.Where(e => !e.IsDeleted).ToListAsync();
         }
+
+        public int? GetInstIdByUserId(int userId)
+        {
+            return _context.Instructors.FirstOrDefault(e => e.UserId == userId)?.Id;
+        }
+
+        public IQueryable<Instructor?> GetByIdWithCourses(int instId)
+        {
+            return _context.Instructors
+                .Include(e => e.DepartmentCourses).ThenInclude(e => e.Course)
+                .Include(e => e.DepartmentCourses).ThenInclude(e => e.Department)
+                .Where(e => !e.IsDeleted && e.Id == instId);
+        }
+
+        public List<Question> GetAllQuestions(int instId)
+        {
+            var question = _context.Instructors
+                            .Include(e => e.Questions.Where(e => !e.IsDeleted))
+                            .ThenInclude(e => e.Choices)
+                            .FirstOrDefault(e => !e.IsDeleted && e.Id == instId)?
+                            .Questions;
+
+            return question?.ToList() ?? new List<Question>();
+        }
+
+        public List<Question> GetCourseQuestions(int instId, int courseId)
+        {
+            var question = _context.Instructors
+                .Include(e => e.Questions.Where(e => !e.IsDeleted && e.CourseId == courseId))
+                .ThenInclude(e => e.Choices)
+                .FirstOrDefault(e => !e.IsDeleted && e.Id == instId)?
+                .Questions;
+
+            return question?.ToList() ?? new List<Question>();
+        }
+
+        public int AddQuestion(Question entity)
+        {
+            _context.Questions.Add(entity);
+            _context.SaveChanges();
+            return entity.Id;
+        }
+
+        public List<Exam> GetExamsWithIncludes(int instId)
+        {
+            var exams = new List<Exam>();
+            var instructor = _context.Instructors
+                     .Include(e => e.DepartmentCourses)
+                        .ThenInclude(e => e.Course)
+                            .ThenInclude(e => e.Exams.Where(e => !e.IsDeleted))
+                                .ThenInclude(e => e.Questions)
+                     .Where(e => !e.IsDeleted && e.Id == instId)
+                     .FirstOrDefault();
+
+            if (instructor != null)
+                foreach (var deptCourse in instructor.DepartmentCourses)
+                {
+                    exams.AddRange(deptCourse.Course.Exams);
+                }
+
+            return exams;
+        }
+
         public List<Instructor> GetAllWithIncludes()
         {
             return _context.Instructors
@@ -82,11 +145,6 @@ namespace DataAccessLibrary.Repository
         public Instructor? GetByUserId(int userId)
         {
             return _context.Instructors.FirstOrDefault(e => e.UserId == userId);
-        }
-
-        public Task<Instructor?> GetByUserIdAsync(int userId)
-        {
-            return _context.Instructors.FirstOrDefaultAsync(e => e.UserId == userId);
         }
 
         public int Add(Instructor entity)
@@ -159,7 +217,7 @@ namespace DataAccessLibrary.Repository
 
         public List<Instructor> SelectAll(Expression<Func<Instructor, bool>> predicate)
         {
-            return _context.Instructors.Where(predicate).ToList();
+            return _context.Instructors.Where(e => !e.IsDeleted).Where(predicate).ToList();
         }
 
         public Task<List<Instructor>> SelectAllAsync(Expression<Func<Instructor, bool>> predicate)

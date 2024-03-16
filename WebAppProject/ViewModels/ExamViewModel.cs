@@ -6,6 +6,5 @@ namespace WebAppProject.ViewModels
     {
         public DepartmentCourse DepartmentCourse { get; set; }
         public Exam Exam { get; set; }
-        public int TotalGrade { get; set; }
     }
 }

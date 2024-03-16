@@ -10,7 +10,7 @@ namespace WebAppProject.Controllers
 {
     public class AccountController : Controller
     {
-       
+
         private readonly IUserRepository userRepository;
         private readonly IStudentRepository studentRepository;
         private readonly IDepartmentRepository departmentRepository;
@@ -32,31 +32,43 @@ namespace WebAppProject.Controllers
         public IActionResult Register()
         {
             ViewBag.Branches = branchRepository.GetAll();
-            return View();
+            var model = new RegisterViewModel();
+            return View(model);
         }
         [HttpPost]
-        public IActionResult Register(RegisterViewModel registerInfo) 
-        { 
-            User user = new User { Email = registerInfo.Email, Password = registerInfo.Password,RoleId=4};
-            int userId= userRepository.Add(user);
-            Student student= new Student { Name=registerInfo.Name,DepartmentId=int.Parse(registerInfo.DeptId),UserId=userId};
+        public IActionResult Register(RegisterViewModel registerInfo)
+        {
+            User user = new User { Email = registerInfo.Email, Password = registerInfo.Password, RoleId = 4 };
+            int userId = userRepository.Add(user);
+            Student student = new Student 
+            {
+                Name = registerInfo.Name,
+                Age = registerInfo.Age,
+                Gender = registerInfo.Gender,
+                Phone = registerInfo.Phone,
+                Address = registerInfo.Address,
+                DepartmentId = registerInfo.DeptId,
+                UserId = userId 
+            };
+
             studentRepository.Add(student);
-            return RedirectToAction("Login"); 
+            return RedirectToAction("Login");
         }
         public IActionResult Departments(int id)
         {
-            var model= departmentRepository.SelectAll(dept=>dept.BranchId==id);
+            var model = departmentRepository.SelectAll(dept => dept.BranchId == id);
             return PartialView(model);
         }
         public IActionResult Login()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Login(User LoginInfo)
         {
-            User user = userRepository.CheckUser(LoginInfo.Email,LoginInfo.Password);
-            if (user==null)
+            User user = userRepository.CheckUser(LoginInfo.Email, LoginInfo.Password);
+            if (user == null)
             {
                 ModelState.AddModelError("", "Username OR Password Invalid");
                 return View(LoginInfo);
@@ -73,14 +85,14 @@ namespace WebAppProject.Controllers
                 id = studentRepository.GetByUserId(user.Id).Id;
                 controller = "Student";
             }
-            else if(role == "Admin")
+            else if (role == "Admin")
             {
                 id = 0;
                 controller = "Manage";
             }
-            else 
+            else
             {
-                id= instructorRepository.GetByUserId(user.Id).Id;
+                id = instructorRepository.GetByUserId(user.Id).Id;
                 controller = "Instructor";
             }
             Claim idClaim = new Claim("id", id.ToString());
@@ -94,7 +106,7 @@ namespace WebAppProject.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

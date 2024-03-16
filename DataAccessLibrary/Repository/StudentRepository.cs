@@ -86,13 +86,7 @@ namespace DataAccessLibrary.Repository
 
         public int Add(Student entity)
         {
-            entity.Address = "ba7riiiii";
-            entity.Email = "omar";
-            entity.Gender = "f";
-            entity.Phone = "23453245";
-            
             _context.Students.Add(entity);
-
             _context.SaveChanges();
             return entity.Id;
         }
@@ -190,7 +184,7 @@ namespace DataAccessLibrary.Repository
                         Question question = choice.Question;
                         questionCorrectChoices = _context.Choices.Where(e => e.QuestionId == question.Id && e.IsCorrect).ToList();
                         studentChoicesForQuestion = listOfChoices.Where(e => e.QuestionId == question.Id).ToList();
-                        isQuestionCorrect=  questionCorrectChoices.Count == studentChoicesForQuestion.Count 
+                        isQuestionCorrect = questionCorrectChoices.Count == studentChoicesForQuestion.Count
                                          && questionCorrectChoices.Count == studentChoicesForQuestion.FindAll(e => e.IsCorrect).Count;
                         result.Add(new ExamChoices
                         {

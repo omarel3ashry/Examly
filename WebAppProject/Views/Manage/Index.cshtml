@@ -28,10 +28,10 @@
             <option value="-1">Select Instructor</option>
         </select>
     </div>
-    <a asp-action="Create" asp-controller="Instructor" class="btn btn-info m-2 col-2">Add</a>
-    <a id="InstructorDetailsBtn" class="btn btn-primary m-2 col-2">Info</a>
-    <a id="InstructorEditBtn" class="btn btn-success m-2 col-2"> Edit</a>
-    <a id="InstructorDeleteBtn" class="btn btn-danger m-2 col-2">Delete</a>
+    <a asp-action="Create" asp-controller="ManageInstructor" class="btn btn-info m-2 col-2">Add</a>
+    <a id="ManageInstructorDetailsBtn" class="btn btn-primary m-2 col-2">Info</a>
+    <a id="ManageInstructorEditBtn" class="btn btn-success m-2 col-2"> Edit</a>
+    <a id="ManageInstructorDeleteBtn" class="btn btn-danger m-2 col-2">Delete</a>
 </div>
 <h3>Department</h3>
 <div class="container row m-1">
@@ -212,7 +212,7 @@
         UpdateUrlState(Controller, "BranchId");
         UpdateSelectLists();
         // Instructor Area
-        Controller = "Instructor";
+        Controller = "ManageInstructor";
         setBtnState(Controller, false);
         UpdateUrlState(Controller, "InstructorId");
         // department Area
@@ -220,10 +220,10 @@
         setBtnState(Controller, false);
         UpdateUrlState(Controller, "DepartmentId");
         // manage btns Area
-        // setManageBtnState("DepartmentId", false);
-        // setManageBtnState("BranchId", false);
-        // SetManageManagerOnClick();
-        // SetManageStudentOnClick();
+        setManageBtnState("DepartmentId", false);
+        setManageBtnState("BranchId", false);
+        SetManageManagerOnClick();
+        SetManageStudentOnClick();
     </script>
 }
 

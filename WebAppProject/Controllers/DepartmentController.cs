@@ -12,12 +12,12 @@ namespace WebAppProject.Controllers
     [Authorize(Roles = "Admin")]
     public class DepartmentController : Controller
     {
-        
+
         private readonly IDepartmentRepository departmentRepository;
         private readonly IBranchRepository branchRepository;
         private readonly IInstructorRepository instructorRepository;
 
-        public DepartmentController(IDepartmentRepository departmentRepository,IBranchRepository branchRepository)
+        public DepartmentController(IDepartmentRepository departmentRepository, IBranchRepository branchRepository)
         {
             this.departmentRepository = departmentRepository;
             this.branchRepository = branchRepository;
@@ -36,23 +36,16 @@ namespace WebAppProject.Controllers
         public IActionResult Create()
         {
             List<Branch> branches = branchRepository.GetAll();
-            var model = new DepartmentFormViewModel() { Branches = branches};
+            var model = new DepartmentFormViewModel() { Branches = branches };
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Create(Department Department)
         {
-            IActionResult actionResult;
-            if (ModelState.IsValid)
-            {
-                int res = departmentRepository.Add(Department);
-                actionResult = res > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
-            }
-            else
-            {
-                actionResult = RedirectToAction("Craete");
-            }
-            return actionResult;
+            // TODO: create ViewModel and add ModelState validation
+            int res = departmentRepository.Add(Department);
+            return res > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
         }
 
         public IActionResult Edit(int Id)
@@ -62,7 +55,7 @@ namespace WebAppProject.Controllers
             Department? department = departmentRepository.GetByIdWithIncludes(Id);
             if (department != null)
             {
-                var model = new DepartmentFormViewModel() { Department = department , Branches = branches };
+                var model = new DepartmentFormViewModel() { Department = department, Branches = branches };
                 actionResult = View(model);
             }
             return actionResult;
@@ -72,7 +65,7 @@ namespace WebAppProject.Controllers
         {
             Department.Id = Id;
             bool res = departmentRepository.Update(Department);
-            IActionResult actionResult = res ? RedirectToAction("Index","Manage") : RedirectToAction("Edit");
+            IActionResult actionResult = res ? RedirectToAction("Index", "Manage") : RedirectToAction("Edit");
             return actionResult;
         }
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLibrary.Migrations
 {
     /// <inheritdoc />
-    public partial class initmigartion : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,6 +76,7 @@ namespace DataAccessLibrary.Migrations
                     Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     ExamDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DurationInMinutes = table.Column<int>(type: "int", nullable: false),
+                    TotalGrade = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -145,7 +146,6 @@ namespace DataAccessLibrary.Migrations
                     Age = table.Column<int>(type: "int", nullable: false),
                     Gender = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: false),
                     Phone = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
-                    Email = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true),
@@ -204,7 +204,7 @@ namespace DataAccessLibrary.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     Grade = table.Column<int>(type: "int", nullable: false, defaultValue: 2),
                     Difficulty = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -269,7 +269,6 @@ namespace DataAccessLibrary.Migrations
                     Age = table.Column<int>(type: "int", nullable: false),
                     Gender = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: false),
                     Phone = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
-                    Email = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true),
@@ -315,7 +314,7 @@ namespace DataAccessLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExamQuestion",
+                name: "ExamQuestions",
                 columns: table => new
                 {
                     ExamId = table.Column<int>(type: "int", nullable: false),
@@ -323,14 +322,14 @@ namespace DataAccessLibrary.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExamQuestion", x => new { x.ExamId, x.QuestionId });
+                    table.PrimaryKey("PK_ExamQuestions", x => new { x.ExamId, x.QuestionId });
                     table.ForeignKey(
-                        name: "FK_ExamQuestion_Exams_ExamId",
+                        name: "FK_ExamQuestions_Exams_ExamId",
                         column: x => x.ExamId,
                         principalTable: "Exams",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ExamQuestion_Questions_QuestionId",
+                        name: "FK_ExamQuestions_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id");
@@ -424,8 +423,8 @@ namespace DataAccessLibrary.Migrations
                 filter: "[ManagerId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExamQuestion_QuestionId",
-                table: "ExamQuestion",
+                name: "IX_ExamQuestions_QuestionId",
+                table: "ExamQuestions",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
@@ -498,7 +497,7 @@ namespace DataAccessLibrary.Migrations
                 name: "DepartmentCourses");
 
             migrationBuilder.DropTable(
-                name: "ExamQuestion");
+                name: "ExamQuestions");
 
             migrationBuilder.DropTable(
                 name: "ExamsTaken");
