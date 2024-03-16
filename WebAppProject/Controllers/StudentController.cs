@@ -62,9 +62,7 @@ namespace WebAppProject.Controllers
             Exam exam = examRepository.GetByIdWithIncludes(examId)!;
             model.Exam = exam;
             model.DepartmentCourse = departmentCourseRepository.GetByDeptAndCrsIdWithIncludes(exam.CourseId, st.DepartmentId!.Value)!;
-            model.TotalGrade = 0;
-            foreach (var question in exam.Questions)
-                model.TotalGrade += question.Grade;
+
             return View(model);
         }
         [HttpPost]
@@ -83,7 +81,16 @@ namespace WebAppProject.Controllers
 
         public IActionResult Answers(int stId, int examId)
         {
+            var examTaken = examTakenRepository.GetByStudentIdWithIncludes(stId);
             var model = studentRepository.GetStudentAnswers(stId, examId);
+
+            if (examTaken == null || model == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.StudentGrade = examTaken.Grade;
+            ViewBag.TotalGrade = examTaken.Exam.TotalGrade;
             return View(model);
         }
     }
