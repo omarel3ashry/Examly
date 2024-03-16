@@ -10,9 +10,10 @@
     <input type="hidden" asp-for="Id" value="@Model.Id" />
     <input type="hidden" asp-for="InstructorId" value="@Model.InstructorId" />
     <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
+    <input type="hidden" asp-for="Type" value="@Model.Type" />
 
     <h5>Type: </h5>
-    @if (Model.Choices.Count > 1)
+    @if (Model.Choices.Count > 2)
     {
         <label>MCQ Question</label>
         <partial name="QuestionPartial" />

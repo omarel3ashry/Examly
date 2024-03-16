@@ -25,7 +25,7 @@
             @foreach (var choice in question.Choices)
             {
                 <input type="text" class="form-control" value="@choice.Text" readonly />
-                <span class="@(@choice.IsCorrect ? "text-info" : "text-danger")">@choice.IsCorrect</span>
+                <span class="@(@choice.IsCorrect ? "text-info" : "text-danger")">@(choice.IsCorrect ? "correct" : "incorrect")</span>
                 <br />
             }
         }

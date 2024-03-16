@@ -8,8 +8,8 @@
 
 <form asp-action="AddQuestion" asp-controller="Instructor" method="post">
 
-    <input type="hidden" asp-for="InstructorId" value="@ViewBag.InstructorId" />
-    <input type="hidden" asp-for="CourseId" value="@ViewBag.CourseId" />
+    <input type="hidden" asp-for="InstructorId" value="@Model.InstructorId" />
+    <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
 
     <div class="form-group">
         <label asp-for="Type">Question Type</label>
@@ -20,7 +20,7 @@
 
     <partial name="QuestionPartial" />
 
-    <button type="submit" asp-route-id="@ViewBag.Courseid" class="btn btn-primary">Add Question</button>
+    <button type="submit" asp-route-id="@Model.CourseId" class="btn btn-primary">Add Question</button>
 </form>
 
 <script src="/lib/jquery/dist/jquery.js"></script>

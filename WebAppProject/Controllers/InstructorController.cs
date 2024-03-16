@@ -6,6 +6,7 @@ using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers
 {
+    [Authorize(Roles = "Manager,Instructor")]
     public class InstructorController : Controller
     {
 
@@ -14,22 +15,25 @@ namespace WebAppProject.Controllers
         private readonly IQuestionRepository _questionRepo;
         private readonly IStudentRepository _studentRepo;
         private Random _random;
+        private readonly int _instId;
 
         public InstructorController(IInstructorRepository instructorRepo,
                                     IExamRepository examRepo,
                                     IQuestionRepository questionRepo,
-                                    IStudentRepository studentRepo)
+                                    IStudentRepository studentRepo,
+                                    IHttpContextAccessor accessor)
         {
             _instructorRepo = instructorRepo;
             _examRepo = examRepo;
             _questionRepo = questionRepo;
             _studentRepo = studentRepo;
             _random = new Random();
+            _instId = int.Parse(accessor.HttpContext!.User.Claims.FirstOrDefault(c => c.Type == "id")!.Value);
         }
 
         public IActionResult Index()
         {
-            var instructor = _instructorRepo.GetByUserIdWithCourses(2).FirstOrDefault();
+            var instructor = _instructorRepo.GetByIdWithCourses(_instId).FirstOrDefault();
 
             if (instructor == null)
             {
@@ -45,7 +49,7 @@ namespace WebAppProject.Controllers
 
         public IActionResult Info(int id)
         {
-            var deptCourse = _instructorRepo.GetByUserIdWithCourses(2)
+            var deptCourse = _instructorRepo.GetByIdWithCourses(_instId)
                                 .Select(e => e.DepartmentCourses.Where(e => e.CourseId == id))
                                 .FirstOrDefault()?.ElementAt(0);
 
@@ -61,10 +65,11 @@ namespace WebAppProject.Controllers
             };
             return View(courseInfo);
         }
+
         public IActionResult QuestionBank(int id)
         {
             ViewBag.CourseId = id;
-            var questions = _instructorRepo.GetCourseQuestions(2, id);
+            var questions = _instructorRepo.GetCourseQuestions(_instId, id);
 
             if (questions == null)
             {
@@ -77,17 +82,13 @@ namespace WebAppProject.Controllers
         [HttpGet]
         public IActionResult AddQuestion(int id)
         {
-            var instructorId = _instructorRepo.GetInstIdByUserId(2);
-            ViewBag.InstructorId = instructorId;
-            ViewBag.CourseId = id;
-            var model = new QuestionViewModel() { CourseId = id, InstructorId = instructorId };
+            var model = new QuestionViewModel() { CourseId = id, InstructorId = _instId };
             return View(model);
         }
 
         [HttpPost]
         public IActionResult AddQuestion(int id, QuestionViewModel questionVM)
         {
-            ViewBag.Courseid = id;
             if (ModelState.IsValid)
             {
                 var questionDto = questionVM.ToQuestionDTO();
@@ -115,7 +116,7 @@ namespace WebAppProject.Controllers
             }
             else
             {
-                model.Choices.AddRange([new ChoiceViewModel()]);
+                model.Choices.AddRange([new ChoiceViewModel(), new ChoiceViewModel()]);
                 return PartialView("TFChoicesPartial", model);
             }
         }
@@ -166,15 +167,13 @@ namespace WebAppProject.Controllers
         [HttpGet]
         public IActionResult MakeExam(int id)
         {
-            // TODO: remove static user id
-            var instructorId = _instructorRepo.GetInstIdByUserId(2);
-            if (instructorId == null || id == 0)
+            if (id == 0)
             {
                 // TODO: user proper page
                 return NotFound();
             }
             var model = new InstExamViewModel() { CourseId = id };
-            var questions = _questionRepo.GetInstQuestions(id, instructorId ?? 0);
+            var questions = _questionRepo.GetInstQuestions(id, _instId);
             model.TotalMCQ = questions.Where(e => e.Type == QType.MCQ).Count();
             model.TotalTF = questions.Where(e => e.Type == QType.TrueFalse).Count();
             return View(model);
@@ -185,17 +184,8 @@ namespace WebAppProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                // TODO: remove static user id
-                var instructorId = _instructorRepo.GetInstIdByUserId(2);
-
-                if (instructorId == null)
-                {
-                    // TODO: replace this with (invalid user page)
-                    return NotFound();
-                }
-
                 QDifficulty difficultyDto = (QDifficulty)(int)model.ExamDifficulty;
-                var questions = _questionRepo.GetInstQuestions(model.CourseId, instructorId ?? 0, difficultyDto);
+                var questions = _questionRepo.GetInstQuestions(model.CourseId, _instId, difficultyDto);
 
                 // Separate true/false and multiple choice questions
                 var mcqQuestions = questions.Where(q => q.Type == QType.MCQ)
@@ -243,7 +233,7 @@ namespace WebAppProject.Controllers
 
         public IActionResult ShowExams()
         {
-            List<Exam> examsDto = _instructorRepo.GetExamsWithIncludes(2);
+            List<Exam> examsDto = _instructorRepo.GetExamsWithIncludes(_instId);
 
             var model = new ExamListsViewModel(examsDto);
             return View(model);
@@ -251,7 +241,6 @@ namespace WebAppProject.Controllers
 
         public IActionResult ExamInfo(int id)
         {
-            // TODO: remove static instructor id
             Exam? examDto = _examRepo.GetByIdWithIncludes(id);
             if (examDto == null)
             {
@@ -265,7 +254,6 @@ namespace WebAppProject.Controllers
         [HttpGet]
         public IActionResult ExamEdit(int id)
         {
-            // TODO: remove static instructor id
             Exam? examDto = _examRepo.GetByIdWithIncludes(id);
             if (examDto == null)
             {

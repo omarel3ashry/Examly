@@ -1,11 +1,13 @@
 ﻿using DataAccessLibrary.Model;
 using DataAccessLibrary.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers
 {
+    [Authorize(Roles = "Manager")]
     public class DeptManagerController : Controller
     {
         private readonly IInstructorRepository _instructorRepo;

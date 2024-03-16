@@ -65,7 +65,7 @@ namespace WebAppProject.ViewModels
                 Grade = Grade,
                 Difficulty = (QDifficulty)(int)Difficulty,
             };
-            if (Choices.Count > 1)
+            if (Choices.Count > 2)
             {
                 foreach (var choice in Choices)
                 {
@@ -78,15 +78,23 @@ namespace WebAppProject.ViewModels
                     });
                 }
             }
-            else if (Choices.Count == 1)
+            else
             {
                 questionDto.Choices.Add(new Choice()
                 {
                     Id = isNew ? 0 : Choices[0].Id,
                     QuestionId = Choices[0].QuestionId,
                     Text = Choices[0].Text,
-                    IsCorrect = Choices[0].Text.Equals("True")
+                    IsCorrect = true
                 });
+
+                questionDto.Choices.Add(new Choice()
+                {
+                    Id = isNew ? 0 : Choices[1].Id,
+                    QuestionId = Choices[0].QuestionId,
+                    Text = Choices[0].Text.Equals("True") ? "False" : "True",
+                    IsCorrect = false
+                }); ;
             }
             return questionDto;
         }

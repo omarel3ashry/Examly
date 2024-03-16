@@ -6,10 +6,9 @@ namespace DataAccessLibrary.Repository
     {
         public int? GetInstIdByUserId(int userId);
         public Instructor? GetByUserId(int userId);
-        public Task<Instructor?> GetByUserIdAsync(int userId);
-        public IQueryable<Instructor?> GetByUserIdWithCourses(int id);
-        public List<Question> GetAllQuestions(int userId);
-        public List<Question> GetCourseQuestions(int userId, int courseId);
+        public IQueryable<Instructor?> GetByIdWithCourses(int instId);
+        public List<Question> GetAllQuestions(int instId);
+        public List<Question> GetCourseQuestions(int instId, int courseId);
         public int AddQuestion(Question entity);
         public List<Exam> GetExamsWithIncludes(int instId);
     }

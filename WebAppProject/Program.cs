@@ -1,7 +1,9 @@
 using DataAccessLibrary.Data;
+using DataAccessLibrary.Model;
 using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using WebAppProject.Models;
 
 
 namespace WebAppProject
@@ -34,6 +36,7 @@ namespace WebAppProject
             builder.Services.AddScoped<IExamTakenRepository, ExamTakenRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();           
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 

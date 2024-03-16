@@ -29,31 +29,31 @@ namespace DataAccessLibrary.Repository
             return _context.Instructors.FirstOrDefault(e => e.UserId == userId)?.Id;
         }
 
-        public IQueryable<Instructor?> GetByUserIdWithCourses(int userId)
+        public IQueryable<Instructor?> GetByIdWithCourses(int instId)
         {
             return _context.Instructors
                 .Include(e => e.DepartmentCourses).ThenInclude(e => e.Course)
                 .Include(e => e.DepartmentCourses).ThenInclude(e => e.Department)
-                .Where(e => !e.IsDeleted && e.UserId == userId);
+                .Where(e => !e.IsDeleted && e.Id == instId);
         }
 
-        public List<Question> GetAllQuestions(int userId)
+        public List<Question> GetAllQuestions(int instId)
         {
             var question = _context.Instructors
                             .Include(e => e.Questions.Where(e => !e.IsDeleted))
                             .ThenInclude(e => e.Choices)
-                            .FirstOrDefault(e => !e.IsDeleted && e.UserId == userId)?
+                            .FirstOrDefault(e => !e.IsDeleted && e.Id == instId)?
                             .Questions;
 
             return question?.ToList() ?? new List<Question>();
         }
 
-        public List<Question> GetCourseQuestions(int userId, int courseId)
+        public List<Question> GetCourseQuestions(int instId, int courseId)
         {
             var question = _context.Instructors
                 .Include(e => e.Questions.Where(e => !e.IsDeleted && e.CourseId == courseId))
                 .ThenInclude(e => e.Choices)
-                .FirstOrDefault(e => !e.IsDeleted && e.UserId == userId)?
+                .FirstOrDefault(e => !e.IsDeleted && e.Id == instId)?
                 .Questions;
 
             return question?.ToList() ?? new List<Question>();
@@ -145,11 +145,6 @@ namespace DataAccessLibrary.Repository
         public Instructor? GetByUserId(int userId)
         {
             return _context.Instructors.FirstOrDefault(e => e.UserId == userId);
-        }
-
-        public Task<Instructor?> GetByUserIdAsync(int userId)
-        {
-            return _context.Instructors.FirstOrDefaultAsync(e => e.UserId == userId);
         }
 
         public int Add(Instructor entity)

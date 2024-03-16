@@ -12,12 +12,15 @@ namespace WebAppProject.Controllers
     {
         private readonly IInstructorRepository _instructorRepo;
         private readonly IBranchRepository _branchRepo;
+        private readonly IUserRepository _userRepo;
 
         public ManageInstructorController(IInstructorRepository instructorRepository,
-                                    IBranchRepository branchRepository)
+                                    IBranchRepository branchRepository,
+                                    IUserRepository userRepo)
         {
             _instructorRepo = instructorRepository;
             _branchRepo = branchRepository;
+            _userRepo = userRepo;
         }
         public IActionResult Index()
         {
@@ -37,26 +40,33 @@ namespace WebAppProject.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult Create(Instructor Instructor)
+        public IActionResult Create(InstructorWithBranchesViewModel model)
         {
-
-            int res = _instructorRepo.Add(Instructor);
-            IActionResult actionResult = res > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
-            return actionResult;
+            var user = new User() { Email = model.Email, Password = model.Password, RoleId = 3 };
+            int userId = _userRepo.Add(user);
+            if (userId != 0)
+            {
+                var instructorDto = model.ToInstructorDto();
+                instructorDto.UserId = userId;
+                int instId = _instructorRepo.Add(instructorDto);
+                return instId > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
+            }
+            return RedirectToAction("Create");
         }
 
         public IActionResult Edit(int Id)
         {
             IActionResult actionResult = BadRequest();
             List<Branch> branches = _branchRepo.GetAll();
-            Instructor? Instructor = _instructorRepo.GetByIdWithIncludes(Id);
-            if (Instructor != null)
+            Instructor? instructor = _instructorRepo.GetByIdWithIncludes(Id);
+            if (instructor != null)
             {
-                var model = new InstructorWithBranchesViewModel() { Instructor = Instructor, Branches = branches };
+                var model = new InstructorWithBranchesViewModel(instructor, branches);
                 actionResult = View(model);
             }
             return actionResult;
         }
+
         [HttpPost]
         public IActionResult Edit(Instructor Instructor, int Id)
         {
