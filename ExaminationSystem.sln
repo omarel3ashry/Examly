@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppProject", "WebAppProject\WebAppProject.csproj", "{90C87BDC-4706-416D-BD1C-8E15024BE006}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppProject", "WebAppProject\WebAppProject.csproj", "{90C87BDC-4706-416D-BD1C-8E15024BE006}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{4968F3DF-39D7-48F4-B972-135253274E10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{4968F3DF-39D7-48F4-B972-135253274E10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

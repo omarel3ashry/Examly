@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Department>
+@if (Model.Count() > 0)
+    foreach (Department dept in Model)
+    {
+        <option value="@dept.Id">@dept.Name</option>
+    }
+else
+{
+    <option value="0">No Departments</option>
+}

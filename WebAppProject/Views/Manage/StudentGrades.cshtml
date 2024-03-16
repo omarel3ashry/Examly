@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ExamTaken>
+@{
+    ViewData["Title"] = "Dashboard | Grades";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>StudentGrades</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+</head>
+<body>
+    <a class="btn btn-outline-info" asp-action="Students" asp-route-deptId="@ViewBag.DeptId">Back</a>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <td>Course Namee</td>
+                <td>Date Taken</td>
+                <td>Grade</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count() > 0)
+                foreach (var examTaken in Model)
+                {
+                    <tr>
+                        <td>@examTaken.Exam.Course.Name</td>
+                        <td>@examTaken.Exam.ExamDate</td>
+                        <td>@examTaken.Grade</td>
+                        <td>                           
+                            <a class="btn btn-info" asp-action="StudentAnswers" asp-controller="Manage" asp-route-stId="@examTaken.StudentId" asp-route-examId="@examTaken.ExamId">Answers</a>
+                        </td>
+                    </tr>
+                }
+            else
+            {
+                <tr>
+                    <td colspan="4">No Exams for this Student </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

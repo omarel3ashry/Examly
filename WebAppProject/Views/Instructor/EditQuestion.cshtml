@@ -1,0 +1,32 @@
+﻿@model QuestionViewModel
+
+@{
+    ViewData["Title"] = "Edit Question";
+}
+
+<h1>Edit Question</h1>
+
+<form asp-action="EditQuestion" asp-controller="Instructor" method="post">
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <input type="hidden" asp-for="InstructorId" value="@Model.InstructorId" />
+    <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
+    <input type="hidden" asp-for="Type" value="@Model.Type" />
+
+    <h5>Type: </h5>
+    @if (Model.Choices.Count > 2)
+    {
+        <label>MCQ Question</label>
+        <partial name="QuestionPartial" />
+        <partial name="MCQChoicesPartial" />
+    }
+    else
+    {
+        <label>TF Question</label>
+        <partial name="QuestionPartial" />
+        <partial name="TFChoicesPartial" />
+    }
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+
