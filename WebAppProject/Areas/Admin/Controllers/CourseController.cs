@@ -6,9 +6,10 @@ using System.Diagnostics;
 
 
 
-namespace WebAppProject.Controllers
+namespace WebAppProject.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [Area(areaName: "Admin")]
     public class CourseController : Controller
     {
 
@@ -36,7 +37,7 @@ namespace WebAppProject.Controllers
         [HttpPost]
         public IActionResult Create(Course Course)
         {
-            
+
             int res = courseRepository.Add(Course);
             IActionResult actionResult = res > 0 ? RedirectToAction("Index") : RedirectToAction("Create");
             return actionResult;

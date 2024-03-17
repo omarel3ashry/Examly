@@ -192,5 +192,29 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Exams.Where(predicate).ToListAsync();
         }
+
+        public List<Exam> GetInstructorExam(int instructorId)
+        {
+            return _context.Exams.Include(e => e.Questions).Where(e=>e.Questions.ElementAt(0).InstructorId==instructorId).ToList();
+        }
+
+        public List<Exam> GetDeptExams(int deptId)
+        {
+            var exams= _context.Exams.Include(e => e.Course)
+                .ThenInclude(e => e.DepartmentCourses)
+                .ToList();
+            var deptExams= new List<Exam>();
+            foreach (var exam in exams)
+            {
+                foreach (var deptCourse in exam.Course.DepartmentCourses)
+                {
+                    if (deptCourse.DepartmentId == deptId)
+                    {
+                        deptExams.Add(exam);
+                    }
+                }
+            }
+            return deptExams;
+        }
     }
 }

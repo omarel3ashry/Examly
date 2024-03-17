@@ -28,14 +28,14 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var questionTypeSelect = document.getElementById("questionType");
-            $("#choicesContainer").load("/Instructor/AddChoices/1");
+            $("#choicesContainer").load("/Staff/Instructor/AddChoices/1");
 
             questionTypeSelect.addEventListener("change", function () {
                 var type = this.value;
                 if (type === '1') {
-                    $("#choicesContainer").load("/Instructor/AddChoices/1");
+                    $("#choicesContainer").load("/Staff/Instructor/AddChoices/1");
                 } else if (type === '2') {
-                    $("#choicesContainer").load("/Instructor/AddChoices/2");
+                    $("#choicesContainer").load("/Staff/Instructor/AddChoices/2");
                 }
             });
         });

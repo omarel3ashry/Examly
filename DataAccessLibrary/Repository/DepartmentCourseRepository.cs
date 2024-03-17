@@ -70,7 +70,7 @@ namespace DataAccessLibrary.Repository
 
         public DepartmentCourse? GetByIdWithIncludes(int id)
         {
-            throw new NotImplementedException();
+            return _context.DepartmentCourses.Include(e=>e.Course).ThenInclude(e=>e.Exams).Where(e=>e.DepartmentId==id&&e.CourseId==1).FirstOrDefault();
         }
 
         public Task<DepartmentCourse?> GetByIdWithIncludesAsync(int id)

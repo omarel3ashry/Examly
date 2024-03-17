@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppProject.ViewModels;
 
-namespace WebAppProject.Controllers
+namespace WebAppProject.Areas.Staff.Controllers
 {
     [Authorize(Roles = "Manager,Instructor")]
+    [Area(areaName: "Staff")]
     public class InstructorController : Controller
     {
 
@@ -233,7 +234,7 @@ namespace WebAppProject.Controllers
 
         public IActionResult ShowExams()
         {
-            List<Exam> examsDto = _instructorRepo.GetExamsWithIncludes(_instId);
+            List<Exam> examsDto = _examRepo.GetInstructorExam(_instId);
 
             var model = new ExamListsViewModel(examsDto);
             return View(model);

@@ -19,8 +19,8 @@
                     <td>@student.Id</td>
                     <td>@student.Name</td>
                     <td>
-                        <a class="btn btn-info" asp-action="studentGrades" asp-controller="Manage" asp-route-stId="@student.Id">Grades</a>
-                        <a class="btn btn-info" asp-action="StudentDelete" asp-controller="Manage" asp-route-stId="@student.Id">Delete</a>
+                        <a class="btn btn-info" asp-action="Grades" asp-route-stId="@student.Id">Grades</a>
+                        <a class="btn btn-info" asp-action="Delete" asp-route-stId="@student.Id">Delete</a>
                     </td>
                 </tr>
             }
@@ -35,7 +35,7 @@
 
 
 
-   
+
 
 
 

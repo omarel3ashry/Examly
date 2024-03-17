@@ -4,17 +4,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppProject.ViewModels;
 
-namespace WebAppProject.Controllers
+namespace WebAppProject.Areas.Admin.Controllers
 {
 
     [Authorize(Roles = "Admin")]
-    public class ManageInstructorController : Controller
+    [Area(areaName: "Admin")]
+    public class InstructorController : Controller
     {
         private readonly IInstructorRepository _instructorRepo;
         private readonly IBranchRepository _branchRepo;
         private readonly IUserRepository _userRepo;
 
-        public ManageInstructorController(IInstructorRepository instructorRepository,
+        public InstructorController(IInstructorRepository instructorRepository,
                                     IBranchRepository branchRepository,
                                     IUserRepository userRepo)
         {
@@ -68,10 +69,10 @@ namespace WebAppProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Instructor Instructor, int Id)
+        public IActionResult Edit(Instructor instructor, int Id)
         {
-            Instructor.Id = Id;
-            bool res = _instructorRepo.Update(Instructor);
+            instructor.Id = Id;
+            bool res = _instructorRepo.Update(instructor);
             IActionResult actionResult = res ? RedirectToAction("Index", "Manage") : RedirectToAction("Edit");
             return actionResult;
         }

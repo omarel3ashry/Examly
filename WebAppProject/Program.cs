@@ -34,7 +34,7 @@ namespace WebAppProject
             builder.Services.AddScoped<IChoiceRepository, ChoiceRepository>();
             builder.Services.AddScoped<IExamRepository, ExamRepository>();
             builder.Services.AddScoped<IExamTakenRepository, ExamTakenRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();           
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             builder.Services.AddHttpContextAccessor();
 
@@ -54,6 +54,10 @@ namespace WebAppProject
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
 
             app.MapControllerRoute(
                 name: "default",

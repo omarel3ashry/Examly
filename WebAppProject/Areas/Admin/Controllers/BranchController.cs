@@ -6,12 +6,13 @@ using System.Diagnostics;
 
 
 
-namespace WebAppProject.Controllers
+namespace WebAppProject.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [Area(areaName:"Admin")]
     public class BranchController : Controller
     {
-        
+
         private readonly IBranchRepository branchRepository;
 
         public BranchController(IBranchRepository branchRepository)
@@ -65,13 +66,13 @@ namespace WebAppProject.Controllers
             }
             else
             {
-                actionResult = RedirectToAction("Edit",Branch.Id);
-            }         
+                actionResult = RedirectToAction("Edit", Branch.Id);
+            }
             return actionResult;
         }
 
         public IActionResult Delete(int Id)
-        {           
+        {
             Branch? model = branchRepository.GetById(Id);
             IActionResult actionResult = model != null ? View(model) : BadRequest();
             return actionResult;

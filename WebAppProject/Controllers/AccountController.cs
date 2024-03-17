@@ -56,7 +56,7 @@ namespace WebAppProject.Controllers
         }
         public IActionResult Departments(int id)
         {
-            var model = departmentRepository.SelectAll(dept => dept.BranchId == id);
+            var model = departmentRepository.SelectAll(dept => dept.BranchId == id&&!dept.IsDeleted);
             return PartialView(model);
         }
         public IActionResult Login()
@@ -78,6 +78,7 @@ namespace WebAppProject.Controllers
             ClaimsIdentity identity = new ClaimsIdentity("Cookies");
             identity.AddClaim(roleClaim);
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+            string area="";
             string controller;
             int id;
             if (role == "Student")
@@ -89,16 +90,18 @@ namespace WebAppProject.Controllers
             {
                 id = 0;
                 controller = "Manage";
+                area = "Admin";
             }
             else
             {
                 id = instructorRepository.GetByUserId(user.Id).Id;
                 controller = "Instructor";
+                area = "Staff";
             }
             Claim idClaim = new Claim("id", id.ToString());
             identity.AddClaim(idClaim);
             await HttpContext.SignInAsync(principal);
-            return RedirectToAction("Index", controller);
+            return RedirectToAction("Index", controller,new {area});
 
 
         }

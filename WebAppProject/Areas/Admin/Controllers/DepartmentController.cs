@@ -7,9 +7,10 @@ using WebAppProject.ViewModels;
 
 
 
-namespace WebAppProject.Controllers
+namespace WebAppProject.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [Area(areaName: "Admin")]
     public class DepartmentController : Controller
     {
 

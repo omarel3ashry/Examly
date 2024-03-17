@@ -5,28 +5,33 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebAppProject.ViewModels;
 
-namespace WebAppProject.Controllers
+namespace WebAppProject.Areas.Staff.Controllers
 {
     [Authorize(Roles = "Manager")]
-    public class DeptManagerController : Controller
+    [Area(areaName: "Staff")]
+    public class ManagerController : Controller
     {
         private readonly IInstructorRepository _instructorRepo;
         private readonly IDepartmentRepository _deptRepo;
         private readonly ICourseRepository _courseRepo;
+        private readonly int _managerId;
 
-        public DeptManagerController(IInstructorRepository instructorRepo,
+        public ManagerController(IInstructorRepository instructorRepo,
                                      IDepartmentRepository deptRepo,
-                                     ICourseRepository courseRepo)
+                                     ICourseRepository courseRepo,
+                                     IHttpContextAccessor accessor)
         {
             _instructorRepo = instructorRepo;
             _deptRepo = deptRepo;
             _courseRepo = courseRepo;
+            _managerId = int.Parse(accessor.HttpContext!.User.Claims.FirstOrDefault(c => c.Type == "id")!.Value);
+
         }
 
         public IActionResult Index()
-        {
-            // TODO: get managed dept id , assuming this user manages deptNo 1
-            var department = _deptRepo.GetByIdCoursesIncluded(1);
+        {        
+
+            var department = _deptRepo.GetByManagerIdCoursesIncluded(_managerId);
             if (department == null)
             {
                 return NotFound();
@@ -36,8 +41,8 @@ namespace WebAppProject.Controllers
 
         public IActionResult Details(int id)
         {
-            // TODO: get managed dept id , assuming this user manages deptNo 1
-            var departmentCourse = _deptRepo.GetDeptCourseWithIncludes(id, 1);
+            var deptId= _deptRepo.Select(e=>e.ManagerId==_managerId)!.Id;
+            var departmentCourse = _deptRepo.GetDeptCourseWithIncludes(id, deptId);
             if (departmentCourse == null)
             {
                 return NotFound();
@@ -48,8 +53,8 @@ namespace WebAppProject.Controllers
         [HttpGet]
         public IActionResult AssignInstructor(int id)
         {
-            // TODO: get managed dept id , assuming this user manages deptNo 1
-            var departmentCourse = _deptRepo.GetDeptCourseWithIncludes(id, 1);
+            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
+            var departmentCourse = _deptRepo.GetDeptCourseWithIncludes(id, deptId);
             if (departmentCourse == null)
             {
                 return NotFound();
@@ -67,7 +72,7 @@ namespace WebAppProject.Controllers
         [HttpPost]
         public IActionResult AssignInstructor(int crsId, int instId)
         {
-            // TODO: get managed dept id , assuming this user manages deptNo 1
+            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;           
             var course = _courseRepo.GetById(crsId);
             var instructor = _instructorRepo.GetById(instId);
             if (course == null || instructor == null)
@@ -75,23 +80,23 @@ namespace WebAppProject.Controllers
                 return NotFound();
             }
 
-            _deptRepo.UpdateDeptCourseInstructor(1, crsId, instId);
+            _deptRepo.UpdateDeptCourseInstructor(deptId, crsId, instId);
 
             return RedirectToAction("Index");
         }
 
         public IActionResult DeleteCourse(int id)
         {
-            // TODO: get managed dept id , assuming this user manages deptNo 1
-            _deptRepo.DeleteDeptCourse(1, id);
+            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
+            _deptRepo.DeleteDeptCourse(deptId, id);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public IActionResult AddCourses(int id)
         {
-            // TODO: get managed dept id , assuming this user manages deptNo 1
-            var coursesNotInDept = _courseRepo.GetCoursesNotInDepartment(id);
+            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
+            var coursesNotInDept = _courseRepo.GetCoursesNotInDepartment(deptId);
             var addCoursesList = new List<AddCourseViewModel>();
 
             foreach (var course in coursesNotInDept)

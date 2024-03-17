@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppProject.ViewModels;
 
-namespace WebAppProject.Controllers
+namespace WebAppProject.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [Area(areaName: "Admin")]
     public class ManageController : Controller
     {
         private readonly IInstructorRepository instructorRepository;
@@ -34,8 +35,8 @@ namespace WebAppProject.Controllers
 
         public IActionResult GetLists(int BranchId)
         {
-            var DepartmentList = departmentRepository.SelectAll(dept => dept.BranchId == BranchId).Select(e => new { e.Id, e.Name }).OrderBy(dept => dept.Name);
-            var InstructorList = instructorRepository.SelectAll(ins => ins.BranchId == BranchId).Select(e => new { e.Id, e.Name }).OrderBy(ins => ins.Name);
+            var DepartmentList = departmentRepository.SelectAll(dept => dept.BranchId == BranchId&& !dept.IsDeleted).Select(e => new { e.Id, e.Name }).OrderBy(dept => dept.Name);
+            var InstructorList = instructorRepository.SelectAll(ins => ins.BranchId == BranchId&& !ins.IsDeleted).Select(e => new { e.Id, e.Name }).OrderBy(ins => ins.Name);
             return Ok(new { DepartmentList, InstructorList });
         }
         public IActionResult DepartmentManager(int branchId, int deptId)
@@ -50,32 +51,7 @@ namespace WebAppProject.Controllers
             departmentRepository.SetManager(deptId, insId);
             return RedirectToAction("Index");
         }
-        public IActionResult Students(int deptId)
-        {
-            var model = studentRepository.SelectAll(st => !st.IsDeleted && st.DepartmentId == deptId);
-            return View(model);
-
-        }
-        public IActionResult StudentGrades(int stId)
-        {
-            var deptId = studentRepository.GetById(stId)?.DepartmentId;
-            var model = examTaken.GetAllByStudentIdWithIncludes(stId);
-            ViewBag.DeptId = deptId ?? 0;
-            return View(model);
-        }
-        public IActionResult StudentAnswers(int stId, int examId)
-        {
-            var model = studentRepository.GetStudentAnswers(stId, examId);
-            ViewBag.StId = stId;
-            return View(model);
-        }
-
-        public IActionResult StudentDelete(int stId)
-        {
-            var student = studentRepository.GetById(stId);
-            studentRepository.Delete(stId);
-            return student != null ? RedirectToAction("Students", new { deptId = student.DepartmentId }) : BadRequest();
-        }
+        
 
     }
 }

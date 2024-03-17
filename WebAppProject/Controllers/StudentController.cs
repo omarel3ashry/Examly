@@ -16,7 +16,6 @@ namespace WebAppProject.Controllers
         private readonly IExamTakenRepository examTakenRepository;
         private readonly IExamRepository examRepository;
         private readonly int _stdId;
-
         public StudentController(IStudentRepository studentRepository,
                                  IDepartmentCourseRepository departmentCourseRepository,
                                  IExamTakenRepository examTakenRepository,
@@ -33,6 +32,7 @@ namespace WebAppProject.Controllers
 
         public IActionResult Index()
         {
+            
             Student st = studentRepository.GetById(_stdId)!;
             var model = departmentCourseRepository.GetCoursesByDeptIdWithIncludes(st.DepartmentId!.Value)!;
             return View(model);
@@ -40,6 +40,7 @@ namespace WebAppProject.Controllers
         public IActionResult Exams()
         {
             Student st = studentRepository.GetById(_stdId)!;
+            var coursesdemo= examRepository.GetDeptExams(st.DepartmentId!.Value);
             var courses = departmentCourseRepository.GetCoursesByDeptIdWithIncludes(st.DepartmentId!.Value);
             var model = new StudentExamsViewModel();
             model.ExamsTaken = examTakenRepository.GetAllByStudentIdWithIncludes(_stdId);
@@ -62,7 +63,6 @@ namespace WebAppProject.Controllers
             Exam exam = examRepository.GetByIdWithIncludes(examId)!;
             model.Exam = exam;
             model.DepartmentCourse = departmentCourseRepository.GetByDeptAndCrsIdWithIncludes(exam.CourseId, st.DepartmentId!.Value)!;
-
             return View(model);
         }
         [HttpPost]
@@ -83,12 +83,10 @@ namespace WebAppProject.Controllers
         {
             var examTaken = examTakenRepository.GetByStudentIdWithIncludes(stId);
             var model = studentRepository.GetStudentAnswers(stId, examId);
-
             if (examTaken == null || model == null)
             {
                 return NotFound();
             }
-
             ViewBag.StudentGrade = examTaken.Grade;
             ViewBag.TotalGrade = examTaken.Exam.TotalGrade;
             return View(model);
