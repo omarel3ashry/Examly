@@ -10,6 +10,8 @@
     <thead>
         <tr>
             <th>Question</th>
+            <th>Type</th>
+            <th>Difficulty</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -18,6 +20,8 @@
         {
             <tr>
                 <td>@question.Text</td>
+                <td>@(question.Type == QType.TrueFalse ? "True/False" : "MCQ")</td>
+                <td>@question.Difficulty</td>
                 <td>
                     <a asp-action="QuestionInfo" asp-route-id="@question.Id" class="btn btn-dark">Info</a>
                     <a asp-action="EditQuestion" asp-route-id="@question.Id" class="btn btn-dark">Edit</a>

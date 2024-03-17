@@ -14,5 +14,6 @@
         public Branch Branch { get; set; }
         public ICollection<Student> Students { get; } = new HashSet<Student>();
         public ICollection<DepartmentCourse> DepartmentCourses { get; } = new HashSet<DepartmentCourse>();
+        public ICollection<Exam> Exams { get; } = new List<Exam>();
     }
 }

@@ -173,33 +173,79 @@ namespace WebAppProject.Areas.Staff.Controllers
                 // TODO: user proper page
                 return NotFound();
             }
-            var model = new InstExamViewModel() { CourseId = id };
             var questions = _questionRepo.GetInstQuestions(id, _instId);
-            model.TotalMCQ = questions.Where(e => e.Type == QType.MCQ).Count();
-            model.TotalTF = questions.Where(e => e.Type == QType.TrueFalse).Count();
+            var mcqDifficultyG = questions.Where(e => e.Type == QType.MCQ)
+                                      .GroupBy(q => q.Difficulty)
+                                      .OrderBy(q => (int)q.Key)
+                                      .ToList();
+            var tfDifficultyG = questions.Where(e => e.Type == QType.TrueFalse)
+                                      .GroupBy(q => q.Difficulty)
+                                      .OrderBy(q => (int)q.Key)
+                                      .ToList();
+
+            int[] mcqDifficultyCounts = new int[3];
+            for (int i = 0; i < mcqDifficultyG.Count(); i++)
+            {
+                int index = ((int)mcqDifficultyG[i].Key) - 1;
+                mcqDifficultyCounts[index] = mcqDifficultyG[i].Count();
+            }
+            int[] tfDifficultyCounts = new int[3];
+            for (int i = 0; i < tfDifficultyG.Count(); i++)
+            {
+                int index = ((int)tfDifficultyG[i].Key) - 1;
+                tfDifficultyCounts[index] = tfDifficultyG[i].Count();
+            }
+
+            if (mcqDifficultyCounts.Sum() + tfDifficultyCounts.Sum() == 0)
+            {
+                return NoContent();
+            }
+
+            var model = new InstExamViewModel()
+            {
+                CourseId = id,
+                TotalMCQ = mcqDifficultyCounts,
+                TotalTF = tfDifficultyCounts
+            };
             return View(model);
         }
 
         [HttpPost]
         public IActionResult MakeExam(InstExamViewModel model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && (model.NoOfMCQ.Sum() + model.NoOfTF.Sum() > 0))
             {
-                QDifficulty difficultyDto = (QDifficulty)(int)model.ExamDifficulty;
-                var questions = _questionRepo.GetInstQuestions(model.CourseId, _instId, difficultyDto);
+                var allQuestionsDto = _questionRepo.GetInstQuestions(model.CourseId, _instId);
 
                 // Separate true/false and multiple choice questions
-                var mcqQuestions = questions.Where(q => q.Type == QType.MCQ)
-                                                       .OrderBy(q => _random.Next())
-                                                       .Take(model.NoOfMCQ)
-                                                       .ToList();
+                var mcqQuestionsDto = new List<Question>();
+                var tfQuestionsDto = new List<Question>();
 
-                var tfQuestions = questions.Where(q => q.Type == QType.TrueFalse)
-                                                        .OrderBy(q => _random.Next())
-                                                        .Take(model.NoOfTF)
-                                                        .ToList();
+                for (int i = 0; i < 3; i++)
+                {
+                    if (model.NoOfMCQ[i] != 0)
+                    {
+                        var questions = allQuestionsDto.Where(q => q.Type == QType.MCQ && q.Difficulty == (QDifficulty)(i + 1))
+                                                      .OrderBy(q => _random.Next())
+                                                      .Take(model.NoOfMCQ[i])
+                                                      .ToList();
+                        mcqQuestionsDto.AddRange(questions);
+                    }
+                }
 
-                var allQuestions = mcqQuestions.Concat(tfQuestions);
+                for (int i = 0; i < 3; i++)
+                {
+                    if (model.NoOfTF[i] != 0)
+                    {
+                        var questions = allQuestionsDto.Where(q => q.Type == QType.TrueFalse && q.Difficulty == (QDifficulty)(i + 1))
+                                                      .OrderBy(q => _random.Next())
+                                                      .Take(model.NoOfTF[i])
+                                                      .ToList();
+                        tfQuestionsDto.AddRange(questions);
+                    }
+                }
+
+                var generatedQuestions = mcqQuestionsDto.Concat(tfQuestionsDto);
                 var examQuestions = new List<ExamQuestion>();
                 int totalGrade = 0;
 
@@ -212,7 +258,7 @@ namespace WebAppProject.Areas.Staff.Controllers
                     return NotFound();
                 }
 
-                foreach (var question in allQuestions)
+                foreach (var question in generatedQuestions)
                 {
                     examQuestions.Add(new ExamQuestion() { ExamId = examId, QuestionId = question.Id });
                     totalGrade += question.Grade;

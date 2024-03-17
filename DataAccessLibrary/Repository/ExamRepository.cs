@@ -60,7 +60,7 @@ namespace DataAccessLibrary.Repository
             return _context.Exams
                 .Include(e => e.Course)
                 .Include(e => e.Questions)
-                .ThenInclude(e=>e.Choices)
+                .ThenInclude(e => e.Choices)
                 .Include(e => e.Students)
                 .Include(e => e.StudentAnswers)
                 .FirstOrDefault(e => e.Id == id);
@@ -75,17 +75,17 @@ namespace DataAccessLibrary.Repository
                         .ToList();
         }
 
-/*        public Exam? GetExamWithStdAnswersIncluded(int examId, int stdId)
-        {
-            return _context.Exams
-                            .Include(e=>e.Course)
-                            .Include(e=>e.Questions)
-                                .ThenInclude(e=>e.Choices)
-                            .Include(e => e.StudentAnswers.Where(e=>e.StudentId==stdId))
-                                .ThenInclude(e=>e.Choice)
-                            .Where(e=>!e.IsDeleted&&e.Id == examId)
-                            .FirstOrDefault();
-        }*/
+        /*        public Exam? GetExamWithStdAnswersIncluded(int examId, int stdId)
+                {
+                    return _context.Exams
+                                    .Include(e=>e.Course)
+                                    .Include(e=>e.Questions)
+                                        .ThenInclude(e=>e.Choices)
+                                    .Include(e => e.StudentAnswers.Where(e=>e.StudentId==stdId))
+                                        .ThenInclude(e=>e.Choice)
+                                    .Where(e=>!e.IsDeleted&&e.Id == examId)
+                                    .FirstOrDefault();
+                }*/
 
         public Task<Exam?> GetByIdWithIncludesAsync(int id)
         {
@@ -195,26 +195,14 @@ namespace DataAccessLibrary.Repository
 
         public List<Exam> GetInstructorExam(int instructorId)
         {
-            return _context.Exams.Include(e => e.Questions).Where(e=>e.Questions.ElementAt(0).InstructorId==instructorId).ToList();
+            return _context.Exams.Include(e => e.Questions).Where(e => e.Questions.ElementAt(0).InstructorId == instructorId).ToList();
         }
 
         public List<Exam> GetDeptExams(int deptId)
         {
-            var exams= _context.Exams.Include(e => e.Course)
-                .ThenInclude(e => e.DepartmentCourses)
-                .ToList();
-            var deptExams= new List<Exam>();
-            foreach (var exam in exams)
-            {
-                foreach (var deptCourse in exam.Course.DepartmentCourses)
-                {
-                    if (deptCourse.DepartmentId == deptId)
-                    {
-                        deptExams.Add(exam);
-                    }
-                }
-            }
-            return deptExams;
+            return  _context.Exams.Include(e => e.Course)
+                                      .Where(e => e.DepartmentId == deptId)
+                                      .ToList();
         }
     }
 }

@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(ESContext))]
-    [Migration("20240316194737_init")]
-    partial class init
+    [Migration("20240317184911_dept-exam-relation")]
+    partial class deptexamrelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -190,6 +190,9 @@ namespace DataAccessLibrary.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("DurationInMinutes")
                         .HasColumnType("int");
 
@@ -210,6 +213,8 @@ namespace DataAccessLibrary.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Exams");
                 });
@@ -566,7 +571,14 @@ namespace DataAccessLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataAccessLibrary.Model.Department", "Department")
+                        .WithMany("Exams")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Course");
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Model.ExamQuestion", b =>
@@ -712,6 +724,8 @@ namespace DataAccessLibrary.Migrations
             modelBuilder.Entity("DataAccessLibrary.Model.Department", b =>
                 {
                     b.Navigation("DepartmentCourses");
+
+                    b.Navigation("Exams");
 
                     b.Navigation("Students");
                 });

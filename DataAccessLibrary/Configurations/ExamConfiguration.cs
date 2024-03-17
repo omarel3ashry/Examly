@@ -33,6 +33,11 @@ namespace DataAccessLibrary.Configurations
                           .UsingEntity<ExamQuestion>(
                               r => r.HasOne<Question>().WithMany().HasForeignKey(e => e.QuestionId).OnDelete(DeleteBehavior.NoAction),
                               l => l.HasOne<Exam>().WithMany().HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.NoAction));
+
+            builder.HasOne(e => e.Department)
+                    .WithMany(e => e.Exams)
+                    .HasForeignKey(e => e.DepartmentId)
+                    .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

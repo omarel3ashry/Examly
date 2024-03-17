@@ -32,30 +32,31 @@ namespace WebAppProject.Controllers
 
         public IActionResult Index()
         {
-            
+
             Student st = studentRepository.GetById(_stdId)!;
             var model = departmentCourseRepository.GetCoursesByDeptIdWithIncludes(st.DepartmentId!.Value)!;
             return View(model);
         }
+
         public IActionResult Exams()
         {
             Student st = studentRepository.GetById(_stdId)!;
-            var coursesdemo= examRepository.GetDeptExams(st.DepartmentId!.Value);
-            var courses = departmentCourseRepository.GetCoursesByDeptIdWithIncludes(st.DepartmentId!.Value);
+            var departmentExams = examRepository.GetDeptExams(st.DepartmentId!.Value);
             var model = new StudentExamsViewModel();
             model.ExamsTaken = examTakenRepository.GetAllByStudentIdWithIncludes(_stdId);
             List<Exam> passedExams = model.ExamsTaken.Select(e => e.Exam).ToList();
             model.CommingExams = new List<Exam>();
             model.MissedExams = new List<Exam>();
-            foreach (Course course in courses)
-                foreach (Exam exam in course.Exams)
-                    if (!passedExams.Contains(exam))
-                        if (exam.ExamDate >= DateTime.Now || exam.ExamDate.AddMinutes((double)exam.DurationInMinutes) > DateTime.Now)
-                            model.CommingExams.Add(exam);
-                        else
-                            model.MissedExams.Add(exam);
+
+            foreach (Exam exam in departmentExams)
+                if (!passedExams.Contains(exam))
+                    if (exam.ExamDate >= DateTime.Now || exam.ExamDate.AddMinutes((double)exam.DurationInMinutes) > DateTime.Now)
+                        model.CommingExams.Add(exam);
+                    else
+                        model.MissedExams.Add(exam);
             return View(model);
         }
+
         public IActionResult TakeExam(int examId)
         {
             Student st = studentRepository.GetById(_stdId)!;
