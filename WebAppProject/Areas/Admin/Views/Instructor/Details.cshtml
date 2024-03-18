@@ -6,10 +6,10 @@
 }
 
 <h1>Details</h1>
-<div class="container">
+<div class="container p-0">
     <div class="row">
         <div class="col-md-6 offset-md-3 mt-4">
-            <div class="card">
+            <div class="card m-0 p-0">
                 <div class="card-body">
                     <h5 class="card-title">@Model.Name</h5>
                     <p class="card-text">ID: <strong> @Model.Id</strong> </p>
@@ -24,9 +24,13 @@
             </div>
         </div>
     </div>
-</div
-<div>
-    <a asp-action="Index" asp-controller="Manage" class="btn btn-warning">Back to Dashboard</a>
-     <a asp-action="Edit" asp-controller="Instructor" asp-route-Id="@Model.Id" class="btn btn-success">Edit</a>
-   <a asp-action="Delete" asp-controller="Instructor" asp-route-Id="@Model.Id" class="btn btn-danger">Delete</a>
 </div>
+<div>
+    <div class="row mt-3">
+        <div class="col-md-4 offset-md-0">
+            <a asp-action="Index" asp-controller="Manage" class="btn info">Back to Dashboard</a>
+            <a asp-action="Edit" asp-controller="ManageInstructor" asp-route-Id="@Model.Id" class="btn success">Edit</a>
+            <a asp-action="Delete" asp-controller="ManageInstructor" asp-route-Id="@Model.Id" class="btn danger">Delete</a>
+        </div>
+    </div>
+<div/>

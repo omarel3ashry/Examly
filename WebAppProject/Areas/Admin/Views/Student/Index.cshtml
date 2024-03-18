@@ -2,13 +2,15 @@
 @{
     ViewData["Title"] = "Dashboard | Students";
 }
-<h1>Dashboard</h1>
-<table class="table table-bordered table-hover">
+<div class="text">
+    <h2 data-text="Dashboard">Dashboard</h2>
+</div>
+<table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <td>Id</td>
-            <td>Name</td>
-            <td></td>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -19,8 +21,8 @@
                     <td>@student.Id</td>
                     <td>@student.Name</td>
                     <td>
-                        <a class="btn btn-info" asp-action="Grades" asp-route-stId="@student.Id">Grades</a>
-                        <a class="btn btn-info" asp-action="Delete" asp-route-stId="@student.Id">Delete</a>
+                        <a class="btn success" asp-action="Grades" asp-route-stId="@student.Id">Grades</a>
+                        <a class="btn danger" asp-action="Delete" asp-route-stId="@student.Id">Delete</a>
                     </td>
                 </tr>
             }
@@ -32,11 +34,3 @@
         }
     </tbody>
 </table>
-
-
-
-
-
-
-
-

@@ -3,10 +3,12 @@
     ViewData["Title"] = "QuestionBank";
 }
 
+<div class="d-flex justify-content-between align-items-center">
+    <h1>Question Bank</h1>
+    <a asp-action="AddQuestion" asp-route-id="@ViewBag.CourseId" class="btn success col-2">Add</a></td>
+</div>
 
-<h1>Question Bank</h1>
-
-<table class="table">
+<table class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Question</th>
@@ -23,9 +25,9 @@
                 <td>@(question.Type == QType.TrueFalse ? "True/False" : "MCQ")</td>
                 <td>@question.Difficulty</td>
                 <td>
-                    <a asp-action="QuestionInfo" asp-route-id="@question.Id" class="btn btn-dark">Info</a>
-                    <a asp-action="EditQuestion" asp-route-id="@question.Id" class="btn btn-dark">Edit</a>
-                    <a asp-action="DeleteQuestion" onclick="return confirm(' Are you sure ')" asp-route-id="@question.CourseId" asp-route-qId="@question.Id" class="btn btn-danger">Delete</a>
+                    <a asp-action="QuestionInfo" asp-route-id="@question.Id" class="btn info">Info</a>
+                    <a asp-action="EditQuestion" asp-route-id="@question.Id" class="btn success">Edit</a>
+                    <a asp-action="DeleteQuestion" onclick="return confirm(' Are you sure ')" asp-route-id="@question.CourseId" asp-route-qId="@question.Id" class="btn danger">Delete</a>
 
                 </td>
 
@@ -34,8 +36,4 @@
     </tbody>
 </table>
 <br />
-<div class="d-flex fixed-bottom justify-content-center mb-5 pb-5">
-
-    <a asp-action="AddQuestion" asp-route-id="@ViewBag.CourseId" class="btn btn-dark col-2">Add</a></td>
-</div>
 

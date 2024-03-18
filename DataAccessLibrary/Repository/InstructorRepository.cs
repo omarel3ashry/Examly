@@ -186,7 +186,13 @@ namespace DataAccessLibrary.Repository
             var instructor = _context.Instructors.Find(id);
             if (instructor != null)
             {
-                instructor.IsDeleted = true;
+                int? userId = instructor.UserId;
+                if (userId != null && userId != 0)
+                {
+                    _context.Users.Where(e => e.Id == userId).ExecuteDelete() ;
+                }
+                    _context.Instructors.Remove(instructor);
+
                 _context.SaveChanges();
                 return true;
             }

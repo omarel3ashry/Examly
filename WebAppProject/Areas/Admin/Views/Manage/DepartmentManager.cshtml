@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Instructor>
-<table class="table table-bordered table-hover">
+<table class="table table-striped table-bordered">
     <thead>
         <tr>
             <td>Id</td>
@@ -15,7 +15,7 @@
                     <td>@instructor.Id</td>
                     <td>@instructor.Name</td>
                     <td>
-                        <a class="btn btn-info" asp-action="AssignManager" asp-controller="Manage" asp-route-deptId="@ViewBag.DepartmentId" asp-route-insId="@instructor.Id">Assign Manager</a>
+                        <a class="btn info" asp-action="AssignManager" asp-controller="Manage" asp-route-deptId="@ViewBag.DepartmentId" asp-route-insId="@instructor.Id">Assign Manager</a>
                     </td>
                 </tr>
             }

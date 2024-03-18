@@ -4,35 +4,47 @@
     ViewData["Title"] = "Exam Info";
 }
 
-<h1>Exam Info</h1>
 
-<p><strong>Course:</strong> @Model.CourseName</p>
-<p><strong>Title:</strong> @Model.Title</p>
-<p><strong>Duration in Minutes:</strong> @Model.DurationInMinutes</p>
-<p><strong>Date:</strong> @Model.ExamDate</p>
-<p><strong>Total Grade:</strong> @Model.TotalGrade</p>
-
-<h4>Questions</h4>
+<div class="text">
+    <h2 data-text="Exam_Info">Exam_Info</h2>
+</div>
+<div>
+    <div class="infocon">
+        <p><strong>Course:</strong> @Model.CourseName</p>
+        <p><strong>Title:</strong> @Model.Title</p>
+        <p><strong>Duration in Minutes:</strong> @Model.DurationInMinutes</p>
+        <p><strong>Date:</strong> @Model.ExamDate</p>
+        <p><strong>Total Grade:</strong> @Model.TotalGrade</p>
+    </div>
+</div>
+<h1>Questions</h1>
 <br />
 @foreach (var question in Model.Questions)
 {
     <div>
-        <p class="mb-0"><strong>Question:</strong> @question.Text</p>
-        <p class="mb-0"><strong>Grade:</strong> @question.Grade</p>
+            <div class="infocon">
+                <p class="mb-0"><strong>Question:</strong> @question.Text</p>
+                <p class="mb-0"><strong>Difficulty:</strong> @question.Difficulty</p>
+                <p class="mb-0"><strong>Grade:</strong> @question.Grade</p>
+            </div>
         @if (question.Choices.Count > 1)
         {
             <label>Choices</label>
             @foreach (var choice in question.Choices)
             {
-                <input type="text" class="form-control" value="@choice.Text" readonly />
-                <span class="@(@choice.IsCorrect ? "text-info" : "text-danger")">@(choice.IsCorrect ? "correct" : "incorrect")</span>
-                <br />
+                <div class="row m-1">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" value="@choice.Text" readonly />
+                        <span class="@(@choice.IsCorrect ? "text-success" : "text-danger")">@(choice.IsCorrect ? "correct" : "incorrect")</span>
+                        <br />
+                    </div>
+                </div>
             }
         }
         else
         {
 
-            <label>Choice</label>
+            <h5>Choice</h5>
             <input type="text" class="form-control" value="@question.Choices[0].Text" readonly />
             <br />
         }
