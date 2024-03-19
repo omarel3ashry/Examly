@@ -29,36 +29,45 @@ namespace WebAppProject.Controllers
             this.branchRepository = branchRepository;
             this.instructorRepository = instructorRepository;
         }
+
         public IActionResult Register()
         {
             ViewBag.Branches = branchRepository.GetAll();
             var model = new RegisterViewModel();
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Register(RegisterViewModel registerInfo)
         {
-            User user = new User { Email = registerInfo.Email, Password = registerInfo.Password, RoleId = 4 };
-            int userId = userRepository.Add(user);
-            Student student = new Student 
+            if (ModelState.IsValid)
             {
-                Name = registerInfo.Name,
-                Age = registerInfo.Age,
-                Gender = registerInfo.Gender,
-                Phone = registerInfo.Phone,
-                Address = registerInfo.Address,
-                DepartmentId = registerInfo.DeptId,
-                UserId = userId 
-            };
+                User user = new User { Email = registerInfo.Email, Password = registerInfo.Password, RoleId = 4 };
+                int userId = userRepository.Add(user);
+                Student student = new Student
+                {
+                    Name = registerInfo.Name,
+                    Age = registerInfo.Age,
+                    Gender = registerInfo.Gender,
+                    Phone = registerInfo.Phone,
+                    Address = registerInfo.Address,
+                    DepartmentId = registerInfo.DeptId,
+                    UserId = userId
+                };
 
-            studentRepository.Add(student);
-            return RedirectToAction("Login");
+                studentRepository.Add(student);
+                return RedirectToAction("Login");
+            }
+            ViewBag.Branches = branchRepository.GetAll();
+            return View(registerInfo);
         }
+
         public IActionResult Departments(int id)
         {
-            var model = departmentRepository.SelectAll(dept => dept.BranchId == id&&!dept.IsDeleted);
+            var model = departmentRepository.SelectAll(dept => dept.BranchId == id && !dept.IsDeleted);
             return PartialView(model);
         }
+
         public IActionResult Login()
         {
             return View();
@@ -78,7 +87,7 @@ namespace WebAppProject.Controllers
             ClaimsIdentity identity = new ClaimsIdentity("Cookies");
             identity.AddClaim(roleClaim);
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-            string area="";
+            string area = "";
             string controller;
             int id;
             if (role == "Student")
@@ -101,10 +110,9 @@ namespace WebAppProject.Controllers
             Claim idClaim = new Claim("id", id.ToString());
             identity.AddClaim(idClaim);
             await HttpContext.SignInAsync(principal);
-            return RedirectToAction("Index", controller,new {area});
-
-
+            return RedirectToAction("Index", controller, new { area });
         }
+
         [Authorize]
         public async Task<IActionResult> Logout()
         {
