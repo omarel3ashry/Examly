@@ -1,0 +1,31 @@
+﻿﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Animated Login Form</title>
+    <link rel="stylesheet" href="~/css/login.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <img class="wave" src="/css/img/wave.png">
+    <div class="container">
+        <div class="img">
+            <img src="/css/img/bg.svg">
+        </div>
+        <div class="login-content">
+            @RenderBody()
+        </div>
+    </div>
+    <script src="/js/login.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

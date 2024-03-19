@@ -1,0 +1,345 @@
+body {
+    font-family: Georgia, serif;
+    padding: 20px;
+    margin: 0;
+    position: relative;
+
+}
+
+.blur-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:  center/cover no-repeat;
+    background-image: url(/css/img/bg.jpg);
+    filter: blur(2px);
+    z-index: -1;
+    
+}
+/* Custom styles for navbar */
+.customnav {
+    background-color: rgba(255, 255, 255, 0.9); /* Set background color */
+    border-color: #ced4da; /* Set border color */
+    border-radius: 8px;
+    margin: 17px;
+    margin-top: 0;
+}
+
+.navbar-nav .nav-link:hover {
+    color: black; 
+}
+
+/* Add hover effect on navbar toggler icon */
+.navbar-toggler-icon:hover {
+    color: #007bff; /* Change icon color on hover */
+}
+
+
+
+.container {
+    overflow-x:hidden;
+    z-index: -91;
+    background-color: rgba(255, 255, 255, 0.9); 
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-width:5000px;
+   
+}
+
+
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .table th, .table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        text-align:center;
+    }
+
+    .table th {
+        background-color: #436850;
+        color: white;
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background-color: #FBFADA;
+    }
+
+    .table tbody tr:hover {
+        background-color: #FFF5C4;
+    }
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.success {
+    /* Your custom styles for the 'success' class */
+    background-color: #12372A; /* Bootstrap success button background color */
+    color: #fff; /* Bootstrap success button text color */
+    border-color: #28a745; /* Bootstrap success button border color */
+}
+
+    .success:hover {
+        background-color: #1E5740; /* Bootstrap success button background color on hover */
+        border-color: #1e7e34; /* Bootstrap success button border color on hover */
+    }
+
+
+.info {
+    background-color: #ADBC9f;
+    color: #fff;
+    border-color: black;
+}
+
+
+   .info:hover {
+        background-color: #CAD0B5;
+        border-color: #1e7e34;
+    }
+
+.danger {
+    background-color: #7D0A0A;
+    color: #fff;
+    border-color: black;
+}
+
+    .danger:hover {
+        background-color: #B51717;
+    }
+.primary {
+    background-color: #1B4242;
+    color: #fff;
+    border-color: black;
+}
+    .primary:hover {
+        background-color: #3A7878;
+    }
+.text-info {
+    color: #12372A;
+}
+.btn-success {
+    background-color: #12372A;
+    color: #fff;
+}
+
+    .btn-success:hover {
+        background-color: #1E5740;
+    }
+h4 {
+    color: green;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.infocon {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px #12372A;
+    margin-bottom: 20px;
+    margin:10px;
+    /*background-color:#12372A;*/
+    text-align:center;
+    /*color:antiquewhite;*/
+}
+.card-body {
+    padding: 20px;
+}
+
+.card-text {
+    margin-bottom: 10px;
+}
+/* Input fields */
+
+/* Input fields and select */
+
+.form-control {
+     max-width: 500px;   
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 0 5px green;
+}
+
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group input[type="submit"] {
+        margin-top: 10px;
+    }
+
+.form-control:focus {
+    box-shadow: 0 0 5px green;
+}
+
+/* Textarea */
+textarea.form-control {
+    height: 120px;
+}
+
+.text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 15vh;
+    background: #12372A;
+}
+
+h2 {
+    position: relative;
+    font-size: 4vw;
+    color: #FBFADA;
+    -webkit-text-stroke: 0.1vw white;
+    text-transform: uppercase;
+}
+
+    h2::before {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        color: #ADBC9f;
+        -webkit-text-stroke: 0vw #092635;
+        border-right: 1px solid #ADBC9f;
+        overflow: hidden;
+        animation: animate 6s linear ;
+    }
+
+@keyframes animate {
+    0%, 10%, 100% {
+        width: 0;
+    }
+
+    70%, 90% {
+        width: 100%;
+    }
+}
+h1 {
+    text-align: center;
+    color: #12372A;
+}
+.alert-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    visibility: hidden;
+}
+
+.alert-box {
+    background-color: #12372A;
+    border: 1px solid #12372A;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #12372A;
+    max-width: 80%;
+    text-align: center;
+    color: white;
+}
+
+.alert-message {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.close-button {
+    background-color: #FFF5C4;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+    .close-button:hover {
+        background-color: #FBFADA;
+    }
+
+.show-alert {
+    visibility: visible;
+}
+h3{
+    text-align:center;
+}
+.correct {
+    background-color: #90EE90;
+    color: green;
+}
+
+.incorrect {
+    background-color: #FFCCCC;
+    color: red;
+}
+/* Styling for radio buttons */
+input[type="radio"] {
+    appearance: none; /* Remove default appearance */
+    width: 16px; /* Set width */
+    height: 16px; /* Set height */
+    border: 2px solid #ccc; /* Set border */
+    border-radius: 50%; /* Make it round */
+    margin-right: 10px; /* Add spacing between radio button and label */
+    outline: none; /* Remove outline */
+}
+
+    /* Custom styling for radio button when checked */
+    input[type="radio"]:checked {
+        background-color: #12372A; /* Change background color when checked */
+    }
+
+/* Styling for checkbox */
+input[type="checkbox"] {
+    appearance: none; /* Remove default appearance */
+    width: 16px; /* Set width */
+    height: 16px; /* Set height */
+    border: 2px solid #ccc; /* Set border */
+    border-radius: 5px; /* Add some border radius */
+    margin-right: 10px; /* Add spacing between checkbox and label */
+    outline: none; /* Remove outline */
+}
+
+    /* Custom styling for checkbox when checked */
+    input[type="checkbox"]:checked {
+        background-color: #12372A; /* Change background color when checked */
+    }
+
+/* Styling for labels associated with radio buttons and checkboxes */
+label {
+    font-size: 20px;    
+    color: #333;  
+}
+

@@ -166,7 +166,7 @@ namespace WebAppProject.Areas.Staff.Controllers
         }
 
         [HttpGet]
-        public IActionResult MakeExam(int id)
+        public IActionResult MakeExam(int id,int deptId)
         {
             if (id == 0)
             {
@@ -205,7 +205,8 @@ namespace WebAppProject.Areas.Staff.Controllers
             {
                 CourseId = id,
                 TotalMCQ = mcqDifficultyCounts,
-                TotalTF = tfDifficultyCounts
+                TotalTF = tfDifficultyCounts,
+                DepartmentId=deptId
             };
             return View(model);
         }

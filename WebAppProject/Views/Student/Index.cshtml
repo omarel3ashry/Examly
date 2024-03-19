@@ -2,115 +2,11 @@
 @{
     ViewData["Title"] = "E-Exam";
 }
-@section Styles {
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-spacing: 0;
-        }
-
-        th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #ddd;
-        }
-
-        .button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-            .button.info-button {
-                background-color: #007bff;
-            }
-
-            .button:hover {
-                background-color: darkred;
-                color: white;
-            }
-
-        /* Centered alert */
-        .alert-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 9999;
-            visibility: hidden;
-        }
-
-        .alert-box {
-            background-color: #ffffff;
-            border: 1px solid #cccccc;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            max-width: 80%;
-            text-align: center;
-        }
-
-        .alert-message {
-            font-size: 18px;
-            color: #333333;
-            margin-bottom: 10px;
-        }
-
-        .close-button {
-            background-color: #007bff;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-            .close-button:hover {
-                background-color: darkblue;
-            }
-
-        .show-alert {
-            visibility: visible;
-        }
-    </style>
-}
-<table>
+<div class="mb-3">
+    <input type="submit" value="Courses" class="btn success" />
+    <a asp-controller="Student" asp-action="Exams" class="btn info">Exams</a>
+</div>
+<table class="table table-bordeded">
     <thead>
         <tr>
             <th>Course ID</th>
@@ -124,7 +20,7 @@
             <tr>
                 <td>@course.Id</td>
                 <td>@course.Name</td>
-                <td><button class="button info-button" data-description="@course.Description">Info</button></td>
+                <td><button class="btn info info-btn" data-description="@course.Description">Info</button></td>
             </tr>
         }
     </tbody>
@@ -139,7 +35,7 @@
 </div>
 @section Scripts {
     <script>
-        var infoButtons = document.querySelectorAll('.info-button');
+        var infoButtons = document.querySelectorAll('.info-btn');
 
         infoButtons.forEach(function (button) {
             button.addEventListener('click', function () {

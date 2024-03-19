@@ -4,11 +4,13 @@
     ViewData["Title"] = "E-Exam | Exams";
 }
 
-<h2>Exams List</h2>
+<div class="text">
+    <h2 data-text="Exams_List">Exams_List</h2>
+</div>
 <br />
-<div class="container">
-    <h4>Upcoming Exams</h4>
-    <table class="table">
+
+    <h1>Upcoming Exams</h1>
+    <table class="table table-striped table-bordered">
         <tr>
             <th class="col-4">Exam Name</th>
             <th>Date</th>
@@ -26,9 +28,9 @@
                     <td>
                         @if (commingExam.ExamDate > DateTime.Now)
                         {
-                            <a asp-action="ExamInfo" asp-route-id="@commingExam.Id" class="btn btn-info">Info</a>
-                            <a asp-action="ExamEdit" asp-route-id="@commingExam.Id" class="btn btn-primary">Edit</a>
-                            <a asp-action="ExamDelete" onclick="return confirm('Delete this exam?')" asp-route-id="@commingExam.Id" class="btn btn-danger">Delete</a>
+                            <a asp-action="ExamInfo" asp-route-id="@commingExam.Id" class="btn info">Info</a>
+                            <a asp-action="ExamEdit" asp-route-id="@commingExam.Id" class="btn primary">Edit</a>
+                            <a asp-action="ExamDelete" onclick="return confirm('Delete this exam?')" asp-route-id="@commingExam.Id" class="btn danger">Delete</a>
                         }
                         else
                         {
@@ -40,12 +42,12 @@
         else
         {
             <tr>
-                <td colspan="3">No upcomming exams</td>
+                <td colspan="4">No upcomming exams</td>
             </tr>
         }
     </table>
-    <h4>Past Exams</h4>
-    <table class="table">
+    <h1>Past Exams</h1>
+    <table class="table table-striped table-bordered">
         <tr>
             <th class="col-4">Exam Name</th>
             <th>Date</th>
@@ -60,7 +62,7 @@
                     <td>@pastExam.ExamDate</td>
                     <td>@pastExam.TotalGrade</td>
                     <td>
-                        <a class="btn btn-info" asp-action="ExamGrades" asp-route-id="@pastExam.Id">Students Grade</a>
+                        <a class="btn info" asp-action="ExamGrades" asp-route-id="@pastExam.Id">Students Grade</a>
                     </td>
                 </tr>
             }
@@ -71,4 +73,4 @@
             </tr>
         }
     </table>
-</div>
+

@@ -4,23 +4,29 @@
     ViewData["Title"] = "Add Question";
 }
 
-<h1>Add Question</h1>
+<div class="text">
+    <h2 data-text="Add_Question">Add_Question</h2>
+</div>
 
 <form asp-action="AddQuestion" asp-controller="Instructor" method="post">
 
     <input type="hidden" asp-for="InstructorId" value="@Model.InstructorId" />
     <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
 
-    <div class="form-group">
-        <label asp-for="Type">Question Type</label>
-        <select asp-for="Type" id="questionType" class="form-control"
-                asp-items="Html.GetEnumSelectList<QVMType>()">
-        </select>
+    <div class="row m-1">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Type">Question Type</label>
+                <select asp-for="Type" id="questionType" class="form-control"
+                        asp-items="Html.GetEnumSelectList<QVMType>()">
+                </select>
+            </div>
+        </div>
     </div>
 
     <partial name="QuestionPartial" />
 
-    <button type="submit" asp-route-id="@Model.CourseId" class="btn btn-primary">Add Question</button>
+    <button type="submit" asp-route-id="@Model.CourseId" class="btn success">Add Question</button>
 </form>
 
 <script src="/lib/jquery/dist/jquery.js"></script>

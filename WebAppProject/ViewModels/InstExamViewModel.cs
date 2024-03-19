@@ -7,6 +7,7 @@ namespace WebAppProject.ViewModels
     {
         public int Id { get; set; }
         public int CourseId { get; set; }
+        public int DepartmentId { get; set; }
         public string Title { get; set; }
         public int DurationInMinutes { get; set; }
 
@@ -51,6 +52,7 @@ namespace WebAppProject.ViewModels
             {
                 Id = isNew ? 0 : Id,
                 CourseId = CourseId,
+                DepartmentId=DepartmentId,
                 ExamDate = ExamDate,
                 DurationInMinutes = DurationInMinutes,
                 Title = Title ?? string.Empty,

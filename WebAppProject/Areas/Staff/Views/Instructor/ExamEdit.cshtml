@@ -4,7 +4,11 @@
     ViewData["Title"] = "Edit Exam";
 }
 
-<h1>Edit Exam</h1>
+
+
+    <div class="text">
+        <h2 data-text="Edit_Exam">Edit_Exam</h2>
+    </div>
 
 <p><strong>Course:</strong> @Model.CourseName</p>
 <p><strong>Exam:</strong> @Model.Title</p>
@@ -14,11 +18,11 @@
     <input asp-for="TotalGrade" value="@Model.TotalGrade" hidden />
     <partial name="ExamEditPartial" />
     <br />
-    <button type="submit" asp-route-id="@Model.CourseId" class="btn btn-primary">Submit</button>
+    <button type="submit" asp-route-id="@Model.CourseId" class="btn primary">Submit</button>
 </form>
 
 <br />
-<h4>Questions</h4>
+<h1>Questions</h1>
 @if (Model.Questions != null)
 {
     foreach (var question in Model.Questions)
@@ -29,23 +33,27 @@
             <p class="mb-0"><strong>Grade:</strong> @question.Grade</p>
             @if (question.Choices.Count > 1)
             {
-                <label>Choices</label>
+                <h5>Choices</h5>
                 @foreach (var choice in question.Choices)
                 {
                     <input type="text" class="form-control" value="@choice.Text" readonly />
-                    <span class="@(@choice.IsCorrect ? "text-info" : "text-danger")">@choice.IsCorrect</span>
+                    <span class="@(@choice.IsCorrect ? "text-success" : "text-danger")">@choice.IsCorrect</span>
                     <br />
                 }
             }
             else
             {
 
-                <label>Choice</label>
-                <input type="text" class="form-control" value="@question.Choices[0].Text" readonly />
-                <br />
+                <h5>Choice</h5>
+                <div class="row m-1">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" value="@question.Choices[0].Text" readonly />
+                        <br />
+                    </div>
+                </div>
             }
             <br />
-            <br />
+            
         </div>
     }
 }
