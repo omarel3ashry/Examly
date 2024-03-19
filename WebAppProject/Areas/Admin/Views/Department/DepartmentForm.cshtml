@@ -1,0 +1,31 @@
+﻿@model DepartmentFormViewModel
+
+@{
+    SelectList BranchesItems = new SelectList(Model.Branches, "Id", "Name");
+}
+
+
+<div style="overflow-y: auto;  max-height: 400px;"></div>
+
+<div class="row m-1">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Department.Name" class="control-label"></label>
+                <input asp-for="Department.Name" class="form-control" />
+                <span asp-validation-for="Department.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group ">
+                <label class="control-label">Branch</label>
+                <select asp-for="Department.BranchId" class="form-control" asp-items="BranchesItems">
+                    <option value="-1">Select Branch</option>
+                </select>
+                <span asp-validation-for="Department.BranchId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Confirm" class="btn success" />
+            </div>
+        </form>
+    </div>
+</div>

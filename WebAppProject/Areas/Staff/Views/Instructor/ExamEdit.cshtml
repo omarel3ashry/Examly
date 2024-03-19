@@ -1,0 +1,59 @@
+﻿@model InstExamViewModel
+
+@{
+    ViewData["Title"] = "Edit Exam";
+}
+
+
+
+    <div class="text">
+        <h2 data-text="Edit_Exam">Edit_Exam</h2>
+    </div>
+
+<p><strong>Course:</strong> @Model.CourseName</p>
+<p><strong>Exam:</strong> @Model.Title</p>
+
+<form asp-action="EditExam" method="post">
+    <input asp-for="Id" value="@Model.Id" hidden />
+    <input asp-for="TotalGrade" value="@Model.TotalGrade" hidden />
+    <partial name="ExamEditPartial" />
+    <br />
+    <button type="submit" asp-route-id="@Model.CourseId" class="btn primary">Submit</button>
+</form>
+
+<br />
+<h1>Questions</h1>
+@if (Model.Questions != null)
+{
+    foreach (var question in Model.Questions)
+    {
+        <div>
+            <p class="mb-0"><strong>Question:</strong> @question.Text</p>
+            <p class="mb-0"><strong>Difficulty:</strong> @question.Difficulty</p>
+            <p class="mb-0"><strong>Grade:</strong> @question.Grade</p>
+            @if (question.Choices.Count > 1)
+            {
+                <h5>Choices</h5>
+                @foreach (var choice in question.Choices)
+                {
+                    <input type="text" class="form-control" value="@choice.Text" readonly />
+                    <span class="@(@choice.IsCorrect ? "text-success" : "text-danger")">@choice.IsCorrect</span>
+                    <br />
+                }
+            }
+            else
+            {
+
+                <h5>Choice</h5>
+                <div class="row m-1">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" value="@question.Choices[0].Text" readonly />
+                        <br />
+                    </div>
+                </div>
+            }
+            <br />
+            
+        </div>
+    }
+}

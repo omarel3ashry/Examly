@@ -1,0 +1,255 @@
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    SelectList BranchesItems = new SelectList(Model.Branches, "Id", "Name");
+    SelectList InstructorsItems = new SelectList(Model.Instructors, "Id", "Name");
+    SelectList DepartmentsItems = new SelectList(Model.Departments, "Id", "Name");
+}
+
+<div class="text">
+    <h2 data-text="Dashboard">Dashboard</h2>
+</div>
+
+<h1>Branch</h1>
+<div class="container row m-1">
+    <div class="form-group col-3">
+        <label class="control-label"> Name </label>
+        <select asp-for="BranchId" class="form-control" asp-items="BranchesItems">
+            <option value="-1">Select Branch</option>
+        </select>
+    </div>
+        <div class="col-auto mt-3">
+            <a asp-action="Create" asp-controller="Branch" class="btn success btn-lg m-2">Add</a>
+        </div>
+        <div class="col-auto mt-3">
+            <a id="BranchDetailsBtn" class="btn info btn-lg m-2">Info</a>
+        </div>
+        <div class="col-auto mt-3">
+            <a id="BranchEditBtn" class="btn success btn-lg m-2">Edit</a>
+        </div>
+        <div class="col-auto mt-3">
+            <a id="BranchDeleteBtn" class="btn danger btn-lg m-2">Delete</a>
+        </div>
+</div>
+<h1>Instructor</h1>
+<div class="container row m-1">
+    <div class="form-group col-3">
+        <label class="control-label"> Name </label>
+        <select asp-for="InstructorId" class="form-control" asp-items="InstructorsItems">
+            <option value="-1">Select Instructor</option>
+        </select>
+    </div>
+        <div class="col-auto mt-3">
+            <a asp-action="Create" asp-controller="Instructor" class="btn success btn-lg m-2">Add</a>
+        </div>
+        <div class="col-auto mt-3">
+            <a id="InstructorDetailsBtn" class="btn info btn-lg m-2">Info</a>
+        </div>
+        <div class="col-auto mt-3">
+            <a id="InstructorEditBtn" class="btn success btn-lg m-2">Edit</a>
+        </div>
+        <div class="col-auto mt-3">
+            <a id="InstructorDeleteBtn" class="btn danger btn-lg m-2">Delete</a>
+        </div>
+</div>
+<h1>Department</h1>
+<div class="container row m-0">
+    <div class="form-group col-3">
+        <label class="control-label"> Name </label>
+        <select asp-for="DepartmentId" class="form-control" asp-items="DepartmentsItems">
+            <option value="-1">Select Department</option>
+        </select>
+    </div>
+        <div class="col-auto mt-3">
+            <a asp-action="Create" asp-controller="Department" class="btn success btn-lg m-2">Add</a>
+        </div>
+        <div class="col-auto mt-3">
+            <a id="DepartmentDetailsBtn" class="btn info btn-lg m-2">Info</a>
+        </div>
+        <div class="col-auto mt-3">
+            <a id="DepartmentEditBtn" class="btn success btn-lg m-2">Edit</a>
+        </div>
+        <div class="col-auto mt-3">
+            <a id="DepartmentDeleteBtn" class="btn danger btn-lg m-2">Delete</a>
+        </div>
+</div>
+<div class="container row m-0 mt-3">
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ModalLabel">Instructors List</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="content">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn info" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="btn success" id="ManageManagertBtn">Department Manager</a>
+    <a class="btn alert-success mt-4" id="ManageStudentsBtn">Manage Students</a>
+</div>
+
+
+@section Scripts {
+    <script>
+        //Array of Btns Ids
+        const BtnIds = ["DetailsBtn", "EditBtn", "DeleteBtn"]
+        //method to change btn state (disabled or enabled)
+        function setBtnState(targetController, state) {
+            BtnIds.forEach(function (id) {
+                var element = document.getElementById(targetController + id);
+                if (element) {
+                    if (state) {
+                        element.classList.remove("disabled");
+                    }
+                    else {
+                        element.classList.add("disabled");
+                    }
+                }
+            });
+
+        }
+        //method to update btns urls acording to selected bransh
+        function UpdateUrlState(targetController, targetId) {
+            document.getElementById(targetId).addEventListener('change', function () {
+                var selectedId = this.value;
+                if (selectedId == -1) {
+                    setBtnState(targetController, false);
+                    setManageBtnState(targetId, false);
+                }
+                else {
+                    setBtnState(targetController, true);
+                    setManageBtnState(targetId, true);
+                    document.getElementById(targetController + "DetailsBtn").setAttribute("href", `/Admin/${targetController}/Details/${selectedId}`);
+                    document.getElementById(targetController + "EditBtn").setAttribute("href", `/Admin/${targetController}/Edit/${selectedId}`);
+                    document.getElementById(targetController + "DeleteBtn").setAttribute("href", `/Admin/${targetController}/Delete/${selectedId}`);
+                }
+            });
+        }
+        //method to empty select list
+        function EmptySelectList(targetId) {
+            var selectElement = document.getElementById(targetId);
+
+            while (selectElement.childNodes.length > 2) {
+                selectElement.removeChild(selectElement.lastChild);
+            }
+        }
+        //methods to append options
+        function appendDepartmentOptions(datalist) {
+            var selectElement = document.getElementById("DepartmentId");
+            EmptySelectList("DepartmentId")
+
+            datalist.forEach(function (Item) {
+                var option = document.createElement("option");
+                option.value = Item.id;
+                option.textContent = Item.name;
+                selectElement.appendChild(option);
+            });
+        };
+        function appendInstructorOptions(datalist) {
+            var selectElement = document.getElementById("InstructorId");
+            EmptySelectList("InstructorId");
+
+            datalist.forEach(function (Item) {
+                var option = document.createElement("option");
+                option.value = Item.id;
+                option.textContent = Item.name;
+                selectElement.appendChild(option);
+            });
+        }
+        //method to update instructor and department select lists acording to selected bransh
+        function UpdateSelectLists() {
+            document.getElementById("BranchId").addEventListener("change", function () {
+                var selectedId = this.value;
+                if (selectedId == -1) {
+                    EmptySelectList("DepartmentId");
+                    EmptySelectList("InstructorId");
+                    setManageBtnState("DepartmentId", false);
+                    setManageBtnState("BranchId", false);
+
+                } else {
+                    $.ajax({
+                        url: "/Admin/Manage/GetLists?BranchId=" + selectedId,
+                        success: function (data) {
+                            console.log(data);
+                            appendDepartmentOptions(data.departmentList);
+                            appendInstructorOptions(data.instructorList);
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            alert("Error in load result");
+                        }
+                    });
+                }
+            });
+        };
+        //method to change manage btn state (disabled or enabled)
+        function setManageBtnState(targetId, state) {
+            if (targetId == "BranchId") {
+                var element = document.getElementById("ManageManagertBtn");
+                if (element) {
+                    if (state) {
+                        element.classList.remove("disabled");
+                    }
+                    else {
+                        element.classList.add("disabled");
+                    }
+                }
+            }
+            else if (targetId == "DepartmentId") {
+                var element = document.getElementById("ManageStudentsBtn");
+                if (element) {
+                    if (state) {
+                        element.classList.remove("disabled");
+                    }
+                    else {
+                        element.classList.add("disabled");
+                    }
+                }
+
+            };
+
+        }
+        //method to add on click event
+        function SetManageManagerOnClick() {
+            document.getElementById("ManageManagertBtn").addEventListener('click', function () {
+                let selectedBranchId = document.getElementById("BranchId").value;
+                let selectedDeptId = document.getElementById("DepartmentId").value;
+                $("#content").load(`/Admin/Manage/DepartmentManager?branchId=${selectedBranchId}&deptId=${selectedDeptId}`)
+                $("#modal").modal('show');
+            });
+        };
+        function SetManageStudentOnClick() {
+            document.getElementById("ManageStudentsBtn").addEventListener('click', function () {
+                let selectedId = document.getElementById("DepartmentId").value;
+                this.setAttribute("href", `/Admin/Student?deptId=${selectedId}`);
+            });
+        };
+
+        // Call Area
+
+        let Controller;
+        // Branch Area
+        Controller = "Branch";
+        setBtnState(Controller, false);
+        UpdateUrlState(Controller, "BranchId");
+        UpdateSelectLists();
+        // Instructor Area
+        Controller = "Instructor";
+        setBtnState(Controller, false);
+        UpdateUrlState(Controller, "InstructorId");
+        // department Area
+        Controller = "Department";
+        setBtnState(Controller, false);
+        UpdateUrlState(Controller, "DepartmentId");
+        // manage btns Area
+        setManageBtnState("DepartmentId", false);
+        setManageBtnState("BranchId", false);
+        SetManageManagerOnClick();
+        SetManageStudentOnClick();
+    </script>
+}

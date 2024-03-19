@@ -9,6 +9,8 @@
         public int? TotalGrade { get; set; }
         public bool IsDeleted { get; set; } = false;
 
+        public int? DepartmentId { get; set; }
+        public Department? Department { get; set; }
         public int CourseId { get; set; }
         public Course Course { get; set; }
         public ICollection<Question> Questions { get; } = new HashSet<Question>();

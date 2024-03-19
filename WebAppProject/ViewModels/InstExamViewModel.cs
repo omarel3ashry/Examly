@@ -7,16 +7,16 @@ namespace WebAppProject.ViewModels
     {
         public int Id { get; set; }
         public int CourseId { get; set; }
+        public int DepartmentId { get; set; }
         public string Title { get; set; }
         public int DurationInMinutes { get; set; }
 
-        [DisplayFormat(DataFormatString = "MM/dd/yyyy hh:mm tt", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "yyyy-MM-ddTHH:mm", ApplyFormatInEditMode = true)]
         public DateTime ExamDate { get; set; }
-        public QVMDifficulty ExamDifficulty { get; set; }
-        public int TotalMCQ { get; set; }
-        public int NoOfMCQ { get; set; }
-        public int TotalTF { get; set; }
-        public int NoOfTF { get; set; }
+        public int[] TotalMCQ { get; set; }
+        public int[] NoOfMCQ { get; set; }
+        public int[] TotalTF { get; set; }
+        public int[] NoOfTF { get; set; }
         public int TotalGrade { get; set; }
 
         public string? CourseName { get; set; }
@@ -24,6 +24,8 @@ namespace WebAppProject.ViewModels
 
         public InstExamViewModel()
         {
+            NoOfMCQ = new int[3];
+            NoOfTF = new int[3];
             Title = string.Empty;
             ExamDate = DateTime.Now;
         }
@@ -50,6 +52,7 @@ namespace WebAppProject.ViewModels
             {
                 Id = isNew ? 0 : Id,
                 CourseId = CourseId,
+                DepartmentId=DepartmentId,
                 ExamDate = ExamDate,
                 DurationInMinutes = DurationInMinutes,
                 Title = Title ?? string.Empty,
@@ -65,6 +68,5 @@ namespace WebAppProject.ViewModels
 
             return examDto;
         }
-
     }
 }

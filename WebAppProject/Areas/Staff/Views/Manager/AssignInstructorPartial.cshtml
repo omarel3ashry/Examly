@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "Assign Instructor";
+}
+
+<div id="modal-id" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Instructor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="AssignInstructor" method="post">
+                    <input type="hidden" name="crsId" value="@ViewBag.CourseId" />
+
+                    <div class="form-group">
+                        <label for="instructorId">Select an Instructor:</label><br />
+                        <select class="form-control" id="instId" name="instId" asp-items="ViewBag.Instructors"></select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn primary">Assign Instructor</button>
+                        <button type="button" class="btn success" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        
+        </div>
+    </div>
+</div>

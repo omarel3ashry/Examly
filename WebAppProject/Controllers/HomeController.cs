@@ -9,21 +9,7 @@ namespace WebAppProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-      /*  private readonly IBranchRepository _branchRepo;
-        private readonly IDepartmentRepository _deptRepo;
-        private readonly IStudentRepository _studentRepo;
 
-        public HomeController(ILogger<HomeController> logger,
-            IBranchRepository branchRepo,
-            IDepartmentRepository deptRepo,
-            IStudentRepository studentRepo)
-        {
-            _logger = logger;
-            _branchRepo = branchRepo;
-            _deptRepo = deptRepo;
-            _studentRepo = studentRepo;
-        } */
-        
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -35,7 +21,8 @@ namespace WebAppProject.Controllers
             {
                 string role= User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)!.Value;
                 string controller = role == "Admin" ? "Manage" : role == "Student" ? "Student" : "Instructor";
-                return RedirectToAction("Index", controller);
+                string area = role == "Admin" ? "Admin" : role == "Instructor" || role == "Manager" ? "Staff" : "";
+                return RedirectToAction("Index", controller,new {area});
             }
             return View();
         }

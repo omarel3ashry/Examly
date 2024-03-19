@@ -29,10 +29,10 @@
                             if (role == "Admin")
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Manage" asp-action="Index">Dashboard</a>
+                                    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Manage" asp-action="Index">Dashboard</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Courses</a>
+                                    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Course" asp-action="Index">Courses</a>
                                 </li>
                             }
                             else if (role == "Manager" || role == "Instructor")
@@ -40,14 +40,14 @@
                                 if (role == "Manager")
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="DeptManager" asp-action="Index">Manage Department</a>
+                                        <a class="nav-link text-dark" asp-area="Staff" asp-controller="Manager" asp-action="Index">Manage Department</a>
                                     </li>
                                 }
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Instructor" asp-action="index">Courses</a>
+                                    <a class="nav-link text-dark" asp-area="Staff" asp-controller="Instructor" asp-action="index">Courses</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Instructor" asp-action="ShowExams">Exams</a>
+                                    <a class="nav-link text-dark" asp-area="Staff" asp-controller="Instructor" asp-action="ShowExams">Exams</a>
                                 </li>
                             }
                             else if (role == "Student")

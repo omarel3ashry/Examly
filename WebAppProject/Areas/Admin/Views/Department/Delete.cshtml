@@ -1,0 +1,23 @@
+﻿@model Department
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-text"> Are you sure you want to delete <strong>@Model.Name Department?</strong></h3>
+                     <form method="post">
+                        <div class="form-group row mt-4">
+                            <input type="submit" value="Delete" class="btn danger col-3 m-auto" />
+                             <a asp-action="Index" asp-controller="Manage" class="btn success col-3 m-auto">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div

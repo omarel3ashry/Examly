@@ -1,0 +1,49 @@
+﻿@model List<AddCourseViewModel>
+
+@{
+    ViewData["Title"] = "Add Course";
+}
+<div class="text">
+    <h2 data-text="Add_Course">Add_Course</h2>
+</div>
+<form asp-action="AddCourses" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Course</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count() == 0)
+            {
+                <tr>
+                    <td colspan="3">No courses to add!</td>
+                </tr>
+            }
+            else
+            {
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    <tr class="form-group">
+                        <th scope="row" class="col-1">@(i+1)</th>
+                        <td >
+                            <input type="hidden" asp-for="@Model[i].Id" value="@Model[i].Id" />
+                            <input type="hidden" asp-for="@Model[i].Name" value="@Model[i].Name" />
+                            <label>@Model[i].Name</label>
+
+                        </td>
+                        <td>
+                            <input type="checkbox" class="btn-check" id="btn-check-outlined@(i)" asp-for="@Model[i].WantToAdd">
+                            <label class="btn btn-outline-info" for="btn-check-outlined@(i)" asp-for="@Model[i].WantToAdd">Add</label>
+                            <br />
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <br />
+    <button type="submit" asp-route-id="@ViewBag.DepartmentId" class="btn btn-success">Add Course</button>
+</form>

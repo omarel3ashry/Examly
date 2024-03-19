@@ -50,12 +50,12 @@ namespace DataAccessLibrary.Repository
             return _context.Departments.FirstOrDefault(e => !e.IsDeleted && e.Id == id);
         }
 
-        public Department? GetByIdCoursesIncluded(int id)
+        public Department? GetByManagerIdCoursesIncluded(int managerId)
         {
             return _context.Departments
                 .Include(e => e.DepartmentCourses).ThenInclude(e => e.Course)
                 .Include(e => e.DepartmentCourses).ThenInclude(e => e.Instructor)
-                .FirstOrDefault(e => !e.IsDeleted && e.Id == id);
+                .FirstOrDefault(e => !e.IsDeleted && e.ManagerId == managerId);
         }
 
         public DepartmentCourse? GetDeptCourseWithIncludes(int crsId, int deptId)
