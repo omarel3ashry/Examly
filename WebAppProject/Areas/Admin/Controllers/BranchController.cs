@@ -1,50 +1,60 @@
-﻿using DataAccessLibrary.Model;
+﻿using AutoMapper;
+using DataAccessLibrary.Model;
 using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using WebAppProject.Areas.Admin.ViewModels;
 
 
 
 namespace WebAppProject.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
-    [Area(areaName:"Admin")]
+    [Area(areaName: "Admin")]
     public class BranchController : Controller
     {
 
         private readonly IBranchRepository branchRepository;
+        private readonly IMapper _mapper;
 
-        public BranchController(IBranchRepository branchRepository)
+        public BranchController(IBranchRepository branchRepository,
+                                IMapper mapper)
         {
             this.branchRepository = branchRepository;
+            _mapper = mapper;
         }
+
         public IActionResult Index()
         {
             return View();
         }
+
         public IActionResult Details(int Id)
         {
             Branch? model = branchRepository.GetById(Id);
             IActionResult actionResult = model != null ? View(model) : BadRequest();
             return actionResult;
         }
+
         public IActionResult Create()
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult Create(Branch Branch)
+        public IActionResult Create(BranchViewModel model)
         {
             IActionResult actionResult;
             if (ModelState.IsValid)
             {
-                int res = branchRepository.Add(Branch);
+                var branchDto = _mapper.Map<Branch>(model);
+                int res = branchRepository.AddAsync(branchDto).Result;
                 actionResult = res > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
             }
             else
             {
-                actionResult = View(Branch);
+                actionResult = View(model);
             }
             return actionResult;
         }
@@ -55,6 +65,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             IActionResult actionResult = model != null ? View(model) : BadRequest();
             return actionResult;
         }
+
         [HttpPost]
         public IActionResult Edit(Branch Branch)
         {
@@ -77,6 +88,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             IActionResult actionResult = model != null ? View(model) : BadRequest();
             return actionResult;
         }
+
         [HttpPost]
         public IActionResult Delete(Branch Branch)
         {
