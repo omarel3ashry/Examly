@@ -1,7 +1,9 @@
-﻿using DataAccessLibrary.Model;
+﻿using AutoMapper;
+using DataAccessLibrary.Model;
 using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebAppProject.Areas.Staff.ViewModels;
 using WebAppProject.ViewModels;
 
 namespace WebAppProject.Areas.Staff.Controllers
@@ -15,6 +17,7 @@ namespace WebAppProject.Areas.Staff.Controllers
         private readonly IExamRepository _examRepo;
         private readonly IQuestionRepository _questionRepo;
         private readonly IStudentRepository _studentRepo;
+        private readonly IMapper _mapper;
         private Random _random;
         private readonly int _instId;
 
@@ -22,12 +25,14 @@ namespace WebAppProject.Areas.Staff.Controllers
                                     IExamRepository examRepo,
                                     IQuestionRepository questionRepo,
                                     IStudentRepository studentRepo,
-                                    IHttpContextAccessor accessor)
+                                    IHttpContextAccessor accessor,
+                                    IMapper mapper)
         {
             _instructorRepo = instructorRepo;
             _examRepo = examRepo;
             _questionRepo = questionRepo;
             _studentRepo = studentRepo;
+            _mapper = mapper;
             _random = new Random();
             _instId = int.Parse(accessor.HttpContext!.User.Claims.FirstOrDefault(c => c.Type == "id")!.Value);
         }
@@ -58,6 +63,21 @@ namespace WebAppProject.Areas.Staff.Controllers
             {
                 return NotFound();
             }
+
+            var courseInfoViewModel = _mapper.Map<CourseInfoViewModel>(deptCourse);
+            return View(courseInfoViewModel);
+        }
+
+/*        public IActionResult Info(int id)
+        {
+            var deptCourse = _instructorRepo.GetByIdWithCourses(_instId)
+                                .Select(e => e.DepartmentCourses.Where(e => e.CourseId == id))
+                                .FirstOrDefault()?.ElementAt(0);
+
+            if (deptCourse == null)
+            {
+                return NotFound();
+            }
             var courseInfo = new CourseInfo()
             {
                 CourseName = deptCourse.Course.Name,
@@ -65,7 +85,7 @@ namespace WebAppProject.Areas.Staff.Controllers
                 CourseDescription = deptCourse.Course.Description
             };
             return View(courseInfo);
-        }
+        }*/
 
         public IActionResult QuestionBank(int id)
         {
