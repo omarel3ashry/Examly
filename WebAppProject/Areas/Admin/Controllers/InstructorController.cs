@@ -1,7 +1,9 @@
-﻿using DataAccessLibrary.Model;
+﻿using AutoMapper;
+using DataAccessLibrary.Model;
 using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebAppProject.Areas.Admin.ViewModels;
 using WebAppProject.ViewModels;
 
 namespace WebAppProject.Areas.Admin.Controllers
@@ -14,48 +16,73 @@ namespace WebAppProject.Areas.Admin.Controllers
         private readonly IInstructorRepository _instructorRepo;
         private readonly IBranchRepository _branchRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IMapper _mapper;
 
-        public InstructorController(IInstructorRepository instructorRepository,
-                                    IBranchRepository branchRepository,
-                                    IUserRepository userRepo)
+        public InstructorController(IInstructorRepository instructorRepository, IBranchRepository branchRepository,
+                                    IUserRepository userRepo, IMapper mapper)
         {
             _instructorRepo = instructorRepository;
             _branchRepo = branchRepository;
             _userRepo = userRepo;
+            _mapper = mapper;
         }
         public IActionResult Index()
         {
             return View();
         }
-        public IActionResult Details(int Id)
+        public async Task<IActionResult> Details(int Id)
         {
-            Instructor? model = _instructorRepo.GetByIdWithIncludes(Id);
-            IActionResult actionResult = model != null ? View(model) : BadRequest();
+            IActionResult actionResult;
+            Instructor? instructor = await _instructorRepo.GetByIdWithIncludesAsync(Id);
+            if (instructor != null)
+            {
+                var model = _mapper.Map<InstructorViewModel>(instructor);
+                actionResult = View(model);
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
             return actionResult;
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            List<Branch> branches = _branchRepo.GetAll();
-            var model = new InstructorWithBranchesViewModel() { Branches = branches };
+            List<Branch> branches = await _branchRepo.GetAllAsync();
+            var branchesDtos = _mapper.Map<List<BranchViewModel>>(branches);
+            var model = new InstructorFormViewModel() { Branches = branchesDtos };
 
             return View(model);
         }
         [HttpPost]
-        public IActionResult Create(InstructorWithBranchesViewModel model)
+        public async Task<IActionResult> Create(InstructorFormViewModel model)
         {
-            var user = new User() { Email = model.Email, Password = model.Password, RoleId = 3 };
-            int userId = _userRepo.Add(user);
-            if (userId != 0)
+            IActionResult actionResult;
+            if (ModelState.IsValid)
             {
-                var instructorDto = model.ToInstructorDto();
-                instructorDto.UserId = userId;
-                int instId = _instructorRepo.Add(instructorDto);
-                return instId > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
+                var user = new User() { Email = model.Email, Password = model.Password, RoleId = 3 };
+                int userId = await _userRepo.AddAsync(user);
+                if (userId != 0)
+                {
+                    var instructorDto = _mapper.Map<Instructor>(model);
+                    instructorDto.UserId = userId;
+                    int res = await _instructorRepo.AddAsync(instructorDto);
+                    actionResult = res > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
+                }
+                else
+                {
+                    actionResult = RedirectToAction("Create");
+                }
             }
-            return RedirectToAction("Create");
+            else
+            {
+                var branches = await _branchRepo.GetAllAsync();
+                model.Branches = _mapper.Map<List<BranchViewModel>>(branches);
+                actionResult = View(model);
+            }
+            return actionResult;
         }
 
-        public IActionResult Edit(int Id)
+        public async Task<IActionResult> Edit(int Id)
         {
             IActionResult actionResult = BadRequest();
             List<Branch> branches = _branchRepo.GetAll();
@@ -69,7 +96,7 @@ namespace WebAppProject.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Instructor instructor, int Id)
+        public async Task<IActionResult> Edit(Instructor instructor, int Id)
         {
             instructor.Id = Id;
             bool res = _instructorRepo.Update(instructor);
@@ -77,14 +104,14 @@ namespace WebAppProject.Areas.Admin.Controllers
             return actionResult;
         }
 
-        public IActionResult Delete(int Id)
+        public async Task<IActionResult> Delete(int Id)
         {
             Instructor? model = _instructorRepo.GetById(Id);
             IActionResult actionResult = model != null ? View(model) : BadRequest();
             return actionResult;
         }
         [HttpPost]
-        public IActionResult Delete(Instructor Instructor)
+        public async Task<IActionResult> Delete(Instructor Instructor)
         {
             _instructorRepo.Delete(Instructor.Id);
             return RedirectToAction("Index", "Manage");

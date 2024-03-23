@@ -1,4 +1,4 @@
-﻿@model InstructorWithBranchesViewModel
+﻿@model InstructorFormViewModel
 
 @{
     SelectList BranchesItems = new SelectList(Model.Branches, "Id", "Name");
@@ -10,7 +10,7 @@
 <div class="row m-1">
     <div class="col-md-4">
         <form method="post">
-            <input hidden asp-for="UserId" value="@Model.UserId" />
+            @* <input hidden asp-for="Id" value="@Model.Id" /> *@
             <div class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>

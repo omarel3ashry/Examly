@@ -1,7 +1,7 @@
 ﻿using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebAppProject.ViewModels;
+using WebAppProject.Areas.Admin.ViewModels;
 
 namespace WebAppProject.Areas.Admin.Controllers
 {

@@ -1,8 +1,11 @@
-﻿using DataAccessLibrary.Model;
+﻿using AutoMapper;
+using DataAccessLibrary.Model;
 using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using System.Diagnostics;
+using WebAppProject.Areas.Admin.ViewModels;
 using WebAppProject.ViewModels;
 
 
@@ -16,71 +19,126 @@ namespace WebAppProject.Areas.Admin.Controllers
 
         private readonly IDepartmentRepository departmentRepository;
         private readonly IBranchRepository branchRepository;
-        private readonly IInstructorRepository instructorRepository;
+        private readonly IMapper _mapper;
 
-        public DepartmentController(IDepartmentRepository departmentRepository, IBranchRepository branchRepository)
+        public DepartmentController(IDepartmentRepository departmentRepository, IBranchRepository branchRepository, IMapper mapper)
         {
             this.departmentRepository = departmentRepository;
             this.branchRepository = branchRepository;
-
+            _mapper = mapper;
         }
         public IActionResult Index()
         {
             return View();
         }
-        public IActionResult Details(int Id)
+        public async Task<IActionResult> Details(int Id)
         {
-            Department? model = departmentRepository.GetByIdWithIncludes(Id);
-            IActionResult actionResult = model != null ? View(model) : BadRequest();
+            IActionResult actionResult;
+            Department? department = await departmentRepository.GetByIdWithIncludesAsync(Id);
+            if (department != null)
+            {
+                var model = _mapper.Map<DepartmentViewModel>(department);
+                actionResult = View(model);
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
             return actionResult;
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            List<Branch> branches = branchRepository.GetAll();
-            var model = new DepartmentFormViewModel() { Branches = branches };
+            var branches = await branchRepository.GetAllAsync();
+            var branchesDtos = _mapper.Map<List<BranchViewModel>>(branches);
+            var model = new DepartmentFormViewModel() { Branches = branchesDtos };
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Create(Department Department)
+        public async Task<IActionResult> Create(DepartmentFormViewModel model)
         {
-            // TODO: create ViewModel and add ModelState validation
-            int res = departmentRepository.Add(Department);
-            return res > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
-        }
 
-        public IActionResult Edit(int Id)
-        {
-            IActionResult actionResult = BadRequest();
-            List<Branch> branches = branchRepository.GetAll();
-            Department? department = departmentRepository.GetByIdWithIncludes(Id);
-            if (department != null)
+            IActionResult actionResult;
+            if (ModelState.IsValid)
             {
-                var model = new DepartmentFormViewModel() { Department = department, Branches = branches };
+                Department department = _mapper.Map<Department>(model);
+                int res = await departmentRepository.AddAsync(department);
+                actionResult = res > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
+            }
+            else
+            {
+                var branches = await branchRepository.GetAllAsync();
+                model.Branches = _mapper.Map<List<BranchViewModel>>(branches);
                 actionResult = View(model);
             }
             return actionResult;
         }
-        [HttpPost]
-        public IActionResult Edit(Department Department, int Id)
+
+        public async Task<IActionResult> Edit(int Id)
         {
-            Department.Id = Id;
-            bool res = departmentRepository.Update(Department);
-            IActionResult actionResult = res ? RedirectToAction("Index", "Manage") : RedirectToAction("Edit");
+            IActionResult actionResult;
+            Department? department = departmentRepository.GetByIdWithIncludes(Id);
+            if (department != null)
+            {
+                var model = _mapper.Map<DepartmentFormViewModel>(department);
+                var branches = await branchRepository.GetAllAsync();
+                model.Branches = _mapper.Map<List<BranchViewModel>>(branches);
+
+                actionResult = View(model);
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
+            return actionResult;
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(DepartmentFormViewModel model)
+        {
+            IActionResult actionResult;
+            if (ModelState.IsValid)
+            {
+                var department = _mapper.Map<Department>(model);
+                bool res = await departmentRepository.UpdateAsync(department);
+                actionResult = res ? RedirectToAction("Index", "Manage") : RedirectToAction("Edit", model.Id);
+            }
+            else
+            {
+                actionResult = RedirectToAction("Edit", model.Id);
+            }
             return actionResult;
         }
 
-        public IActionResult Delete(int Id)
+        public async Task<IActionResult> Delete(int Id)
         {
-            Department? model = departmentRepository.GetById(Id);
-            IActionResult actionResult = model != null ? View(model) : BadRequest();
+            IActionResult actionResult;
+            Department? department = await departmentRepository.GetByIdWithIncludesAsync(Id);
+            if (department != null)
+            {
+                var model = _mapper.Map<DepartmentViewModel>(department);
+                actionResult = View(model);
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
             return actionResult;
         }
         [HttpPost]
-        public IActionResult Delete(Department Department)
+        public async Task<IActionResult> Delete(DepartmentViewModel model)
         {
-            departmentRepository.Delete(Department.Id);
-            return RedirectToAction("Index", "Manage");
+            IActionResult actionResult;
+            Department? department = await departmentRepository.GetByIdWithIncludesAsync(model.Id);
+            if (department != null)
+            {
+                await departmentRepository.DeleteAsync(department.Id);
+                actionResult = RedirectToAction("Index", "Manage");
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
+            return actionResult;
         }
 
 

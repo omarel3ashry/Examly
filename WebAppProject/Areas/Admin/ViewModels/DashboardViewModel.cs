@@ -1,6 +1,6 @@
 ﻿using DataAccessLibrary.Model;
 
-namespace WebAppProject.ViewModels
+namespace WebAppProject.Areas.Admin.ViewModels
 {
     public class DashboardViewModel
     {
