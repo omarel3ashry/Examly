@@ -1,4 +1,4 @@
-﻿@model Department
+﻿@model WebAppProject.Areas.Staff.ViewModels.DepartmentViewModel
 
 <div class="text">
     <h2 data-text="Courses">Courses</h2>
@@ -12,22 +12,22 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model.DepartmentCourses.Count == 0)
+        @if (Model.DepartmentCourse == null || !Model.DepartmentCourse.Any())
         {
             <tr><td colspan="3">Currently no courses in the department</td></tr>
         }
         else
         {
-            foreach (var deptCourse in Model.DepartmentCourses)
+            foreach (var deptCourse in Model.DepartmentCourse)
             {
                 <tr>
-                    <td>@deptCourse.Course.Name</td>
-                    <td>@(deptCourse.Instructor?.Name ?? "Not Assigned")</td>
+                    <td>@deptCourse.Name</td>
+                    <td>@(deptCourse.InstructorName ?? "Not Assigned")</td>
                     <td>
                         <a asp-action="Details" asp-route-id="@deptCourse.CourseId" class="btn info">Info</a>
                         <button onclick="showDialog(@deptCourse.CourseId)" class="btn success">Assign Instructor</button>
-                        @* <a asp-action="AssignInstructor" asp-route-id="@deptCourse.CourseId" class="btn btn-primary">Assign Instructor</a> *@
-                        <a asp-action="DeleteCourse" onclick="return confirm(' Are you sure ')" asp-route-id="@deptCourse.CourseId" class="btn danger">Remove</a>
+                        @* <a asp-action="AssignInstructor" asp-route-id="@deptCourse.Id" class="btn btn-primary">Assign Instructor</a> *@
+                        <a asp-action="DeleteCourse" onclick="return confirm('Are you sure?')" asp-route-id="@deptCourse.CourseId" class="btn danger">Remove</a>
                     </td>
                 </tr>
             }
@@ -42,7 +42,7 @@
 <script>
     function showDialog(id) {
         $("#div-id").load(`/Staff/Manager/AssignInstructor/${id}`, function () {
-            $("#modal-id").modal('show')
+            $("#modal-id").modal('show');
         });
     }
 </script>

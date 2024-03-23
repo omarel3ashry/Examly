@@ -1,8 +1,10 @@
-﻿using DataAccessLibrary.Model;
+﻿using AutoMapper;
+using DataAccessLibrary.Model;
 using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using WebAppProject.Areas.Staff.ViewModels;
 using WebAppProject.ViewModels;
 
 namespace WebAppProject.Areas.Staff.Controllers
@@ -14,16 +16,21 @@ namespace WebAppProject.Areas.Staff.Controllers
         private readonly IInstructorRepository _instructorRepo;
         private readonly IDepartmentRepository _deptRepo;
         private readonly ICourseRepository _courseRepo;
+        private readonly IMapper _mapper;
         private readonly int _managerId;
+        
 
         public ManagerController(IInstructorRepository instructorRepo,
                                      IDepartmentRepository deptRepo,
                                      ICourseRepository courseRepo,
-                                     IHttpContextAccessor accessor)
+                                     IHttpContextAccessor accessor,
+                                     IMapper mapper)
+
         {
             _instructorRepo = instructorRepo;
             _deptRepo = deptRepo;
             _courseRepo = courseRepo;
+            _mapper = mapper;
             _managerId = int.Parse(accessor.HttpContext!.User.Claims.FirstOrDefault(c => c.Type == "id")!.Value);
 
         }
@@ -36,7 +43,9 @@ namespace WebAppProject.Areas.Staff.Controllers
             {
                 return NotFound();
             }
-            return View(department);
+            var departmentviewmodel = _mapper.Map<DepartmentViewModel>(department);
+
+            return View(departmentviewmodel);
         }
 
         public IActionResult Details(int id)
@@ -47,7 +56,8 @@ namespace WebAppProject.Areas.Staff.Controllers
             {
                 return NotFound();
             }
-            return View(departmentCourse);
+            var courseinfoviewmodel = _mapper.Map<CourseInfoViewModel>(departmentCourse);
+            return View(courseinfoviewmodel);
         }
 
         [HttpGet]
@@ -97,12 +107,9 @@ namespace WebAppProject.Areas.Staff.Controllers
         {
             var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
             var coursesNotInDept = _courseRepo.GetCoursesNotInDepartment(deptId);
-            var addCoursesList = new List<AddCourseViewModel>();
+            
+            var addCoursesList = _mapper.Map<List<AddCourseViewModel>>(coursesNotInDept);
 
-            foreach (var course in coursesNotInDept)
-            {
-                addCoursesList.Add(new AddCourseViewModel() { Id = course.Id, Name = course.Name });
-            }
 
             ViewBag.DepartmentId = id;
             return View(addCoursesList);
