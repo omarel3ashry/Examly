@@ -12,13 +12,13 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model.DepartmentCourse == null || !Model.DepartmentCourse.Any())
+        @if (Model.DepartmentCourses == null || !Model.DepartmentCourses.Any())
         {
             <tr><td colspan="3">Currently no courses in the department</td></tr>
         }
         else
         {
-            foreach (var deptCourse in Model.DepartmentCourse)
+            foreach (var deptCourse in Model.DepartmentCourses)
             {
                 <tr>
                     <td>@deptCourse.Name</td>

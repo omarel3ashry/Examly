@@ -13,7 +13,7 @@ namespace WebAppProject.Areas.Staff.ViewModels
         public string Name { get; set; }
 
         //public IEnumerable <CourseInfoViewModel> DepartmentCourse { get; set; }
-        public ICollection<CourseInfoViewModel> DepartmentCourse { get; } = new List<CourseInfoViewModel>();
+        public ICollection<CourseInfoViewModel> DepartmentCourses { get; } = new List<CourseInfoViewModel>();
 
 
     }
