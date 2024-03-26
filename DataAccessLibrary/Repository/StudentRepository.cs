@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -200,10 +201,10 @@ namespace DataAccessLibrary.Repository
         }
         public void AddStudentAnswers(int examId, int studentId, List<Choice> choices)
         {
-            
+
             foreach (Choice choice in choices)
             {
-                StudentAnswer studentAnswer = new StudentAnswer { ExamId = examId, StudentId = studentId,ChoiceId=choice.Id };
+                StudentAnswer studentAnswer = new StudentAnswer { ExamId = examId, StudentId = studentId, ChoiceId = choice.Id };
                 _context.StudentAnswers.Add(studentAnswer);
             }
             _context.SaveChanges();

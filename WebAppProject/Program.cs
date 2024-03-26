@@ -1,4 +1,5 @@
 using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -189,9 +190,9 @@ namespace DataAccessLibrary.Repository
                 int? userId = instructor.UserId;
                 if (userId != null && userId != 0)
                 {
-                    _context.Users.Where(e => e.Id == userId).ExecuteDelete() ;
+                    _context.Users.Where(e => e.Id == userId).ExecuteDelete();
                 }
-                    _context.Instructors.Remove(instructor);
+                _context.Instructors.Remove(instructor);
 
                 _context.SaveChanges();
                 return true;

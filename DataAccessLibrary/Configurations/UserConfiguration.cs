@@ -8,8 +8,8 @@ namespace DataAccessLibrary.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            
-            
+
+
             builder.Property(e => e.Email)
                 .HasMaxLength(100)
                 .IsUnicode(false)

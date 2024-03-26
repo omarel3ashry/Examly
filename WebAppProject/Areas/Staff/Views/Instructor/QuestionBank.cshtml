@@ -1,11 +1,11 @@
-﻿@model IEnumerable<DataAccessLibrary.Model.Question>
+﻿@model IEnumerable<QuestionViewModel>
 @{
     ViewData["Title"] = "QuestionBank";
 }
 
 <div class="d-flex justify-content-between align-items-center">
     <h1>Question Bank</h1>
-    <a asp-action="AddQuestion" asp-route-id="@ViewBag.CourseId" class="btn success col-2">Add</a></td>
+    <a asp-action="AddQuestion" asp-route-courseId="@ViewBag.CourseId" class="btn success col-2">Add</a></td>
 </div>
 
 <table class="table table-striped table-bordered">
@@ -22,7 +22,7 @@
         {
             <tr>
                 <td>@question.Text</td>
-                <td>@(question.Type == QType.TrueFalse ? "True/False" : "MCQ")</td>
+                <td>@(question.Type == QVMType.TrueFalse ? "True/False" : "MCQ")</td>
                 <td>@question.Difficulty</td>
                 <td>
                     <a asp-action="QuestionInfo" asp-route-id="@question.Id" class="btn info">Info</a>

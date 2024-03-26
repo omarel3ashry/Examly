@@ -1,8 +1,7 @@
-﻿using DataAccessLibrary.Model;
-using DataAccessLibrary.Repository;
+﻿using DataAccessLibrary.Interfaces;
+using DataAccessLibrary.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using WebAppProject.ViewModels;
 
 

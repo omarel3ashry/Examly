@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -194,21 +195,21 @@ namespace DataAccessLibrary.Repository
 
         public bool SetManager(int departmentId, int? instructorId)
         {
-            
+
             var department = _context.Departments.Find(departmentId);
             if (department != null)
             {
                 var ins = _context.Instructors.Include(e => e.User).FirstOrDefault(e => e.Id == instructorId && !e.IsDeleted);
-                if(ins != null)
+                if (ins != null)
                     ins.User.RoleId = 2;
                 if (department.ManagerId != null)
                 {
                     var oldManagerUserID = _context.Instructors.FirstOrDefault(e => e.Id == department.ManagerId)?.UserId;
                     if (oldManagerUserID != null)
                     {
-                       var u= _context.Users.FirstOrDefault(e => e.Id==oldManagerUserID);
-                       if (u != null) 
-                           u.RoleId = 3;
+                        var u = _context.Users.FirstOrDefault(e => e.Id == oldManagerUserID);
+                        if (u != null)
+                            u.RoleId = 3;
                     }
                 }
                 department.ManagerId = instructorId;

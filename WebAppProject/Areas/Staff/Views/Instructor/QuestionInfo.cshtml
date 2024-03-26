@@ -9,7 +9,7 @@
     </div>
     <div>
         <div class="infocon">
-            <p><strong>Course Name:</strong> @Model.Course?.Name</p>
+            <p><strong>Course Name:</strong> @Model.CourseName</p>
             <p><strong>Question Text:</strong> @Model.Text</p>
             <p><strong>Question Difficulty:</strong> @Model.Difficulty</p>
             <p><strong>Grade:</strong> @Model.Grade</p>
@@ -17,7 +17,7 @@
          </div>
     @if (Model.Choices.Count > 1)
     {
-        @foreach (var choice in Model.Choices)
+        foreach (var choice in Model.Choices)
         {
             <div class="row m-1">
                 <div class="col-md-4">
@@ -30,7 +30,6 @@
              </div>
         }
     }
-    </div>
     else
     {
             <div class="row m-1">
@@ -42,5 +41,7 @@
                 </div>
             </div>
     }
+    </div>
+   
 
 </div>

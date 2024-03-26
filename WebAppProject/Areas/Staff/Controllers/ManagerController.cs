@@ -1,5 +1,5 @@
-﻿using DataAccessLibrary.Model;
-using DataAccessLibrary.Repository;
+﻿using DataAccessLibrary.Interfaces;
+using DataAccessLibrary.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -29,7 +29,7 @@ namespace WebAppProject.Areas.Staff.Controllers
         }
 
         public IActionResult Index()
-        {        
+        {
 
             var department = _deptRepo.GetByManagerIdCoursesIncluded(_managerId);
             if (department == null)
@@ -41,7 +41,7 @@ namespace WebAppProject.Areas.Staff.Controllers
 
         public IActionResult Details(int id)
         {
-            var deptId= _deptRepo.Select(e=>e.ManagerId==_managerId)!.Id;
+            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
             var departmentCourse = _deptRepo.GetDeptCourseWithIncludes(id, deptId);
             if (departmentCourse == null)
             {
@@ -72,7 +72,7 @@ namespace WebAppProject.Areas.Staff.Controllers
         [HttpPost]
         public IActionResult AssignInstructor(int crsId, int instId)
         {
-            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;           
+            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
             var course = _courseRepo.GetById(crsId);
             var instructor = _instructorRepo.GetById(instId);
             if (course == null || instructor == null)

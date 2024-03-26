@@ -1,7 +1,6 @@
 ﻿using DataAccessLibrary.Model;
-using System.Linq.Expressions;
 
-namespace DataAccessLibrary.Repository
+namespace DataAccessLibrary.Interfaces
 {
     public interface IStudentRepository : IRepository<Student>
     {

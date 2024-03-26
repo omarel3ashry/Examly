@@ -1,12 +1,8 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLibrary.Repository
 {
@@ -70,7 +66,7 @@ namespace DataAccessLibrary.Repository
 
         public DepartmentCourse? GetByIdWithIncludes(int id)
         {
-            return _context.DepartmentCourses.Include(e=>e.Course).ThenInclude(e=>e.Exams).Where(e=>e.DepartmentId==id&&e.CourseId==1).FirstOrDefault();
+            return _context.DepartmentCourses.Include(e => e.Course).ThenInclude(e => e.Exams).Where(e => e.DepartmentId == id && e.CourseId == 1).FirstOrDefault();
         }
 
         public Task<DepartmentCourse?> GetByIdWithIncludesAsync(int id)
@@ -82,17 +78,17 @@ namespace DataAccessLibrary.Repository
         {
             return _context.DepartmentCourses.Where(e => e.DepartmentId == deptId)
                 .Include(e => e.Course)
-                .ThenInclude(e=>e.Exams)
-                .Select(e=>e.Course)
+                .ThenInclude(e => e.Exams)
+                .Select(e => e.Course)
                 .ToList();
         }
-        public DepartmentCourse? GetByDeptAndCrsIdWithIncludes(int crsId,int deptId)
+        public DepartmentCourse? GetByDeptAndCrsIdWithIncludes(int crsId, int deptId)
         {
             return _context.DepartmentCourses
                             .Include(e => e.Course)
                             .Include(e => e.Instructor)
                             .Include(e => e.Department)
-                            .FirstOrDefault(e => e.CourseId == crsId&&e.DepartmentId==deptId);
+                            .FirstOrDefault(e => e.CourseId == crsId && e.DepartmentId == deptId);
         }
 
         public DepartmentCourse? Select(Expression<Func<DepartmentCourse, bool>> predicate)

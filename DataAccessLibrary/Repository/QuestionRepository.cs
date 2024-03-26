@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -71,7 +72,7 @@ namespace DataAccessLibrary.Repository
                                      .Where(e => e.CourseId == crsId && e.InstructorId == instId)
                                      .Include(e => e.Choices)
                                      .ToList();
-        } 
+        }
 
         public List<Question> GetInstQuestions(int crsId, int instId, QDifficulty difficulty)
         {

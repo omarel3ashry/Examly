@@ -1,7 +1,6 @@
-﻿using DataAccessLibrary.Model;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
-namespace DataAccessLibrary.Repository
+namespace DataAccessLibrary.Interfaces
 {
     public interface IRepository<T> where T : class
     {

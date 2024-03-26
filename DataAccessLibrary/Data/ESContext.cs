@@ -23,7 +23,7 @@ namespace DataAccessLibrary.Data
         public DbSet<Choice> Choices { get; set; }
         public DbSet<StudentAnswer> StudentAnswers { get; set; }
 
-        public ESContext(DbContextOptions options):base(options) {}
+        public ESContext(DbContextOptions options) : base(options) { }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

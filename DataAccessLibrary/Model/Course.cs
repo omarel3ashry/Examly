@@ -7,9 +7,9 @@
         public string Description { get; set; }
         public bool IsDeleted { get; set; } = false;
 
-        public ICollection<Topic> Topics{ get; } = new HashSet<Topic>();
-        public ICollection<Question> Questions{ get; } = new HashSet<Question>();
-        public ICollection<Exam> Exams{ get; } = new HashSet<Exam>();
+        public ICollection<Topic> Topics { get; } = new HashSet<Topic>();
+        public ICollection<Question> Questions { get; } = new HashSet<Question>();
+        public ICollection<Exam> Exams { get; } = new HashSet<Exam>();
         public ICollection<DepartmentCourse> DepartmentCourses { get; } = new HashSet<DepartmentCourse>();
     }
 }
