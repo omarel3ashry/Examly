@@ -166,6 +166,10 @@ namespace DataAccessLibrary.Repository
         {
             return _context.Instructors.FirstOrDefault(e => e.UserId == userId);
         }
+        public Task<Instructor?> GetByUserIdAsync(int userId)
+        {
+            return _context.Instructors.FirstOrDefaultAsync(e => e.UserId == userId);
+        }
 
         public int Add(Instructor entity)
         {

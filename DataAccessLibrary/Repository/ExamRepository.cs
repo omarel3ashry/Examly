@@ -229,5 +229,12 @@ namespace DataAccessLibrary.Repository
                                       .Where(e => e.DepartmentId == deptId)
                                       .ToList();
         }
+        public Task<List<Exam>> GetDeptExamsAsync(int deptId)
+        {
+            return _context.Exams.Include(e => e.Course)
+                                      .Where(e => e.DepartmentId == deptId)
+                                      .ToListAsync();
+        }
+
     }
 }

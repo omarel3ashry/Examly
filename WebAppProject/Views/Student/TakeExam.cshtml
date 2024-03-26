@@ -1,10 +1,10 @@
-﻿@model ExamViewModel
+﻿@model TakeExamViewModel
 @{
     
-    ViewData["Title"] = $"{@Model.DepartmentCourse.Course.Name} Exam";
+    ViewData["Title"] = $"{@Model.DepartmentCourse.CourseName} Exam";
 
-    List<Question> mcqQuestions = Model.Exam.Questions.Where(e => e.Type == QType.MCQ).ToList();
-    List<Question> tfQuestions = Model.Exam.Questions.Where(e => e.Type == QType.TrueFalse).ToList();
+    var mcqQuestions = Model.Exam.Questions.Where(e => e.Type == WebAppProject.VMS.QVMType.MCQ).ToList();
+    var tfQuestions = Model.Exam.Questions.Where(e => e.Type == WebAppProject.VMS.QVMType.TrueFalse).ToList();
 }
 
 
@@ -21,9 +21,9 @@
                 <th>Timer</th>
             </tr>
                 <tr>
-                    <td>@Model.DepartmentCourse.Department.Name</td>
-                    <td>@Model.DepartmentCourse.Course.Name</td>
-                    <td>@Model.DepartmentCourse.Instructor.Name</td>
+                    <td>@Model.DepartmentCourse.DeptName</td>
+                    <td>@Model.DepartmentCourse.CourseName</td>
+                    <td>@Model.DepartmentCourse.InstructorName</td>
                     <td>@Model.Exam.TotalGrade</td>
                     <td>@Model.Exam.DurationInMinutes Minutes</td>
                     <td><span id="timer">00:00:00</span></td>
@@ -38,7 +38,7 @@
                 @for (int i = 0; i < tfQuestions.Count; i++)
                 {
                     <h5>@(i + 1). @tfQuestions[i].Text</h5>
-                    foreach (var choice in tfQuestions[i].Choices)
+                    foreach (var choice in tfQuestions[i].Choices.OrderBy(e=>e.Text))
                     {
                         <div class="align-content-center" >
                             <input type="radio" id="@choice.Id" name="tfChoices[@i].Id" value="@choice.Id" />

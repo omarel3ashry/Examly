@@ -1,6 +1,6 @@
-﻿@model IEnumerable<Department>
+﻿@model IEnumerable<DepartmentViewModel>
 @if (Model.Count() > 0)
-    foreach (Department dept in Model)
+    foreach (DepartmentViewModel dept in Model)
     {
         <option value="@dept.Id">@dept.Name</option>
     }
