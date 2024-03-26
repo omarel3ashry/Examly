@@ -60,10 +60,29 @@ namespace DataAccessLibrary.Repository
             return question?.ToList() ?? new List<Question>();
         }
 
+        public async Task<List<Question>> GetCourseQuestionsAsync(int instId, int courseId)
+        {
+            var instructor = await _context.Instructors
+                .Include(e => e.Questions.Where(e => !e.IsDeleted && e.CourseId == courseId))
+                .ThenInclude(e => e.Choices)
+                .FirstOrDefaultAsync(e => !e.IsDeleted && e.Id == instId);
+
+            var questions = instructor?.Questions.ToList() ?? new List<Question>();
+
+            return questions;
+        }
+
         public int AddQuestion(Question entity)
         {
             _context.Questions.Add(entity);
             _context.SaveChanges();
+            return entity.Id;
+        }
+
+        public async Task<int> AddQuestionAsync(Question entity)
+        {
+            await _context.Questions.AddAsync(entity);
+            await _context.SaveChangesAsync();
             return entity.Id;
         }
 
