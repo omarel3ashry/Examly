@@ -1,10 +1,15 @@
-﻿using DataAccessLibrary.Model;
+﻿
 
 namespace WebAppProject.ViewModels
 {
     public class ExamViewModel
     {
-        public DepartmentCourse DepartmentCourse { get; set; }
-        public Exam Exam { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public DateTime ExamDate { get; set; }
+        public int DurationInMinutes { get; set; }
+        public int? TotalGrade { get; set; }
+        public string CourseName { get; set; }
+        public ICollection<QuestionViewModel> Questions { get; set; }= new HashSet<QuestionViewModel>();
     }
 }

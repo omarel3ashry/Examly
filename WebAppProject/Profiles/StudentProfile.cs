@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DataAccessLibrary.Model;
-using WebAppProject.VMS;
+using WebAppProject.ViewModels;
 
 namespace WebAppProject.Profiles
 {

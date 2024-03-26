@@ -1,10 +1,11 @@
-﻿using DataAccessLibrary.Interfaces;
+﻿using AutoMapper;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebAppProject.VMS;
+using WebAppProject.ViewModels;
 
 namespace WebAppProject.Controllers
 {
@@ -16,23 +17,27 @@ namespace WebAppProject.Controllers
         private readonly IDepartmentRepository departmentRepository;
         private readonly IBranchRepository branchRepository;
         private readonly IInstructorRepository instructorRepository;
+        private readonly IMapper mapper;
 
         public AccountController(IUserRepository userRepository,
             IStudentRepository studentRepository,
             IDepartmentRepository departmentRepository,
             IBranchRepository branchRepository,
-            IInstructorRepository instructorRepository)
+            IInstructorRepository instructorRepository,
+            IMapper mapper)
         {
             this.userRepository = userRepository;
             this.studentRepository = studentRepository;
             this.departmentRepository = departmentRepository;
             this.branchRepository = branchRepository;
             this.instructorRepository = instructorRepository;
+            this.mapper = mapper;
         }
 
         public async Task<IActionResult> Register()
         {
-            ViewBag.Branches = await branchRepository.GetAllAsync();
+            var Branches = await branchRepository.GetAllAsync();
+            ViewBag.Branches = Branches.ToDictionary(key => key.Id, value => value.Name);
             var model = new RegisterViewModel();
             return View(model);
         }
@@ -65,13 +70,15 @@ namespace WebAppProject.Controllers
                 await studentRepository.AddAsync(student);
                 return RedirectToAction("Login");
             }
-            ViewBag.Branches = await branchRepository.GetAllAsync();
+            var Branches = await branchRepository.GetAllAsync();
+            ViewBag.Branches = Branches.ToDictionary(key => key.Id, value => value.Name);
             return View(registerInfo);
         }
 
         public async Task<IActionResult> Departments(int id)
         {
-            var model =await departmentRepository.SelectAllAsync(dept => dept.BranchId == id && !dept.IsDeleted);
+            var depts =await departmentRepository.SelectAllAsync(dept => dept.BranchId == id && !dept.IsDeleted);
+            var model = mapper.Map<IList<DepartmentViewModel>>(depts);
             return PartialView(model);
         }
 

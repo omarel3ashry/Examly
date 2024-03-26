@@ -3,8 +3,8 @@
     
     ViewData["Title"] = $"{@Model.DepartmentCourse.CourseName} Exam";
 
-    var mcqQuestions = Model.Exam.Questions.Where(e => e.Type == WebAppProject.VMS.QVMType.MCQ).ToList();
-    var tfQuestions = Model.Exam.Questions.Where(e => e.Type == WebAppProject.VMS.QVMType.TrueFalse).ToList();
+    var mcqQuestions = Model.Exam.Questions.Where(e => e.Type == QVMType.MCQ).ToList();
+    var tfQuestions = Model.Exam.Questions.Where(e => e.Type == QVMType.TrueFalse).ToList();
 }
 
 

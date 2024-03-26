@@ -13,5 +13,6 @@ namespace DataAccessLibrary.Interfaces
         public List<Exam> GetInstructorExams(int instructorId);
         public Task<List<Exam>> GetInstructorExamsAsync(int instructorId);
         public List<Exam> GetDeptExams(int deptId);
+        public Task<List<Exam>> GetDeptExamsAsync(int deptId);
     }
 }

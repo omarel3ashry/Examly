@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DataAccessLibrary.Model;
 using WebAppProject.Areas.Staff.ViewModels;
-using WebAppProject.ViewModels;
+
 
 namespace WebAppProject.Areas.Staff.Profiles
 {

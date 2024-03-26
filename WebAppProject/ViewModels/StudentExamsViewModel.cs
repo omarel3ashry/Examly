@@ -4,8 +4,8 @@ namespace WebAppProject.ViewModels
 {
     public class StudentExamsViewModel
     {
-        public List<Exam> CommingExams;
-        public List<ExamTaken> ExamsTaken;
-        public List<Exam> MissedExams;
+        public List<ExamViewModel> CommingExams;
+        public List<ExamTakenViewModel> ExamsTaken;
+        public List<ExamViewModel> MissedExams;
     }
 }
