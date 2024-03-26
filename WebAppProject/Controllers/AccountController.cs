@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebAppProject.ViewModels;
+using WebAppProject.VMS;
 
 namespace WebAppProject.Controllers
 {
@@ -30,20 +30,27 @@ namespace WebAppProject.Controllers
             this.instructorRepository = instructorRepository;
         }
 
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
-            ViewBag.Branches = branchRepository.GetAll();
+            ViewBag.Branches = await branchRepository.GetAllAsync();
             var model = new RegisterViewModel();
             return View(model);
         }
+        public async Task<IActionResult> CheckEmail(string Email)
+        {          
+            var st = await userRepository.GetByEmailAsync(Email);
+            bool valid;       
+            valid= st == null ? true : false;
+            return Json(valid);
+        }
 
         [HttpPost]
-        public IActionResult Register(RegisterViewModel registerInfo)
+        public async Task<IActionResult> Register(RegisterViewModel registerInfo)
         {
             if (ModelState.IsValid)
             {
                 User user = new User { Email = registerInfo.Email, Password = registerInfo.Password, RoleId = 4 };
-                int userId = userRepository.Add(user);
+                int userId =await userRepository.AddAsync(user);
                 Student student = new Student
                 {
                     Name = registerInfo.Name,
@@ -55,16 +62,16 @@ namespace WebAppProject.Controllers
                     UserId = userId
                 };
 
-                studentRepository.Add(student);
+                await studentRepository.AddAsync(student);
                 return RedirectToAction("Login");
             }
-            ViewBag.Branches = branchRepository.GetAll();
+            ViewBag.Branches = await branchRepository.GetAllAsync();
             return View(registerInfo);
         }
 
-        public IActionResult Departments(int id)
+        public async Task<IActionResult> Departments(int id)
         {
-            var model = departmentRepository.SelectAll(dept => dept.BranchId == id && !dept.IsDeleted);
+            var model =await departmentRepository.SelectAllAsync(dept => dept.BranchId == id && !dept.IsDeleted);
             return PartialView(model);
         }
 
@@ -74,15 +81,15 @@ namespace WebAppProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(User LoginInfo)
+        public async Task<IActionResult> Login(UserViewModel LoginInfo)
         {
-            User user = userRepository.CheckUser(LoginInfo.Email, LoginInfo.Password);
+            User? user = await userRepository.CheckUserAsync(LoginInfo.Email, LoginInfo.Password);
             if (user == null)
             {
                 ModelState.AddModelError("", "Username OR Password Invalid");
-                return View(LoginInfo);
+                return View();
             }
-            string role = user.Role.Title;
+            string role = user.Role!.Title;
             Claim roleClaim = new Claim(ClaimTypes.Role, role);
             ClaimsIdentity identity = new ClaimsIdentity("Cookies");
             identity.AddClaim(roleClaim);
@@ -92,7 +99,8 @@ namespace WebAppProject.Controllers
             int id;
             if (role == "Student")
             {
-                id = studentRepository.GetByUserId(user.Id).Id;
+                var st = await studentRepository.GetByUserIdAsync(user.Id);
+                id = st.Id;
                 controller = "Student";
             }
             else if (role == "Admin")
@@ -103,7 +111,8 @@ namespace WebAppProject.Controllers
             }
             else
             {
-                id = instructorRepository.GetByUserId(user.Id).Id;
+                var ins = await instructorRepository.GetByUserIdAsync(user.Id);
+                id = ins.Id;
                 controller = "Instructor";
                 area = "Staff";
             }

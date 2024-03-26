@@ -9,5 +9,6 @@ namespace DataAccessLibrary.Repository
         public List<ExamTaken> GetExamGradesWithIncludes(int examId);
         public List<Exam> GetInstructorExam(int instructorId);
         public List<Exam> GetDeptExams(int deptId);
+        public Task<List<Exam>> GetDeptExamsAsync(int deptId);
     }
 }

@@ -94,6 +94,14 @@ namespace DataAccessLibrary.Repository
                             .Include(e => e.Department)
                             .FirstOrDefault(e => e.CourseId == crsId&&e.DepartmentId==deptId);
         }
+        public Task<DepartmentCourse?> GetByDeptAndCrsIdWithIncludesAsync(int crsId,int deptId)
+        {
+            return _context.DepartmentCourses
+                            .Include(e => e.Course)
+                            .Include(e => e.Instructor)
+                            .Include(e => e.Department)
+                            .FirstOrDefaultAsync(e => e.CourseId == crsId&&e.DepartmentId==deptId);
+        }
 
         public DepartmentCourse? Select(Expression<Func<DepartmentCourse, bool>> predicate)
         {
