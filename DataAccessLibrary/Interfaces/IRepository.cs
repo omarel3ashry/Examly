@@ -9,7 +9,7 @@ namespace DataAccessLibrary.Interfaces
         public List<T> GetAllWithIncludes();
         public Task<List<T>> GetAllWithIncludesAsync();
         public T? GetById(int id);
-        public Task<T?> GetByIdAsync(int id);
+        public ValueTask<T?> GetByIdAsync(int id);
         public T? GetByIdWithIncludes(int id);
         public Task<T?> GetByIdWithIncludesAsync(int id);
         public int Add(T entity);

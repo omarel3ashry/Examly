@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebAppProject.Areas.Staff.ViewModels;
-using WebAppProject.ViewModels;
 
 namespace WebAppProject.Areas.Staff.Controllers
 {
@@ -18,7 +17,7 @@ namespace WebAppProject.Areas.Staff.Controllers
         private readonly ICourseRepository _courseRepo;
         private readonly IMapper _mapper;
         private readonly int _managerId;
-        
+
 
         public ManagerController(IInstructorRepository instructorRepo,
                                      IDepartmentRepository deptRepo,
@@ -35,10 +34,10 @@ namespace WebAppProject.Areas.Staff.Controllers
 
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
 
-            var department = _deptRepo.GetByManagerIdCoursesIncluded(_managerId);
+            var department = await _deptRepo.GetByManagerIdCoursesIncludedAsync(_managerId);
             if (department == null)
             {
                 return NotFound();
@@ -48,29 +47,47 @@ namespace WebAppProject.Areas.Staff.Controllers
             return View(departmentviewmodel);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
-            var departmentCourse = _deptRepo.GetDeptCourseWithIncludes(id, deptId);
+            var department = await _deptRepo.SelectAsync(e => e.ManagerId == _managerId);
+
+            if (department == null)
+            {
+                return NotFound();
+            }
+
+            var deptId = department.Id;
+            var departmentCourse = await _deptRepo.GetDeptCourseWithIncludesAsync(id, deptId);
+
             if (departmentCourse == null)
             {
                 return NotFound();
             }
+
             var courseinfoviewmodel = _mapper.Map<CourseInfoViewModel>(departmentCourse);
             return View(courseinfoviewmodel);
         }
 
         [HttpGet]
-        public IActionResult AssignInstructor(int id)
+        public async Task<IActionResult> AssignInstructor(int id)
         {
-            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
-            var departmentCourse = _deptRepo.GetDeptCourseWithIncludes(id, deptId);
+            var department = await _deptRepo.SelectAsync(e => e.ManagerId == _managerId);
+
+            if (department == null)
+            {
+                return NotFound();
+            }
+
+            var deptId = department.Id;
+            var departmentCourse = await _deptRepo.GetDeptCourseWithIncludesAsync(id, deptId);
+
             if (departmentCourse == null)
             {
                 return NotFound();
             }
+
             var branchId = departmentCourse.Department.BranchId;
-            var availableInstructors = _instructorRepo.SelectAll(e => e.BranchId == branchId);
+            var availableInstructors = await _instructorRepo.SelectAllAsync(e => e.BranchId == branchId);
             var selectList = new SelectList(availableInstructors, "Id", "Name", departmentCourse.InstructorId);
 
             ViewBag.CourseId = id;
@@ -80,43 +97,61 @@ namespace WebAppProject.Areas.Staff.Controllers
         }
 
         [HttpPost]
-        public IActionResult AssignInstructor(int crsId, int instId)
+        public async Task<IActionResult> AssignInstructor(int crsId, int instId)
         {
-            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
-            var course = _courseRepo.GetById(crsId);
-            var instructor = _instructorRepo.GetById(instId);
+            var department = await _deptRepo.SelectAsync(e => e.ManagerId == _managerId);
+
+            if (department == null)
+            {
+                return NotFound();
+            }
+
+            var deptId = department.Id;
+            var course = await _courseRepo.GetByIdAsync(crsId);
+            var instructor = await _instructorRepo.GetByIdAsync(instId);
             if (course == null || instructor == null)
             {
                 return NotFound();
             }
 
-            _deptRepo.UpdateDeptCourseInstructor(deptId, crsId, instId);
+            await _deptRepo.UpdateDeptCourseInstructorAsync(deptId, crsId, instId);
 
             return RedirectToAction("Index");
         }
 
-        public IActionResult DeleteCourse(int id)
+        public async Task<IActionResult> DeleteCourse(int id)
         {
-            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
-            _deptRepo.DeleteDeptCourse(deptId, id);
+            var department = await _deptRepo.SelectAsync(e => e.ManagerId == _managerId);
+
+            if (department != null)
+            {
+                var deptId = department.Id;
+                await _deptRepo.DeleteDeptCourseAsync(deptId, id);
+            }
+
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult AddCourses(int id)
+        public async Task<IActionResult> AddCourses(int id)
         {
-            var deptId = _deptRepo.Select(e => e.ManagerId == _managerId)!.Id;
-            var coursesNotInDept = _courseRepo.GetCoursesNotInDepartment(deptId);
-            
-            var addCoursesList = _mapper.Map<List<AddCourseViewModel>>(coursesNotInDept);
+            var department = await _deptRepo.SelectAsync(e => e.ManagerId == _managerId);
 
+            if (department == null)
+            {
+                return NotFound();
+            }
+
+            var deptId = department.Id;
+            var coursesNotInDept = await _courseRepo.GetCoursesNotInDepartmentAsync(deptId);
+            var addCoursesList = _mapper.Map<List<AddCourseViewModel>>(coursesNotInDept);
 
             ViewBag.DepartmentId = id;
             return View(addCoursesList);
         }
 
         [HttpPost]
-        public IActionResult AddCourses(int id, List<AddCourseViewModel> coursesToAdd)
+        public async Task<IActionResult> AddCourses(int id, List<AddCourseViewModel> coursesToAdd)
         {
             ViewBag.DepartmentId = id;
             if (ModelState.IsValid)
@@ -129,7 +164,7 @@ namespace WebAppProject.Areas.Staff.Controllers
                         deptCourses.Add(new DepartmentCourse() { DepartmentId = id, CourseId = course.Id });
                 }
 
-                int result = _deptRepo.AddDepartmentCourses(deptCourses);
+                int result = await _deptRepo.AddDepartmentCoursesAsync(deptCourses);
                 return result == deptCourses.Count() ? RedirectToAction("Index") : View(coursesToAdd);
             }
             return View(coursesToAdd);

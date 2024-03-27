@@ -2,7 +2,6 @@
 using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace DataAccessLibrary.Repository
 {
@@ -14,64 +13,14 @@ namespace DataAccessLibrary.Repository
         {
             _context = context;
         }
-        public int Add(DepartmentCourse entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> AddAsync(DepartmentCourse entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<DepartmentCourse> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<DepartmentCourse>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<DepartmentCourse> GetAllWithIncludes()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<DepartmentCourse>> GetAllWithIncludesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public DepartmentCourse? GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<DepartmentCourse?> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public DepartmentCourse? GetByIdWithIncludes(int id)
         {
-            return _context.DepartmentCourses.Include(e => e.Course).ThenInclude(e => e.Exams).Where(e => e.DepartmentId == id && e.CourseId == 1).FirstOrDefault();
-        }
-
-        public Task<DepartmentCourse?> GetByIdWithIncludesAsync(int id)
-        {
-            throw new NotImplementedException();
+            return _context.DepartmentCourses
+                .Include(e => e.Course)
+                .ThenInclude(e => e.Exams)
+                .Where(e => e.DepartmentId == id && e.CourseId == 1)
+                .FirstOrDefault();
         }
 
         public List<Course> GetCoursesByDeptIdWithIncludes(int deptId)
@@ -82,6 +31,7 @@ namespace DataAccessLibrary.Repository
                 .Select(e => e.Course)
                 .ToList();
         }
+
         public DepartmentCourse? GetByDeptAndCrsIdWithIncludes(int crsId, int deptId)
         {
             return _context.DepartmentCourses
@@ -90,6 +40,7 @@ namespace DataAccessLibrary.Repository
                             .Include(e => e.Department)
                             .FirstOrDefault(e => e.CourseId == crsId && e.DepartmentId == deptId);
         }
+
         public Task<DepartmentCourse?> GetByDeptAndCrsIdWithIncludesAsync(int crsId,int deptId)
         {
             return _context.DepartmentCourses
@@ -97,36 +48,6 @@ namespace DataAccessLibrary.Repository
                             .Include(e => e.Instructor)
                             .Include(e => e.Department)
                             .FirstOrDefaultAsync(e => e.CourseId == crsId&&e.DepartmentId==deptId);
-        }
-
-        public DepartmentCourse? Select(Expression<Func<DepartmentCourse, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<DepartmentCourse> SelectAll(Expression<Func<DepartmentCourse, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<DepartmentCourse>> SelectAllAsync(Expression<Func<DepartmentCourse, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<DepartmentCourse?> SelectAsync(Expression<Func<DepartmentCourse, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(DepartmentCourse entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateAsync(DepartmentCourse entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

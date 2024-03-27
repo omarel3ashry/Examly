@@ -44,9 +44,9 @@ namespace DataAccessLibrary.Repository
             return _context.Topics.Find(id);
         }
 
-        public async Task<Topic?> GetByIdAsync(int id)
+        public ValueTask<Topic?> GetByIdAsync(int id)
         {
-            return await _context.Topics.FindAsync(id);
+            return _context.Topics.FindAsync(id);
         }
 
         public Topic? GetByIdWithIncludes(int id)

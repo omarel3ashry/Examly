@@ -59,6 +59,14 @@ namespace DataAccessLibrary.Repository
                 .FirstOrDefault(e => !e.IsDeleted && e.ManagerId == managerId);
         }
 
+        public Task<Department?> GetByManagerIdCoursesIncludedAsync(int managerId)
+        {
+            return _context.Departments
+               .Include(e => e.DepartmentCourses).ThenInclude(e => e.Course)
+               .Include(e => e.DepartmentCourses).ThenInclude(e => e.Instructor)
+               .FirstOrDefaultAsync(e => !e.IsDeleted && e.ManagerId == managerId);
+        }
+
         public DepartmentCourse? GetDeptCourseWithIncludes(int crsId, int deptId)
         {
             return _context.DepartmentCourses
@@ -69,9 +77,19 @@ namespace DataAccessLibrary.Repository
                             .FirstOrDefault(e => e.CourseId == crsId && e.DepartmentId == deptId);
         }
 
-        public async Task<Department?> GetByIdAsync(int id)
+        public Task<DepartmentCourse?> GetDeptCourseWithIncludesAsync(int crsId, int deptId)
         {
-            return await _context.Departments.FindAsync(id);
+            return _context.DepartmentCourses
+                          .Include(e => e.Course)
+                          .Include(e => e.Instructor)
+                          .Include(e => e.Department)
+                          .ThenInclude(e => e.Branch)
+                          .FirstOrDefaultAsync(e => e.CourseId == crsId && e.DepartmentId == deptId);
+        }
+
+        public ValueTask<Department?> GetByIdAsync(int id)
+        {
+            return _context.Departments.FindAsync(id);
         }
 
         public Department? GetByIdWithIncludes(int id)
@@ -124,6 +142,12 @@ namespace DataAccessLibrary.Repository
             return _context.SaveChanges();
         }
 
+        public async Task<int> AddDepartmentCoursesAsync(List<DepartmentCourse> deptCourses)
+        {
+            _context.DepartmentCourses.AddRange(deptCourses);
+            return await _context.SaveChangesAsync();
+        }
+
         public bool UpdateDeptCourseInstructor(int deptId, int crsId, int newInstId)
         {
             var deptCourse = _context.DepartmentCourses
@@ -132,6 +156,18 @@ namespace DataAccessLibrary.Repository
             {
                 deptCourse.InstructorId = newInstId;
                 return _context.SaveChanges() == 1;
+            }
+            return false;
+        }
+
+        public async Task<bool> UpdateDeptCourseInstructorAsync(int deptId, int crsId, int newInstId)
+        {
+            var deptCourse = await _context.DepartmentCourses.FirstOrDefaultAsync
+                                   (e => e.DepartmentId == deptId && e.CourseId == crsId);
+            if (deptCourse != null)
+            {
+                deptCourse.InstructorId = newInstId;
+                return await _context.SaveChangesAsync() == 1;
             }
             return false;
         }
@@ -171,6 +207,19 @@ namespace DataAccessLibrary.Repository
             return false;
         }
 
+        public async Task<bool> DeleteDeptCourseAsync(int deptId, int crsId)
+        {
+            var deptCourse = await _context.DepartmentCourses
+                   .FirstOrDefaultAsync(e => e.DepartmentId == deptId && e.CourseId == crsId);
+            if (deptCourse != null)
+            {
+                _context.DepartmentCourses.Remove(deptCourse);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> DeleteAsync(int id)
         {
             var department = _context.Departments.Find(id);
@@ -181,16 +230,6 @@ namespace DataAccessLibrary.Repository
                 return true;
             }
             return false;
-        }
-
-        public Department? Select(Expression<Func<Department, bool>> predicate)
-        {
-            return _context.Departments.Where(predicate).FirstOrDefault();
-        }
-
-        public Task<Department?> SelectAsync(Expression<Func<Department, bool>> predicate)
-        {
-            return _context.Departments.Where(predicate).FirstOrDefaultAsync();
         }
 
         public bool SetManager(int departmentId, int? instructorId)
@@ -229,6 +268,16 @@ namespace DataAccessLibrary.Repository
                 return await _context.SaveChangesAsync() == 1;
             }
             return false;
+        }
+
+        public Department? Select(Expression<Func<Department, bool>> predicate)
+        {
+            return _context.Departments.Where(predicate).FirstOrDefault();
+        }
+
+        public Task<Department?> SelectAsync(Expression<Func<Department, bool>> predicate)
+        {
+            return _context.Departments.Where(predicate).FirstOrDefaultAsync();
         }
 
         public List<Department> SelectAll(Expression<Func<Department, bool>> predicate)

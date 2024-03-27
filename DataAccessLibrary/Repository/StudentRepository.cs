@@ -50,9 +50,9 @@ namespace DataAccessLibrary.Repository
             return _context.Students.Find(id);
         }
 
-        public async Task<Student?> GetByIdAsync(int id)
+        public ValueTask<Student?> GetByIdAsync(int id)
         {
-            return await _context.Students.FindAsync(id);
+            return _context.Students.FindAsync(id);
         }
 
         public Student? GetByIdWithIncludes(int id)
@@ -203,7 +203,7 @@ namespace DataAccessLibrary.Repository
 
         public async Task<List<ExamChoices>> GetStudentAnswersAsync(int studentId, int examId)
         {
-            var student =await _context.Students
+            var student = await _context.Students
                 .Include(e => e.StudentAnswers.Where(e => e.ExamId == examId))
                 .ThenInclude(e => e.Choice)
                 .ThenInclude(e => e.Question)

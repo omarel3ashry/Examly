@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebAppProject.ViewModels
+namespace WebAppProject.Areas.Staff.ViewModels
 {
     public class AddCourseViewModel
     {

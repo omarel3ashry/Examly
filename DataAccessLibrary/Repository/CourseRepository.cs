@@ -52,9 +52,9 @@ namespace DataAccessLibrary.Repository
             return _context.Courses.Find(id);
         }
 
-        public async Task<Course?> GetByIdAsync(int id)
+        public ValueTask<Course?> GetByIdAsync(int id)
         {
-            return await _context.Courses.FindAsync(id);
+            return _context.Courses.FindAsync(id);
         }
 
         public Course? GetByIdWithIncludes(int id)
@@ -146,6 +146,19 @@ namespace DataAccessLibrary.Repository
                                                   )
                                   )
                             .ToList();
+        }
+
+        public Task<List<Course>> GetCoursesNotInDepartmentAsync(int deptId)
+        {
+            return _context.Courses
+                .Where(course => !course.IsDeleted &&
+                                 !_context.DepartmentCourses
+                                  .Any(
+                                        dc => dc.CourseId == course.Id &&
+                                        dc.DepartmentId == deptId
+                                      )
+                      )
+                .ToListAsync();
         }
 
         public Course? Select(Expression<Func<Course, bool>> predicate)

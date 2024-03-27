@@ -46,9 +46,9 @@ namespace DataAccessLibrary.Repository
             return _context.ExamsTaken.Find(examId);
         }
 
-        public async Task<ExamTaken?> GetByIdAsync(int examId)
+        public ValueTask<ExamTaken?> GetByIdAsync(int examId)
         {
-            return await _context.ExamsTaken.FindAsync(examId);
+            return _context.ExamsTaken.FindAsync(examId);
         }
 
         public ExamTaken? GetByIdWithIncludes(int examId)

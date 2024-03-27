@@ -135,9 +135,9 @@ namespace DataAccessLibrary.Repository
             return _context.Instructors.Find(id);
         }
 
-        public async Task<Instructor?> GetByIdAsync(int id)
+        public  ValueTask<Instructor?> GetByIdAsync(int id)
         {
-            return await _context.Instructors.FindAsync(id);
+            return _context.Instructors.FindAsync(id);
         }
 
         public Instructor? GetByIdWithIncludes(int id)
@@ -237,12 +237,12 @@ namespace DataAccessLibrary.Repository
 
         public Instructor? Select(Expression<Func<Instructor, bool>> predicate)
         {
-            return _context.Instructors.Where(predicate).FirstOrDefault();
+            return _context.Instructors.Where(e => !e.IsDeleted).Where(predicate).FirstOrDefault();
         }
 
         public Task<Instructor?> SelectAsync(Expression<Func<Instructor, bool>> predicate)
         {
-            return _context.Instructors.Where(predicate).FirstOrDefaultAsync();
+            return _context.Instructors.Where(e => !e.IsDeleted).Where(predicate).FirstOrDefaultAsync();
         }
 
         public List<Instructor> SelectAll(Expression<Func<Instructor, bool>> predicate)
@@ -252,7 +252,7 @@ namespace DataAccessLibrary.Repository
 
         public Task<List<Instructor>> SelectAllAsync(Expression<Func<Instructor, bool>> predicate)
         {
-            return _context.Instructors.Where(predicate).ToListAsync();
+            return _context.Instructors.Where(e => !e.IsDeleted).Where(predicate).ToListAsync();
         }
     }
 }

@@ -53,11 +53,15 @@ namespace DataAccessLibrary.Repository
                         .FirstOrDefault(e => e.Id == id);
         }
 
-        public Task<Question?> GetByIdAsync(int id)
+        public async ValueTask<Question?> GetByIdAsync(int id)
         {
-            return _context.Questions
-                            .Include(e => e.Choices)
-                            .FirstOrDefaultAsync(e => e.Id == id);
+            var question = await _context.Questions.FindAsync(id);
+            if (question != null)
+            {
+                await _context.Entry(question).Collection(e => e.Choices).LoadAsync();
+                return question;
+            }
+            return null;
         }
 
         public Question? GetByIdCourseIncluded(int id)

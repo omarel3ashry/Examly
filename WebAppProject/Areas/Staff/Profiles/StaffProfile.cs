@@ -9,24 +9,12 @@ namespace WebAppProject.Areas.Staff.Profiles
     {
         public StaffProfile()
         {
-            CreateMap<DepartmentCourse, CourseInfoViewModel>()
-                .ForMember(dest => dest.Name, src => src.MapFrom(src => src.Course.Name))
-                .ForMember(dest => dest.Description, src => src.MapFrom(src => src.Course.Description))
-                .ForMember(dest => dest.DepartmentName, src => src.MapFrom(src => src.Department.Name))
-                .ForMember(dest=>dest.InstructorName,src=>src.MapFrom(src=>src.Instructor.Name))
-                .ForMember(dest=>dest.BranchName,src=>src.MapFrom(src=>src.Department.Branch.Name))
-                .ReverseMap();
-
-            CreateMap<Department, DepartmentViewModel>()
-            .ReverseMap();
-
-            CreateMap<Course, AddCourseViewModel>()
-            .ReverseMap();
+            // instructor mapping
 
             CreateMap<DepartmentCourse, DeptCourseViewModel>()
-                .ForMember(dest => dest.CourseName, opt => opt.MapFrom(src => src.Course.Name))
-                .ForMember(dest => dest.CourseDescription, opt => opt.MapFrom(src => src.Course.Description))
-                .ForMember(dest => dest.DeptName, opt => opt.MapFrom(src => src.Department.Name));
+               .ForMember(dest => dest.CourseName, opt => opt.MapFrom(src => src.Course.Name))
+               .ForMember(dest => dest.CourseDescription, opt => opt.MapFrom(src => src.Course.Description))
+               .ForMember(dest => dest.DeptName, opt => opt.MapFrom(src => src.Department.Name));
 
             CreateMap<Choice, ChoiceViewModel>().ReverseMap();
 
@@ -53,6 +41,22 @@ namespace WebAppProject.Areas.Staff.Profiles
             CreateMap<ExamChoices, StudentAnswersViewModel>()
                 .ForMember(dest => dest.QuestionText, opt => opt.MapFrom(src => src.Question.Text))
                 .ForMember(dest => dest.QuestionGrade, opt => opt.MapFrom(src => src.Question.Grade));
+
+            // department manager mapping
+
+            CreateMap<DepartmentCourse, CourseInfoViewModel>()
+                .ForMember(dest => dest.Name, src => src.MapFrom(src => src.Course.Name))
+                .ForMember(dest => dest.Description, src => src.MapFrom(src => src.Course.Description))
+                .ForMember(dest => dest.DepartmentName, src => src.MapFrom(src => src.Department.Name))
+                .ForMember(dest=>dest.InstructorName,src=>src.MapFrom(src=>src.Instructor.Name))
+                .ForMember(dest=>dest.BranchName,src=>src.MapFrom(src=>src.Department.Branch.Name))
+                .ReverseMap();
+
+            CreateMap<Department, DepartmentViewModel>()
+                .ReverseMap();
+
+            CreateMap<Course, AddCourseViewModel>()
+                .ReverseMap();
         }
         
     }
