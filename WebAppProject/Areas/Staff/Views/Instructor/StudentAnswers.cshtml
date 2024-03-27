@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ExamChoices>
+﻿@model IEnumerable<StudentAnswersViewModel>
 @{  
     ViewData["Title"] = "E-Exam | Answers";
 }
@@ -17,7 +17,7 @@
         @foreach (var examChoice in Model)
         {
             <tr>
-                <td>@examChoice.Question.Text (@examChoice.Question.Grade)</td>
+                <td>@examChoice.QuestionText (@examChoice.QuestionGrade)</td>
                 <td class="@(examChoice.IsCorrect ? "correct" : "incorrect")">
                     @foreach (var choice in examChoice.StudentChoices)
                     {

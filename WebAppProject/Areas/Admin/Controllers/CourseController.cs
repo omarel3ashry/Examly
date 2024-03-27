@@ -1,6 +1,5 @@
-﻿using AutoMapper;
+﻿using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
-using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

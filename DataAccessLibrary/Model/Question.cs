@@ -6,7 +6,7 @@
         MCQ = 1,
         TrueFalse = 2
     }
-    public enum QDifficulty { Unspecified=0, Easy = 1, Medium = 2, Hard = 3 }
+    public enum QDifficulty { Unspecified = 0, Easy = 1, Medium = 2, Hard = 3 }
     public class Question
     {
         public int Id { get; set; }

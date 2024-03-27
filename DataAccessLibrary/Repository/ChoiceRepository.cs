@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -45,9 +46,9 @@ namespace DataAccessLibrary.Repository
             return _context.Choices.Find(id);
         }
 
-        public async Task<Choice?> GetByIdAsync(int id)
+        public ValueTask<Choice?> GetByIdAsync(int id)
         {
-            return await _context.Choices.FindAsync(id);
+            return _context.Choices.FindAsync(id);
         }
 
         public Choice? GetByIdWithIncludes(int id)

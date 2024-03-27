@@ -22,10 +22,8 @@
     <script src="/js/login.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-    }
+    <script src="~/js/site.js" asp-append-version="true"></script>   
+    <partial name="_ValidationScriptsPartial" />
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

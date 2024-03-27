@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model UserViewModel
 
 @{
     Layout = "_LoginLayout";
@@ -14,7 +14,7 @@
         <div>
             <label asp-for="Email" class="control-label"></label>
             <input asp-for="Email" class="input">
-            
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
     <div class="input-div pass">
@@ -24,7 +24,7 @@
         <div>
             <label asp-for="Password" class="control-label"></label>
             <input asp-for="Password" class="input" type="password" />
-            
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
     </div>
     

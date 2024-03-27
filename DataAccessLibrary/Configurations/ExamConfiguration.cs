@@ -1,5 +1,4 @@
-﻿using Azure;
-using DataAccessLibrary.Model;
+﻿using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

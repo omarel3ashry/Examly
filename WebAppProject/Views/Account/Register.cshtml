@@ -2,7 +2,8 @@
 
 @{
     Layout = "_LoginLayout";
-    SelectList Branches = new SelectList(ViewBag.Branches, "Id", "Name");
+    Dictionary<int, string> branches = ViewBag.Branches;
+    SelectList BranchList = new SelectList(branches.Select(x => new { Value = x.Key, Text = x.Value }),"Value","Text");
     SelectList GenderItems = new SelectList(Model.GenderOptions, "Value", "Text");
 }
 <form asp-action="Register">
@@ -88,7 +89,7 @@
         </div>
         <div class="div">
             @* <label for="branchId" >Branch </label> *@
-            <select asp-items="Branches" id="branchId" class="input">
+            <select asp-items="BranchList" id="branchId" class="input">
                 <option disabled selected>Select Branch</option>
             </select>
         </div>
@@ -112,7 +113,8 @@
   
 <script src="/lib/jquery/dist/jquery.js"></script>
 <script>
-    $("#branchId").change(function () {           
+    $("#branchId").change(function () {
+        console.log($(this).val())
         $("#DeptId").load(`/Account/Departments/${$(this).val()}`);
     })                   
 </script>

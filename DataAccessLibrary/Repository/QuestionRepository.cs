@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -52,9 +53,15 @@ namespace DataAccessLibrary.Repository
                         .FirstOrDefault(e => e.Id == id);
         }
 
-        public async Task<Question?> GetByIdAsync(int id)
+        public async ValueTask<Question?> GetByIdAsync(int id)
         {
-            return await _context.Questions.FindAsync(id);
+            var question = await _context.Questions.FindAsync(id);
+            if (question != null)
+            {
+                await _context.Entry(question).Collection(e => e.Choices).LoadAsync();
+                return question;
+            }
+            return null;
         }
 
         public Question? GetByIdCourseIncluded(int id)
@@ -65,13 +72,29 @@ namespace DataAccessLibrary.Repository
                 .FirstOrDefault(e => !e.IsDeleted && e.Id == id);
         }
 
+        public Task<Question?> GetByIdCourseIncludedAsync(int id)
+        {
+            return _context.Questions
+              .Include(e => e.Course)
+              .Include(e => e.Choices)
+              .FirstOrDefaultAsync(e => !e.IsDeleted && e.Id == id);
+        }
+
         public List<Question> GetInstQuestions(int crsId, int instId)
         {
             return _context.Questions.Where(e => !e.IsDeleted)
                                      .Where(e => e.CourseId == crsId && e.InstructorId == instId)
                                      .Include(e => e.Choices)
                                      .ToList();
-        } 
+        }
+
+        public Task<List<Question>> GetInstQuestionsAsync(int crsId, int instId)
+        {
+            return _context.Questions.Where(e => !e.IsDeleted)
+                         .Where(e => e.CourseId == crsId && e.InstructorId == instId)
+                         .Include(e => e.Choices)
+                         .ToListAsync();
+        }
 
         public List<Question> GetInstQuestions(int crsId, int instId, QDifficulty difficulty)
         {
@@ -80,6 +103,15 @@ namespace DataAccessLibrary.Repository
                                      .Where(e => e.Difficulty == difficulty)
                                      .Include(e => e.Choices)
                                      .ToList();
+        }
+
+        public Task<List<Question>> GetInstQuestionsAsync(int crsId, int instId, QDifficulty difficulty)
+        {
+            return _context.Questions.Where(e => !e.IsDeleted)
+                                .Where(e => e.CourseId == crsId && e.InstructorId == instId)
+                                .Where(e => e.Difficulty == difficulty)
+                                .Include(e => e.Choices)
+                                .ToListAsync();
         }
 
         public Question? GetByIdWithIncludes(int id)
@@ -121,7 +153,7 @@ namespace DataAccessLibrary.Repository
             if (entity != null)
             {
                 _context.Questions.Update(entity);
-                return _context.SaveChanges() == 1;
+                return _context.SaveChanges() > 0;
             }
             return false;
         }
@@ -131,7 +163,7 @@ namespace DataAccessLibrary.Repository
             if (entity != null)
             {
                 _context.Questions.Update(entity);
-                return await _context.SaveChangesAsync() == 1;
+                return await _context.SaveChangesAsync() > 0;
             }
             return false;
         }
@@ -150,7 +182,7 @@ namespace DataAccessLibrary.Repository
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var question = _context.Questions.Find(id);
+            var question = await _context.Questions.FindAsync(id);
             if (question != null)
             {
                 question.IsDeleted = true;

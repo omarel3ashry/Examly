@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using DataAccessLibrary.Repository;
+﻿using DataAccessLibrary.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppProject.Areas.Admin.ViewModels;
@@ -42,8 +42,8 @@ namespace WebAppProject.Areas.Admin.Controllers
 
         public IActionResult GetLists(int BranchId)
         {
-            var DepartmentList = departmentRepository.SelectAll(dept => dept.BranchId == BranchId&& !dept.IsDeleted).Select(e => new { e.Id, e.Name }).OrderBy(dept => dept.Name);
-            var InstructorList = instructorRepository.SelectAll(ins => ins.BranchId == BranchId&& !ins.IsDeleted).Select(e => new { e.Id, e.Name }).OrderBy(ins => ins.Name);
+            var DepartmentList = departmentRepository.SelectAll(dept => dept.BranchId == BranchId && !dept.IsDeleted).Select(e => new { e.Id, e.Name }).OrderBy(dept => dept.Name);
+            var InstructorList = instructorRepository.SelectAll(ins => ins.BranchId == BranchId && !ins.IsDeleted).Select(e => new { e.Id, e.Name }).OrderBy(ins => ins.Name);
             return Ok(new { DepartmentList, InstructorList });
         }
         public async Task<IActionResult> DepartmentManager(int branchId, int deptId)
@@ -59,7 +59,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             departmentRepository.SetManager(deptId, insId);
             return RedirectToAction("Index");
         }
-        
+
 
     }
 }

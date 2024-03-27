@@ -1,4 +1,4 @@
-﻿using DataAccessLibrary.Repository;
+﻿using DataAccessLibrary.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

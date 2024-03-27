@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using DataAccessLibrary.Interfaces;
+using AutoMapper;
 using DataAccessLibrary.Model;
-using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Core.Types;

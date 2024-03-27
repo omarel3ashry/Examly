@@ -14,11 +14,11 @@
     </thead>
     <tbody>
         @if (Model.CommingExams.Count() > 0)
-            @foreach (Exam commingExam in Model.CommingExams)
+            @foreach (var commingExam in Model.CommingExams)
             {
 
                 <tr class="examRow">
-                    <td>@commingExam.Course.Name | @commingExam.Title | @commingExam.TotalGrade</td>
+                    <td>@commingExam.CourseName | @commingExam.Title | @commingExam.TotalGrade</td>
                     <td class="datestr">@commingExam.ExamDate</td>
                     <td>
                         <a class="btn success takeBtn" asp-action="TakeExam" asp-controller="Student" asp-route-examId="@commingExam.Id">Take Exam</a>
@@ -58,11 +58,11 @@
             foreach (var examTaken in Model.ExamsTaken)
             {
                 <tr>
-                    <td>@examTaken.Exam.Course.Name | @examTaken.Exam.Title</td>
+                    <td>@examTaken.Exam.CourseName | @examTaken.Exam.Title</td>
                     <td>@examTaken.Exam.ExamDate</td>
                     <td>@examTaken.Grade/@examTaken.Exam.TotalGrade</td>
                     <td>
-                        <a class="btn info" asp-action="Answers" asp-controller="Student" asp-route-stId="@examTaken.StudentId" asp-route-examId="@examTaken.ExamId">Answers</a>
+                        <a class="btn info" asp-action="Answers" asp-controller="Student" asp-route-examId="@examTaken.ExamId">Answers</a>
                     </td>
                 </tr>
             }
@@ -88,7 +88,7 @@
             foreach (var missedExam in Model.MissedExams)
             {
                 <tr>
-                    <td>@missedExam.Course.Name | @missedExam.Title</td>
+                    <td>@missedExam.CourseName| @missedExam.Title</td>
                     <td>@missedExam.ExamDate</td>
                     <td>0/@missedExam.TotalGrade</td>
                 </tr>
