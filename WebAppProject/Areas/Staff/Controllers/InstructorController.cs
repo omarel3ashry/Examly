@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
-using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebAppProject.Areas.Staff.ViewModels;
-using WebAppProject.ViewModels;
+
 
 namespace WebAppProject.Areas.Staff.Controllers
 {
@@ -37,84 +38,74 @@ namespace WebAppProject.Areas.Staff.Controllers
             _instId = int.Parse(accessor.HttpContext!.User.Claims.FirstOrDefault(c => c.Type == "id")!.Value);
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var instructor = _instructorRepo.GetByIdWithCourses(_instId).FirstOrDefault();
+            var instructor = await _instructorRepo.GetByIdWithCourses(_instId).FirstOrDefaultAsync();
 
             if (instructor == null)
             {
                 return NotFound();
             }
-            else
-            {
-                var viewModel = instructor.DepartmentCourses;
 
-                return View(viewModel);
-            }
+            IEnumerable<DeptCourseViewModel> deptCourses =
+                _mapper.Map<IEnumerable<DeptCourseViewModel>>(instructor.DepartmentCourses);
+
+            return View(deptCourses);
         }
 
-        public IActionResult Info(int id)
+        public async Task<IActionResult> Info(int id)
         {
-            var deptCourse = _instructorRepo.GetByIdWithCourses(_instId)
+            var deptCourses = await _instructorRepo.GetByIdWithCourses(_instId)
                                 .Select(e => e.DepartmentCourses.Where(e => e.CourseId == id))
-                                .FirstOrDefault()?.ElementAt(0);
+                                .FirstOrDefaultAsync();
+            var deptCourse = deptCourses?.ElementAt(0);
 
             if (deptCourse == null)
             {
                 return NotFound();
             }
 
-            var courseInfoViewModel = _mapper.Map<CourseInfoViewModel>(deptCourse);
-            return View(courseInfoViewModel);
+            var deptCourseViewModel = _mapper.Map<DeptCourseViewModel>(deptCourse);
+            return View(deptCourseViewModel);
         }
 
-/*        public IActionResult Info(int id)
-        {
-            var deptCourse = _instructorRepo.GetByIdWithCourses(_instId)
-                                .Select(e => e.DepartmentCourses.Where(e => e.CourseId == id))
-                                .FirstOrDefault()?.ElementAt(0);
-
-            if (deptCourse == null)
-            {
-                return NotFound();
-            }
-            var courseInfo = new CourseInfo()
-            {
-                CourseName = deptCourse.Course.Name,
-                DepartmentName = deptCourse.Department.Name,
-                CourseDescription = deptCourse.Course.Description
-            };
-            return View(courseInfo);
-        }*/
-
-        public IActionResult QuestionBank(int id)
+        public async Task<IActionResult> QuestionBank(int id)
         {
             ViewBag.CourseId = id;
-            var questions = _instructorRepo.GetCourseQuestions(_instId, id);
+            var questions = await _instructorRepo.GetCourseQuestionsAsync(_instId, id);
 
             if (questions == null)
             {
                 return NotFound();
             }
 
-            return View(questions);
+            IEnumerable<QuestionViewModel> model =
+                _mapper.Map<IEnumerable<QuestionViewModel>>(questions);
+
+            return View(model);
         }
 
         [HttpGet]
-        public IActionResult AddQuestion(int id)
+        public IActionResult AddQuestion(int courseId)
         {
-            var model = new QuestionViewModel() { CourseId = id, InstructorId = _instId };
+            var model = new QuestionViewModel() { CourseId = courseId, InstructorId = _instId };
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult AddQuestion(int id, QuestionViewModel questionVM)
+        public async Task<IActionResult> AddQuestion(int courseId, QuestionViewModel questionVM)
         {
             if (ModelState.IsValid)
             {
-                var questionDto = questionVM.ToQuestionDTO();
-                _instructorRepo.AddQuestion(questionDto);
-                return RedirectToAction("QuestionBank", new { id });
+                if (questionVM.Choices.Count == 2)
+                {
+                    questionVM.Choices[0].IsCorrect = true;
+                    questionVM.Choices[1].Text = questionVM.Choices[0].Text.Equals("True") ? "False" : "True";
+                }
+
+                var questionDto = _mapper.Map<Question>(questionVM);
+                await _instructorRepo.AddQuestionAsync(questionDto);
+                return RedirectToAction("QuestionBank", new { id = courseId });
             }
 
             return View(questionVM);
@@ -143,57 +134,59 @@ namespace WebAppProject.Areas.Staff.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditQuestion(int id)
+        public async Task<IActionResult> EditQuestion(int id)
         {
-            var question = _questionRepo.GetById(id);
+            var question = await _questionRepo.GetByIdAsync(id);
             if (question == null)
             {
                 return NotFound();
             }
-
-            return View(new QuestionViewModel(question));
+            var questionViewModel = _mapper.Map<QuestionViewModel>(question);
+            return View(questionViewModel);
         }
 
         [HttpPost]
-        public IActionResult EditQuestion(QuestionViewModel questionVM)
+        public async Task<IActionResult> EditQuestion(QuestionViewModel questionVM)
         {
             if (ModelState.IsValid)
             {
-                var questioDto = questionVM.ToQuestionDTO(isNew: false);
-                _questionRepo.Update(questioDto);
+                var questionDto = _mapper.Map<Question>(questionVM);
+                await _questionRepo.UpdateAsync(questionDto);
                 return RedirectToAction("QuestionBank", new { id = questionVM.CourseId });
             }
 
             return View(questionVM);
         }
 
-        public IActionResult QuestionInfo(int id)
+        public async Task<IActionResult> QuestionInfo(int id)
         {
-            var questionDto = _questionRepo.GetByIdCourseIncluded(id);
+            var question = await _questionRepo.GetByIdCourseIncludedAsync(id);
 
-            if (questionDto == null)
+            if (question == null)
             {
                 return NotFound();
             }
-            var model = new QuestionViewModel(questionDto);
-            return View(model);
+
+            var questionViewModel = _mapper.Map<QuestionViewModel>(question);
+
+            return View(questionViewModel);
         }
 
-        public IActionResult DeleteQuestion(int id, int qId)
+        public async Task<IActionResult> DeleteQuestion(int id, int qId)
         {
-            _questionRepo.Delete(qId);
+            await _questionRepo.DeleteAsync(qId);
             return RedirectToAction("QuestionBank", new { id });
         }
 
         [HttpGet]
-        public IActionResult MakeExam(int id,int deptId)
+        public async Task<IActionResult> MakeExam(int id, int deptId)
         {
             if (id == 0)
             {
                 // TODO: user proper page
                 return NotFound();
             }
-            var questions = _questionRepo.GetInstQuestions(id, _instId);
+            var questions = await _questionRepo.GetInstQuestionsAsync(id, _instId);
             var mcqDifficultyG = questions.Where(e => e.Type == QType.MCQ)
                                       .GroupBy(q => q.Difficulty)
                                       .OrderBy(q => (int)q.Key)
@@ -226,17 +219,19 @@ namespace WebAppProject.Areas.Staff.Controllers
                 CourseId = id,
                 TotalMCQ = mcqDifficultyCounts,
                 TotalTF = tfDifficultyCounts,
-                DepartmentId=deptId
+                NoOfMCQ = new int[3],
+                NoOfTF = new int[3],
+                DepartmentId = deptId
             };
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult MakeExam(InstExamViewModel model)
+        public async Task<IActionResult> MakeExam(InstExamViewModel instExamVM)
         {
-            if (ModelState.IsValid && (model.NoOfMCQ.Sum() + model.NoOfTF.Sum() > 0))
+            if (ModelState.IsValid && (instExamVM.NoOfMCQ.Sum() + instExamVM.NoOfTF.Sum() > 0))
             {
-                var allQuestionsDto = _questionRepo.GetInstQuestions(model.CourseId, _instId);
+                var allQuestionsDto = await _questionRepo.GetInstQuestionsAsync(instExamVM.CourseId, _instId);
 
                 // Separate true/false and multiple choice questions
                 var mcqQuestionsDto = new List<Question>();
@@ -244,11 +239,11 @@ namespace WebAppProject.Areas.Staff.Controllers
 
                 for (int i = 0; i < 3; i++)
                 {
-                    if (model.NoOfMCQ[i] != 0)
+                    if (instExamVM.NoOfMCQ[i] != 0)
                     {
                         var questions = allQuestionsDto.Where(q => q.Type == QType.MCQ && q.Difficulty == (QDifficulty)(i + 1))
                                                       .OrderBy(q => _random.Next())
-                                                      .Take(model.NoOfMCQ[i])
+                                                      .Take(instExamVM.NoOfMCQ[i])
                                                       .ToList();
                         mcqQuestionsDto.AddRange(questions);
                     }
@@ -256,11 +251,11 @@ namespace WebAppProject.Areas.Staff.Controllers
 
                 for (int i = 0; i < 3; i++)
                 {
-                    if (model.NoOfTF[i] != 0)
+                    if (instExamVM.NoOfTF[i] != 0)
                     {
                         var questions = allQuestionsDto.Where(q => q.Type == QType.TrueFalse && q.Difficulty == (QDifficulty)(i + 1))
                                                       .OrderBy(q => _random.Next())
-                                                      .Take(model.NoOfTF[i])
+                                                      .Take(instExamVM.NoOfTF[i])
                                                       .ToList();
                         tfQuestionsDto.AddRange(questions);
                     }
@@ -270,8 +265,8 @@ namespace WebAppProject.Areas.Staff.Controllers
                 var examQuestions = new List<ExamQuestion>();
                 int totalGrade = 0;
 
-                Exam examDto = model.ToExamDTO();
-                int examId = _examRepo.Add(examDto);
+                Exam examDto = _mapper.Map<Exam>(instExamVM);
+                int examId = await _examRepo.AddAsync(examDto);
 
                 if (examId == 0)
                 {
@@ -285,9 +280,9 @@ namespace WebAppProject.Areas.Staff.Controllers
                     totalGrade += question.Grade;
                 }
 
-                _examRepo.UpdateTotalGrade(examId, totalGrade);
+                await _examRepo.UpdateTotalGradeAsync(examId, totalGrade);
 
-                bool questionAdded = _examRepo.AddExamQuestions(examQuestions);
+                bool questionAdded = await _examRepo.AddExamQuestionsAsync(examQuestions);
 
                 if (!questionAdded)
                 {
@@ -296,72 +291,80 @@ namespace WebAppProject.Areas.Staff.Controllers
                 }
                 return RedirectToAction("ShowExams");
             }
+            return View(instExamVM);
+        }
+
+        public async Task<IActionResult> ShowExams()
+        {
+            List<Exam> exams = await _examRepo.GetInstructorExamsAsync(_instId);
+
+            var model = _mapper.Map<ExamListsViewModel>(exams);
             return View(model);
         }
 
-        public IActionResult ShowExams()
+        public async Task<IActionResult> ExamInfo(int id)
         {
-            List<Exam> examsDto = _examRepo.GetInstructorExam(_instId);
-
-            var model = new ExamListsViewModel(examsDto);
-            return View(model);
-        }
-
-        public IActionResult ExamInfo(int id)
-        {
-            Exam? examDto = _examRepo.GetByIdWithIncludes(id);
-            if (examDto == null)
+            Exam? exam = await _examRepo.GetByIdWithIncludesAsync(id);
+            if (exam == null)
             {
                 // TODO: user proper page
                 return NotFound();
             }
-            var model = new InstExamViewModel(examDto);
-            return View(model);
+            var instExamViewModel = _mapper.Map<InstExamViewModel>(exam);
+            return View(instExamViewModel);
         }
 
         [HttpGet]
-        public IActionResult ExamEdit(int id)
+        public async Task<IActionResult> ExamEdit(int id)
         {
-            Exam? examDto = _examRepo.GetByIdWithIncludes(id);
-            if (examDto == null)
+            Exam? exam = await _examRepo.GetByIdWithIncludesAsync(id);
+            if (exam == null)
             {
                 // TODO: user proper page
                 return NotFound();
             }
-            var model = new InstExamViewModel(examDto);
-            return View(model);
+            var instExamViewModel = _mapper.Map<InstExamViewModel>(exam);
+            return View(instExamViewModel);
         }
 
         [HttpPost]
-        public IActionResult ExamEdit(InstExamViewModel model)
+        public async Task<IActionResult> ExamEdit(InstExamViewModel model)
         {
 
             if (ModelState.IsValid)
             {
-                Exam examDto = model.ToExamDTO(isNew: false);
-                bool success = _examRepo.Update(examDto);
+                Exam examDto = _mapper.Map<Exam>(model);
+                bool success = await _examRepo.UpdateAsync(examDto);
                 return success ? RedirectToAction("ShowExams") : View(model);
             }
 
             return View(model);
         }
 
-        public IActionResult ExamDelete(int id)
+        public async Task<IActionResult> ExamDelete(int id)
         {
-            _examRepo.Delete(id);
+            await _examRepo.DeleteAsync(id);
             return RedirectToAction("ShowExams");
         }
 
-        public IActionResult ExamGrades(int id)
+        public async Task<IActionResult> ExamGrades(int id)
         {
-            List<ExamTaken> examsTaken = _examRepo.GetExamGradesWithIncludes(id);
-            return View(examsTaken);
+            List<ExamTaken> examsTaken = await _examRepo.GetExamGradesWithIncludesAsync(id);
+
+            IEnumerable<ExamTakenViewModel> examsTakenVM =
+                _mapper.Map<IEnumerable<ExamTakenViewModel>>(examsTaken);
+
+            return View(examsTakenVM);
         }
 
-        public IActionResult StudentAnswers(int examId, int stdId)
+        public async Task<IActionResult> StudentAnswers(int examId, int stdId)
         {
-            var model = _studentRepo.GetStudentAnswers(stdId, examId);
-            return View(model);
+            List<ExamChoices> studentAnswers = await _studentRepo.GetStudentAnswersAsync(stdId, examId);
+
+            IEnumerable<StudentAnswersViewModel> studentAnswersVM =
+                _mapper.Map<IEnumerable<StudentAnswersViewModel>>(studentAnswers);
+
+            return View(studentAnswersVM);
         }
     }
 }

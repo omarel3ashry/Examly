@@ -1,7 +1,6 @@
-﻿using DataAccessLibrary.Model;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
-namespace DataAccessLibrary.Repository
+namespace DataAccessLibrary.Interfaces
 {
     public interface IRepository<T> where T : class
     {
@@ -10,7 +9,7 @@ namespace DataAccessLibrary.Repository
         public List<T> GetAllWithIncludes();
         public Task<List<T>> GetAllWithIncludesAsync();
         public T? GetById(int id);
-        public Task<T?> GetByIdAsync(int id);
+        public ValueTask<T?> GetByIdAsync(int id);
         public T? GetByIdWithIncludes(int id);
         public Task<T?> GetByIdWithIncludesAsync(int id);
         public int Add(T entity);

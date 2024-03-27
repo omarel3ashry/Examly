@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,12 +29,12 @@ namespace DataAccessLibrary.Repository
 
         public User? CheckUser(string email, string password)
         {
-            return _context.Users.Include(a=>a.Role).FirstOrDefault(e => e.Email == email && e.Password == password);
+            return _context.Users.Include(a => a.Role).FirstOrDefault(e => e.Email == email && e.Password == password);
         }
 
         public Task<User?> CheckUserAsync(string email, string password)
         {
-            return _context.Users.FirstOrDefaultAsync(e => e.Email == email && e.Password == password);
+            return _context.Users.Include(a => a.Role).FirstOrDefaultAsync(e => e.Email == email && e.Password == password);
         }
 
         public User? GetByEmail(string email)

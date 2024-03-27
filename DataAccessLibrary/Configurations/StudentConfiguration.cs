@@ -34,7 +34,7 @@ namespace DataAccessLibrary.Configurations
                 .HasForeignKey(e => e.DepartmentId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasOne(e=>e.User)
+            builder.HasOne(e => e.User)
                 .WithOne(e => e.Student)
                 .HasForeignKey<Student>(e => e.UserId)
                 .OnDelete(DeleteBehavior.SetNull);
