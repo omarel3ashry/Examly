@@ -82,7 +82,7 @@ namespace WebAppProject.Controllers
         {
             int grade = 0;
             studentRepository.AddStudentAnswers(examId, _stdId, mcqChoices.Concat(tfChoices).ToList());
-            List<ExamChoices> examChoices = studentRepository.GetStudentAnswers(_stdId, examId);
+            List<ExamChoices> examChoices = await studentRepository.GetStudentAnswersAsync(_stdId, examId);
             foreach (var examChoice in examChoices)
                 if (examChoice.IsCorrect)
                     grade += examChoice.Question.Grade;
@@ -94,7 +94,7 @@ namespace WebAppProject.Controllers
         public async Task<IActionResult> Answers(int examId)
         {
             var examTaken = await examTakenRepository.GetByStudentIdWithIncludesAsync(_stdId);
-            var model = studentRepository.GetStudentAnswers(_stdId, examId);
+            var model = await studentRepository.GetStudentAnswersAsync(_stdId, examId);
             if (examTaken == null || model == null)
             {
                 return NotFound();

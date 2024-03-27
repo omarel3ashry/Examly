@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataAccessLibrary.Model;
+using WebAppProject.ViewModels;
 using WebAppProject.Areas.Staff.ViewModels;
 
 
@@ -34,13 +35,9 @@ namespace WebAppProject.Areas.Staff.Profiles
                 .ForMember(dest => dest.PastExams,
                            opt => opt.MapFrom(src => src.Where(e => e.ExamDate <= DateTime.Now)));
 
-            CreateMap<ExamTaken, ExamTakenViewModel>()
+            CreateMap<ExamTaken, StaffExamTakenViewModel>()
                 .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.Student.Name))
                 .ForMember(dest => dest.ExamTitle, opt => opt.MapFrom(src => src.Exam.Title));
-
-            CreateMap<ExamChoices, StudentAnswersViewModel>()
-                .ForMember(dest => dest.QuestionText, opt => opt.MapFrom(src => src.Question.Text))
-                .ForMember(dest => dest.QuestionGrade, opt => opt.MapFrom(src => src.Question.Grade));
 
             // department manager mapping
 
@@ -52,7 +49,7 @@ namespace WebAppProject.Areas.Staff.Profiles
                 .ForMember(dest=>dest.BranchName,src=>src.MapFrom(src=>src.Department.Branch.Name))
                 .ReverseMap();
 
-            CreateMap<Department, DepartmentViewModel>()
+            CreateMap<Department, StaffDepartmentViewModel>()
                 .ReverseMap();
 
             CreateMap<Course, AddCourseViewModel>()

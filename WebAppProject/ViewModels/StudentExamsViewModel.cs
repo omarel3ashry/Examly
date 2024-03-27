@@ -1,6 +1,4 @@
-﻿using DataAccessLibrary.Model;
-
-namespace WebAppProject.ViewModels
+﻿namespace WebAppProject.ViewModels
 {
     public class StudentExamsViewModel
     {

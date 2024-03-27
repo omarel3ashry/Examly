@@ -10,6 +10,6 @@ namespace WebAppProject.Areas.Admin.ViewModels
         public IEnumerable<InstructorViewModel> Instructors { get; } = new List<InstructorViewModel>();
 
         public int DepartmentId { get; set; }
-        public IEnumerable<DepartmentViewModel> Departments { get; } = new List<DepartmentViewModel>();
+        public IEnumerable<AdminDepartmentViewModel> Departments { get; } = new List<AdminDepartmentViewModel>();
     }
 }

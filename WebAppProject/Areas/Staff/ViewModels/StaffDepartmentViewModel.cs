@@ -2,7 +2,7 @@
 
 namespace WebAppProject.Areas.Staff.ViewModels
 {
-    public class DepartmentViewModel
+    public class StaffDepartmentViewModel
     {
         public int Id { get; set; }
 
@@ -12,7 +12,6 @@ namespace WebAppProject.Areas.Staff.ViewModels
 
         public string Name { get; set; }
 
-        //public IEnumerable <CourseInfoViewModel> DepartmentCourse { get; set; }
         public ICollection<CourseInfoViewModel> DepartmentCourses { get; } = new List<CourseInfoViewModel>();
 
 

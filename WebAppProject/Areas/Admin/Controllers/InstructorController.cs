@@ -1,10 +1,9 @@
-﻿using DataAccessLibrary.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppProject.Areas.Admin.ViewModels;
-using WebAppProject.ViewModels;
 
 namespace WebAppProject.Areas.Admin.Controllers
 {

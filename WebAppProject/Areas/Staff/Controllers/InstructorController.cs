@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAppProject.Areas.Staff.ViewModels;
+using WebAppProject.ViewModels;
 
 
 namespace WebAppProject.Areas.Staff.Controllers
@@ -351,8 +352,8 @@ namespace WebAppProject.Areas.Staff.Controllers
         {
             List<ExamTaken> examsTaken = await _examRepo.GetExamGradesWithIncludesAsync(id);
 
-            IEnumerable<ExamTakenViewModel> examsTakenVM =
-                _mapper.Map<IEnumerable<ExamTakenViewModel>>(examsTaken);
+            IEnumerable<StaffExamTakenViewModel> examsTakenVM =
+                _mapper.Map<IEnumerable<StaffExamTakenViewModel>>(examsTaken);
 
             return View(examsTakenVM);
         }

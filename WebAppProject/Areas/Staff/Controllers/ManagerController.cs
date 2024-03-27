@@ -42,7 +42,7 @@ namespace WebAppProject.Areas.Staff.Controllers
             {
                 return NotFound();
             }
-            var departmentviewmodel = _mapper.Map<DepartmentViewModel>(department);
+            var departmentviewmodel = _mapper.Map<StaffDepartmentViewModel>(department);
 
             return View(departmentviewmodel);
         }

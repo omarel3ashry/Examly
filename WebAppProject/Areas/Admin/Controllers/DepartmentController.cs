@@ -1,12 +1,9 @@
-﻿using DataAccessLibrary.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
-using System.Diagnostics;
 using WebAppProject.Areas.Admin.ViewModels;
-using WebAppProject.ViewModels;
 
 
 
@@ -37,7 +34,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             Department? department = await departmentRepository.GetByIdWithIncludesAsync(Id);
             if (department != null)
             {
-                var model = _mapper.Map<DepartmentViewModel>(department);
+                var model = _mapper.Map<AdminDepartmentViewModel>(department);
                 actionResult = View(model);
             }
             else
@@ -117,7 +114,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             Department? department = await departmentRepository.GetByIdWithIncludesAsync(Id);
             if (department != null)
             {
-                var model = _mapper.Map<DepartmentViewModel>(department);
+                var model = _mapper.Map<AdminDepartmentViewModel>(department);
                 actionResult = View(model);
             }
             else
@@ -127,7 +124,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             return actionResult;
         }
         [HttpPost]
-        public async Task<IActionResult> Delete(DepartmentViewModel model)
+        public async Task<IActionResult> Delete(AdminDepartmentViewModel model)
         {
             IActionResult actionResult;
             Department? department = await departmentRepository.GetByIdWithIncludesAsync(model.Id);

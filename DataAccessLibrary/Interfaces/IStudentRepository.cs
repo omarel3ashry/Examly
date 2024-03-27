@@ -6,7 +6,6 @@ namespace DataAccessLibrary.Interfaces
     {
         public Student? GetByUserId(int userId);
         public Task<Student?> GetByUserIdAsync(int userId);
-        public List<ExamChoices> GetStudentAnswers(int studentId, int examId);
         public Task<List<ExamChoices>> GetStudentAnswersAsync(int studentId, int examId);
         public void AddStudentAnswers(int examId, int studentId, List<Choice> choices);
     }

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace WebAppProject.Areas.Admin.ViewModels
+﻿namespace WebAppProject.Areas.Admin.ViewModels
 {
     public class InstructorViewModel
     {

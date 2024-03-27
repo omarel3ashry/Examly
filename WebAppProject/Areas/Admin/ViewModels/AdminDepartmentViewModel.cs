@@ -1,9 +1,8 @@
-﻿using DataAccessLibrary.Model;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WebAppProject.Areas.Admin.ViewModels
 {
-    public class DepartmentViewModel
+    public class AdminDepartmentViewModel
     {
         public int Id { get; set; }
 

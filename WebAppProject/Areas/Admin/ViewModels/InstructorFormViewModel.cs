@@ -1,9 +1,7 @@
-﻿using DataAccessLibrary.Model;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using WebAppProject.Areas.Admin.ViewModels;
 
-namespace WebAppProject.ViewModels
+namespace WebAppProject.Areas.Admin.ViewModels
 {
     public class InstructorFormViewModel
     {

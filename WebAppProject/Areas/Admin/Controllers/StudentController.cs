@@ -1,6 +1,9 @@
-﻿using DataAccessLibrary.Interfaces;
+﻿using AutoMapper;
+using DataAccessLibrary.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebAppProject.Areas.Admin.ViewModels;
+using WebAppProject.ViewModels;
 
 namespace WebAppProject.Areas.Admin.Controllers
 {
@@ -12,35 +15,43 @@ namespace WebAppProject.Areas.Admin.Controllers
         private readonly IDepartmentRepository departmentRepository;
         private readonly IStudentRepository studentRepository;
         private readonly IBranchRepository branchRepository;
-        private readonly IExamTakenRepository examTaken;
+        private readonly IExamTakenRepository examTakenRepo;
+        private readonly IMapper _mapper;
 
         public StudentController(IInstructorRepository instructorRepository,
             IDepartmentRepository departmentRepository,
             IStudentRepository studentRepository,
             IBranchRepository branchRepository,
-            IExamTakenRepository examTaken)
+            IExamTakenRepository examTakenRepo,
+            IMapper mapper)
         {
             this.instructorRepository = instructorRepository;
             this.departmentRepository = departmentRepository;
             this.studentRepository = studentRepository;
             this.branchRepository = branchRepository;
-            this.examTaken = examTaken;
+            this.examTakenRepo = examTakenRepo;
+            _mapper = mapper;
         }
-        public IActionResult Index(int deptId)
+        public async Task<IActionResult> Index(int deptId)
         {
-            var model = studentRepository.SelectAll(st => !st.IsDeleted && st.DepartmentId == deptId);
+            var students = await studentRepository.SelectAllAsync(st => !st.IsDeleted && st.DepartmentId == deptId);
+            var model = _mapper.Map<IEnumerable<StudentViewModel>>(students);
             return View(model);
         }
-        public IActionResult Grades(int stId)
+        public async Task<IActionResult> Grades(int stId)
         {
-            var deptId = studentRepository.GetById(stId)?.DepartmentId;
-            var model = examTaken.GetAllByStudentIdWithIncludes(stId);
+            var department = await studentRepository.GetByIdAsync(stId);
+            var deptId = department?.DepartmentId;
+            var examsTaken = await examTakenRepo.GetAllByStudentIdWithIncludesAsync(stId);
+            IEnumerable<AdminExamTakenViewModel> model =
+                _mapper.Map<IEnumerable<AdminExamTakenViewModel>>(examsTaken);
             ViewBag.DeptId = deptId ?? 0;
             return View(model);
         }
-        public IActionResult Answers(int stId, int examId)
+        public async Task<IActionResult> Answers(int stId, int examId)
         {
-            var model = studentRepository.GetStudentAnswers(stId, examId);
+            var studentAnswers = await studentRepository.GetStudentAnswersAsync(stId, examId);
+            var model = _mapper.Map<IEnumerable<StudentAnswersViewModel>>(studentAnswers);
             ViewBag.StId = stId;
             return View(model);
         }
