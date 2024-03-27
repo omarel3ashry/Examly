@@ -10,6 +10,6 @@ namespace WebAppProject.ViewModels
         public int DurationInMinutes { get; set; }
         public int? TotalGrade { get; set; }
         public string CourseName { get; set; }
-        public ICollection<QuestionViewModel> Questions { get; set; }= new HashSet<QuestionViewModel>();
+        public ICollection<QuestionViewModel> Questions { get; set; } = new HashSet<QuestionViewModel>();
     }
 }

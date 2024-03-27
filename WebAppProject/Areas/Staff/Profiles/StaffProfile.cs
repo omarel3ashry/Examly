@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DataAccessLibrary.Model;
-using WebAppProject.ViewModels;
 using WebAppProject.Areas.Staff.ViewModels;
+using WebAppProject.ViewModels;
 
 
 namespace WebAppProject.Areas.Staff.Profiles
@@ -45,8 +45,8 @@ namespace WebAppProject.Areas.Staff.Profiles
                 .ForMember(dest => dest.Name, src => src.MapFrom(src => src.Course.Name))
                 .ForMember(dest => dest.Description, src => src.MapFrom(src => src.Course.Description))
                 .ForMember(dest => dest.DepartmentName, src => src.MapFrom(src => src.Department.Name))
-                .ForMember(dest=>dest.InstructorName,src=>src.MapFrom(src=>src.Instructor.Name))
-                .ForMember(dest=>dest.BranchName,src=>src.MapFrom(src=>src.Department.Branch.Name))
+                .ForMember(dest => dest.InstructorName, src => src.MapFrom(src => src.Instructor.Name))
+                .ForMember(dest => dest.BranchName, src => src.MapFrom(src => src.Department.Branch.Name))
                 .ReverseMap();
 
             CreateMap<Department, StaffDepartmentViewModel>()
@@ -55,6 +55,6 @@ namespace WebAppProject.Areas.Staff.Profiles
             CreateMap<Course, AddCourseViewModel>()
                 .ReverseMap();
         }
-        
+
     }
 }

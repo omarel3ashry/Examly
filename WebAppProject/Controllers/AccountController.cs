@@ -42,10 +42,10 @@ namespace WebAppProject.Controllers
             return View(model);
         }
         public async Task<IActionResult> CheckEmail(string Email)
-        {          
+        {
             var st = await userRepository.GetByEmailAsync(Email);
-            bool valid;       
-            valid= st == null ? true : false;
+            bool valid;
+            valid = st == null ? true : false;
             return Json(valid);
         }
 
@@ -55,7 +55,7 @@ namespace WebAppProject.Controllers
             if (ModelState.IsValid)
             {
                 User user = new User { Email = registerInfo.Email, Password = registerInfo.Password, RoleId = 4 };
-                int userId =await userRepository.AddAsync(user);
+                int userId = await userRepository.AddAsync(user);
                 Student student = new Student
                 {
                     Name = registerInfo.Name,
@@ -77,7 +77,7 @@ namespace WebAppProject.Controllers
 
         public async Task<IActionResult> Departments(int id)
         {
-            var depts =await departmentRepository.SelectAllAsync(dept => dept.BranchId == id && !dept.IsDeleted);
+            var depts = await departmentRepository.SelectAllAsync(dept => dept.BranchId == id);
             var model = mapper.Map<IList<DepartmentViewModel>>(depts);
             return PartialView(model);
         }

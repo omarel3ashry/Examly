@@ -46,9 +46,9 @@ namespace DataAccessLibrary.Repository
             return _context.Branches.Find(id);
         }
 
-        public  ValueTask<Branch?> GetByIdAsync(int id)
+        public ValueTask<Branch?> GetByIdAsync(int id)
         {
-            return  _context.Branches.FindAsync(id);
+            return _context.Branches.FindAsync(id);
         }
 
         public Branch? GetByIdWithIncludes(int id)

@@ -13,7 +13,6 @@ namespace WebAppProject.Areas.Admin.Controllers
     [Area(areaName: "Admin")]
     public class BranchController : Controller
     {
-
         private readonly IBranchRepository branchRepository;
         private readonly IMapper _mapper;
 
@@ -133,7 +132,5 @@ namespace WebAppProject.Areas.Admin.Controllers
             return actionResult;
 
         }
-
-
     }
 }

@@ -10,7 +10,7 @@ namespace WebAppProject.Areas.Admin.ViewModels
         [MinLength(3, ErrorMessage = "Name must be at least 3 characters.")]
         [RegularExpression(@"[a-zA-Z- ]+", ErrorMessage = "Name must contain only characters")]
         public string Name { get; set; }
-        
+
         [RegularExpression(@"^[\w-]+(\.[\w-]+)*@([\w -]+\.)+[a-zA-Z]{2,7}$", ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
         [MinLength(4, ErrorMessage = "Password must be at least 4 characters.")]
@@ -26,7 +26,7 @@ namespace WebAppProject.Areas.Admin.ViewModels
         //[Required(ErrorMessage = "You must select gender.")]
         public string Gender { get; set; }
 
-        [Range(22,80, ErrorMessage = "Age must be at between 22 and 80.")]
+        [Range(22, 80, ErrorMessage = "Age must be at between 22 and 80.")]
         public int Age { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "You must select Branch first.")]

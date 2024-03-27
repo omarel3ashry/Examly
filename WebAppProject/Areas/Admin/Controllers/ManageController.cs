@@ -1,5 +1,5 @@
-﻿using DataAccessLibrary.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using DataAccessLibrary.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAppProject.Areas.Admin.ViewModels;
@@ -31,6 +31,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             this.examTaken = examTaken;
             _mapper = mapper;
         }
+
         public async Task<IActionResult> Index()
         {
             var branches = await branchRepository.GetAllAsync();
@@ -40,12 +41,15 @@ namespace WebAppProject.Areas.Admin.Controllers
             return View(model);
         }
 
-        public IActionResult GetLists(int BranchId)
+        public async Task<IActionResult> GetLists(int BranchId)
         {
-            var DepartmentList = departmentRepository.SelectAll(dept => dept.BranchId == BranchId && !dept.IsDeleted).Select(e => new { e.Id, e.Name }).OrderBy(dept => dept.Name);
-            var InstructorList = instructorRepository.SelectAll(ins => ins.BranchId == BranchId && !ins.IsDeleted).Select(e => new { e.Id, e.Name }).OrderBy(ins => ins.Name);
-            return Ok(new { DepartmentList, InstructorList });
+            var departmentQuery = await departmentRepository.SelectAllAsync(dept => dept.BranchId == BranchId);
+            var departmentList = departmentQuery.Select(e => new { e.Id, e.Name }).OrderBy(dept => dept.Name);
+            var instructorQuery = await instructorRepository.SelectAllAsync(ins => ins.BranchId == BranchId);
+            var instructorList = instructorQuery.Select(e => new { e.Id, e.Name }).OrderBy(ins => ins.Name);
+            return Ok(new { departmentList, instructorList });
         }
+
         public async Task<IActionResult> DepartmentManager(int branchId, int deptId)
         {
             ViewBag.DepartmentId = deptId;
@@ -53,13 +57,12 @@ namespace WebAppProject.Areas.Admin.Controllers
             var model = _mapper.Map<IEnumerable<InstructorViewModel>>(instructors);
             return PartialView(model);
         }
-        public IActionResult AssignManager(int deptId, int insId)
+
+        public async Task<IActionResult> AssignManager(int deptId, int insId)
         {
 
-            departmentRepository.SetManager(deptId, insId);
+            await departmentRepository.SetManagerAsync(deptId, insId);
             return RedirectToAction("Index");
         }
-
-
     }
 }

@@ -56,10 +56,10 @@ namespace WebAppProject.Areas.Admin.Controllers
             return View(model);
         }
 
-        public IActionResult Delete(int stId)
+        public async Task<IActionResult> Delete(int stId)
         {
-            var student = studentRepository.GetById(stId);
-            studentRepository.Delete(stId);
+            var student = await studentRepository.GetByIdAsync(stId);
+            await studentRepository.DeleteAsync(stId);
             return student != null ? RedirectToAction("Index", new { deptId = student.DepartmentId }) : BadRequest();
         }
     }

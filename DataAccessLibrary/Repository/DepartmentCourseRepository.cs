@@ -32,6 +32,15 @@ namespace DataAccessLibrary.Repository
                 .ToList();
         }
 
+        public Task<List<Course>> GetCoursesByDeptIdWithIncludesAsync(int deptId)
+        {
+            return _context.DepartmentCourses.Where(e => e.DepartmentId == deptId)
+                .Include(e => e.Course)
+                .ThenInclude(e => e.Exams)
+                .Select(e => e.Course)
+                .ToListAsync();
+        }
+
         public DepartmentCourse? GetByDeptAndCrsIdWithIncludes(int crsId, int deptId)
         {
             return _context.DepartmentCourses
@@ -41,13 +50,13 @@ namespace DataAccessLibrary.Repository
                             .FirstOrDefault(e => e.CourseId == crsId && e.DepartmentId == deptId);
         }
 
-        public Task<DepartmentCourse?> GetByDeptAndCrsIdWithIncludesAsync(int crsId,int deptId)
+        public Task<DepartmentCourse?> GetByDeptAndCrsIdWithIncludesAsync(int crsId, int deptId)
         {
             return _context.DepartmentCourses
                             .Include(e => e.Course)
                             .Include(e => e.Instructor)
                             .Include(e => e.Department)
-                            .FirstOrDefaultAsync(e => e.CourseId == crsId&&e.DepartmentId==deptId);
+                            .FirstOrDefaultAsync(e => e.CourseId == crsId && e.DepartmentId == deptId);
         }
     }
 }

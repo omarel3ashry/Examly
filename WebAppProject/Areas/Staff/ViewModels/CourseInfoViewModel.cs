@@ -5,9 +5,9 @@ namespace WebAppProject.Areas.Staff.ViewModels
 {
     public class CourseInfoViewModel
     {
-        
+
         public int CourseId { get; set; }
-        [Required(ErrorMessage = "The cours ename is required.")]        
+        [Required(ErrorMessage = "The cours ename is required.")]
         public string Name { get; set; }
         [Required(ErrorMessage = "The department name is required.")]
         [MinLength(2, ErrorMessage = "Name must be 2 characters or more.")]

@@ -135,7 +135,7 @@ namespace DataAccessLibrary.Repository
             return _context.Instructors.Find(id);
         }
 
-        public  ValueTask<Instructor?> GetByIdAsync(int id)
+        public ValueTask<Instructor?> GetByIdAsync(int id)
         {
             return _context.Instructors.FindAsync(id);
         }

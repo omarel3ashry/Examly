@@ -1,5 +1,5 @@
-﻿using DataAccessLibrary.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,6 @@ namespace WebAppProject.Areas.Staff.Controllers
         private readonly ICourseRepository _courseRepo;
         private readonly IMapper _mapper;
         private readonly int _managerId;
-
 
         public ManagerController(IInstructorRepository instructorRepo,
                                      IDepartmentRepository deptRepo,

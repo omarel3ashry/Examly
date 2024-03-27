@@ -24,10 +24,12 @@ namespace WebAppProject.Areas.Admin.Controllers
             this.branchRepository = branchRepository;
             _mapper = mapper;
         }
+
         public IActionResult Index()
         {
             return View();
         }
+
         public async Task<IActionResult> Details(int Id)
         {
             IActionResult actionResult;
@@ -70,7 +72,6 @@ namespace WebAppProject.Areas.Admin.Controllers
             }
             return actionResult;
         }
-
         public async Task<IActionResult> Edit(int Id)
         {
             IActionResult actionResult;
@@ -89,6 +90,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             }
             return actionResult;
         }
+
         [HttpPost]
         public async Task<IActionResult> Edit(DepartmentFormViewModel model)
         {
@@ -123,6 +125,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             }
             return actionResult;
         }
+
         [HttpPost]
         public async Task<IActionResult> Delete(AdminDepartmentViewModel model)
         {
@@ -139,7 +142,5 @@ namespace WebAppProject.Areas.Admin.Controllers
             }
             return actionResult;
         }
-
-
     }
 }

@@ -17,6 +17,7 @@ namespace WebAppProject.Controllers
         private readonly IExamRepository examRepository;
         private readonly IMapper mapper;
         private readonly int _stdId;
+
         public StudentController(IStudentRepository studentRepository,
                                  IDepartmentCourseRepository departmentCourseRepository,
                                  IExamTakenRepository examTakenRepository,
@@ -37,7 +38,8 @@ namespace WebAppProject.Controllers
         {
 
             Student? st = await studentRepository.GetByIdAsync(_stdId);
-            var courses= departmentCourseRepository.GetCoursesByDeptIdWithIncludes(st!.DepartmentId!.Value)!;
+            var courses = await departmentCourseRepository
+                                    .GetCoursesByDeptIdWithIncludesAsync(st!.DepartmentId!.Value)!;
             var model = mapper.Map<IList<CourseViewModel>>(courses);
             return View(model);
         }
@@ -45,7 +47,7 @@ namespace WebAppProject.Controllers
         public async Task<IActionResult> Exams()
         {
             Student? st = await studentRepository.GetByIdAsync(_stdId);
-            var departmentExams = await examRepository.GetDeptExamsAsync(st!.DepartmentId!.Value);          
+            var departmentExams = await examRepository.GetDeptExamsAsync(st!.DepartmentId!.Value);
             var ExamsTaken = await examTakenRepository.GetAllByStudentIdWithIncludesAsync(_stdId);
             var passedExams = ExamsTaken.Select(e => e.Exam).ToList();
             var CommingExams = new List<Exam>();
@@ -58,8 +60,8 @@ namespace WebAppProject.Controllers
                         MissedExams.Add(exam);
             var model = new StudentExamsViewModel();
             model.CommingExams = mapper.Map<IList<ExamViewModel>>(CommingExams).ToList();
-            model.ExamsTaken= mapper.Map<IList<ExamTakenViewModel>>(ExamsTaken).ToList();
-            model.MissedExams= mapper.Map<IList<ExamViewModel>>(MissedExams).ToList();
+            model.ExamsTaken = mapper.Map<IList<ExamTakenViewModel>>(ExamsTaken).ToList();
+            model.MissedExams = mapper.Map<IList<ExamViewModel>>(MissedExams).ToList();
             return View(model);
         }
 
@@ -68,8 +70,8 @@ namespace WebAppProject.Controllers
             Student? st = await studentRepository.GetByIdAsync(_stdId);
             var exam = await examRepository.GetByIdWithIncludesAsync(examId)!;
             if (exam != null)
-            {           
-                var departmentCourse= await departmentCourseRepository.GetByDeptAndCrsIdWithIncludesAsync(exam.CourseId, st!.DepartmentId!.Value)!;
+            {
+                var departmentCourse = await departmentCourseRepository.GetByDeptAndCrsIdWithIncludesAsync(exam.CourseId, st!.DepartmentId!.Value)!;
                 var model = new TakeExamViewModel();
                 model.Exam = mapper.Map<ExamViewModel>(exam);
                 model.DepartmentCourse = mapper.Map<DepartmentCourseViewModel>(departmentCourse);
@@ -77,11 +79,12 @@ namespace WebAppProject.Controllers
             }
             return RedirectToAction("Exams");
         }
+
         [HttpPost]
         public async Task<IActionResult> SubmitExam(List<Choice> mcqChoices, List<Choice> tfChoices, int examId)
         {
             int grade = 0;
-            studentRepository.AddStudentAnswers(examId, _stdId, mcqChoices.Concat(tfChoices).ToList());
+            await studentRepository.AddStudentAnswersAsync(examId, _stdId, mcqChoices.Concat(tfChoices).ToList());
             List<ExamChoices> examChoices = await studentRepository.GetStudentAnswersAsync(_stdId, examId);
             foreach (var examChoice in examChoices)
                 if (examChoice.IsCorrect)
@@ -94,11 +97,13 @@ namespace WebAppProject.Controllers
         public async Task<IActionResult> Answers(int examId)
         {
             var examTaken = await examTakenRepository.GetByStudentIdWithIncludesAsync(_stdId);
-            var model = await studentRepository.GetStudentAnswersAsync(_stdId, examId);
-            if (examTaken == null || model == null)
+            var studentAnswers = await studentRepository.GetStudentAnswersAsync(_stdId, examId);
+            if (examTaken == null || studentAnswers == null)
             {
                 return NotFound();
             }
+            IEnumerable<StudentAnswersViewModel> model =
+                    mapper.Map<IEnumerable<StudentAnswersViewModel>>(studentAnswers);
             ViewBag.StudentGrade = examTaken.Grade;
             ViewBag.TotalGrade = examTaken.Exam.TotalGrade;
             return View(model);

@@ -133,7 +133,7 @@ namespace DataAccessLibrary.Repository
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var student = _context.Students.Find(id);
+            var student = await _context.Students.FindAsync(id);
             if (student != null)
             {
                 student.IsDeleted = true;
@@ -209,6 +209,18 @@ namespace DataAccessLibrary.Repository
                 _context.StudentAnswers.Add(studentAnswer);
             }
             _context.SaveChanges();
+        }
+
+        public async Task<bool> AddStudentAnswersAsync(int examId, int studentId, List<Choice> choices)
+        {
+            var studentAnswers = new List<StudentAnswer>();
+            foreach (Choice choice in choices)
+            {
+                StudentAnswer studentAnswer = new StudentAnswer { ExamId = examId, StudentId = studentId, ChoiceId = choice.Id };
+                studentAnswers.Add(studentAnswer);
+            }
+            await _context.StudentAnswers.AddRangeAsync(studentAnswers);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

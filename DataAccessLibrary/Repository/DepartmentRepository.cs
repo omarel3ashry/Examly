@@ -260,12 +260,26 @@ namespace DataAccessLibrary.Repository
 
         public async Task<bool> SetManagerAsync(int departmentId, int? instructorId)
         {
-            var department = _context.Departments.Find(departmentId);
+            var department = await _context.Departments.FindAsync(departmentId);
             if (department != null)
             {
+                var ins = await _context.Instructors.Include(e => e.User).FirstOrDefaultAsync(e => e.Id == instructorId && !e.IsDeleted);
+                if (ins != null)
+                    ins.User.RoleId = 2;
+                if (department.ManagerId != null)
+                {
+                    var oldManager = await _context.Instructors.FirstOrDefaultAsync(e => e.Id == department.ManagerId);
+                    var oldManagerUserID = oldManager?.UserId;
+                    if (oldManagerUserID != null)
+                    {
+                        var u = await _context.Users.FirstOrDefaultAsync(e => e.Id == oldManagerUserID);
+                        if (u != null)
+                            u.RoleId = 3;
+                    }
+                }
                 department.ManagerId = instructorId;
                 department.HireDate = DateTime.Now;
-                return await _context.SaveChangesAsync() == 1;
+                return await _context.SaveChangesAsync() > 1;
             }
             return false;
         }
@@ -282,12 +296,12 @@ namespace DataAccessLibrary.Repository
 
         public List<Department> SelectAll(Expression<Func<Department, bool>> predicate)
         {
-            return _context.Departments.Where(predicate).ToList();
+            return _context.Departments.Where(e => !e.IsDeleted).Where(predicate).ToList();
         }
 
         public Task<List<Department>> SelectAllAsync(Expression<Func<Department, bool>> predicate)
         {
-            return _context.Departments.Where(predicate).ToListAsync();
+            return _context.Departments.Where(e => !e.IsDeleted).Where(predicate).ToListAsync();
         }
     }
 }

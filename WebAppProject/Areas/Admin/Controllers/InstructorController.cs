@@ -25,10 +25,12 @@ namespace WebAppProject.Areas.Admin.Controllers
             this.userRepository = userRepository;
             _mapper = mapper;
         }
+
         public IActionResult Index()
         {
             return View();
         }
+
         public async Task<IActionResult> Details(int Id)
         {
             IActionResult actionResult;
@@ -44,6 +46,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             }
             return actionResult;
         }
+
         public async Task<IActionResult> Create()
         {
             List<Branch> branches = await branchRepository.GetAllAsync();
@@ -52,6 +55,7 @@ namespace WebAppProject.Areas.Admin.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(InstructorFormViewModel model)
         {
@@ -128,6 +132,7 @@ namespace WebAppProject.Areas.Admin.Controllers
             }
             return actionResult;
         }
+
         [HttpPost]
         public async Task<IActionResult> Delete(InstructorViewModel model)
         {
@@ -145,5 +150,4 @@ namespace WebAppProject.Areas.Admin.Controllers
             return actionResult;
         }
     }
-
 }
