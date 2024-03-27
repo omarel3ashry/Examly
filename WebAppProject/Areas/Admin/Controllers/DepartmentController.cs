@@ -104,7 +104,9 @@ namespace WebAppProject.Areas.Admin.Controllers
             }
             else
             {
-                actionResult = RedirectToAction("Edit", model.Id);
+                var branches = await branchRepository.GetAllAsync();
+                model.Branches = _mapper.Map<List<BranchViewModel>>(branches);
+                actionResult = View(model);
             }
             return actionResult;
         }

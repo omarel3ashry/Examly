@@ -1,16 +1,15 @@
-﻿using DataAccessLibrary.Model;
-
+﻿
 namespace WebAppProject.Areas.Admin.ViewModels
 {
     public class DashboardViewModel
     {
         public int BranchId { get; set; }
-        public IEnumerable<Branch> Branches { get; set; }
+        public IEnumerable<BranchViewModel> Branches { get; set; }
 
         public int InstructorId { get; set; }
-        public IEnumerable<Instructor> Instructors { get; } = new List<Instructor>();
+        public IEnumerable<InstructorViewModel> Instructors { get; } = new List<InstructorViewModel>();
 
         public int DepartmentId { get; set; }
-        public IEnumerable<Department> Departments { get; } = new List<Department>();
+        public IEnumerable<DepartmentViewModel> Departments { get; } = new List<DepartmentViewModel>();
     }
 }

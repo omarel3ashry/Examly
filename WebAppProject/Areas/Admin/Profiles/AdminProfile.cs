@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataAccessLibrary.Model;
+using System.Diagnostics.Tracing;
 using WebAppProject.Areas.Admin.ViewModels;
 using WebAppProject.ViewModels;
 
@@ -20,7 +21,12 @@ namespace WebAppProject.Areas.Admin.Profiles
             CreateMap<Instructor, InstructorViewModel>()
                 .ForMember(dest => dest.ManagedDepartmentName,src => src.MapFrom(src => src.ManagedDepartment.Name))
                 .ForMember(dest => dest.BranchName, src => src.MapFrom(src => src.Branch.Name)).ReverseMap();
-            CreateMap<Instructor, InstructorFormViewModel>().ReverseMap();
+            CreateMap<Instructor, InstructorFormViewModel>()
+                .ForMember(dest => dest.Email, src => src.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.Password, src => src.MapFrom(src => src.User.Password))
+                .ReverseMap()
+                .ForPath(dest => dest.User.Email, src => src.Ignore())
+                .ForPath(dest => dest.User.Password, src => src.Ignore());
         }
     }
 }
