@@ -31,9 +31,9 @@ namespace WebAppProject.Areas.Admin.Controllers
             this.examTaken = examTaken;
             _mapper = mapper;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var branches = branchRepository.GetAll();
+            var branches = await branchRepository.GetAllAsync();
             var branchDtos = _mapper.Map<IEnumerable<BranchViewModel>>(branches);
 
             DashboardViewModel model = new DashboardViewModel() { Branches = branchDtos };
@@ -46,10 +46,10 @@ namespace WebAppProject.Areas.Admin.Controllers
             var InstructorList = instructorRepository.SelectAll(ins => ins.BranchId == BranchId&& !ins.IsDeleted).Select(e => new { e.Id, e.Name }).OrderBy(ins => ins.Name);
             return Ok(new { DepartmentList, InstructorList });
         }
-        public IActionResult DepartmentManager(int branchId, int deptId)
+        public async Task<IActionResult> DepartmentManager(int branchId, int deptId)
         {
             ViewBag.DepartmentId = deptId;
-            var instructors = instructorRepository.SelectAll(e => e.BranchId == branchId);
+            var instructors = await instructorRepository.SelectAllAsync(e => e.BranchId == branchId);
             var model = _mapper.Map<IEnumerable<InstructorViewModel>>(instructors);
             return PartialView(model);
         }
