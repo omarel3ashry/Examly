@@ -1,6 +1,4 @@
-﻿using WebAppProject.ViewModels;
-
-namespace WebAppProject.Areas.Staff.ViewModels
+﻿namespace WebAppProject.ViewModels
 {
     public class StudentAnswersViewModel
     {

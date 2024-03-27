@@ -155,50 +155,12 @@ namespace DataAccessLibrary.Repository
 
         public List<Student> SelectAll(Expression<Func<Student, bool>> predicate)
         {
-            return _context.Students.Where(predicate).ToList();
+            return _context.Students.Where(e => !e.IsDeleted).Where(predicate).ToList();
         }
 
         public Task<List<Student>> SelectAllAsync(Expression<Func<Student, bool>> predicate)
         {
-            return _context.Students.Where(predicate).ToListAsync();
-        }
-
-        // TODO: Remove this banda sync method
-        public List<ExamChoices> GetStudentAnswers(int studentId, int examId)
-        {
-            var student = _context.Students
-                .Include(e => e.StudentAnswers.Where(e => e.ExamId == examId))
-                .ThenInclude(e => e.Choice)
-                .ThenInclude(e => e.Question)
-                .FirstOrDefault(e => e.Id == studentId);
-
-            var questionCorrectChoices = new List<Choice>();
-            var studentChoicesForQuestion = new List<Choice>();
-            var result = new List<ExamChoices>();
-            bool isQuestionCorrect;
-            if (student != null)
-            {
-                var listOfChoices = student.StudentAnswers.Select(e => e.Choice);
-                foreach (var choice in listOfChoices)
-                {
-                    if (!result.Select(r => r.Question).Contains(choice.Question))
-                    {
-                        Question question = choice.Question;
-                        questionCorrectChoices = _context.Choices.Where(e => e.QuestionId == question.Id && e.IsCorrect).ToList();
-                        studentChoicesForQuestion = listOfChoices.Where(e => e.QuestionId == question.Id).ToList();
-                        isQuestionCorrect = questionCorrectChoices.Count == studentChoicesForQuestion.Count
-                                         && questionCorrectChoices.Count == studentChoicesForQuestion.FindAll(e => e.IsCorrect).Count;
-                        result.Add(new ExamChoices
-                        {
-                            Question = choice.Question,
-                            CorrectChoices = questionCorrectChoices,
-                            StudentChoices = studentChoicesForQuestion,
-                            IsCorrect = isQuestionCorrect
-                        });
-                    }
-                }
-            }
-            return result;
+            return _context.Students.Where(e => !e.IsDeleted).Where(predicate).ToListAsync();
         }
 
         public async Task<List<ExamChoices>> GetStudentAnswersAsync(int studentId, int examId)

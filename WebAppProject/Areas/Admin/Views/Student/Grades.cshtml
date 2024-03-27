@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ExamTaken>
+﻿@model IEnumerable<AdminExamTakenViewModel>
 @{
     ViewData["Title"] = "Dashboard | Grades";
 }
@@ -17,8 +17,8 @@
             foreach (var examTaken in Model)
             {
                 <tr>
-                    <td>@examTaken.Exam.Course.Name</td>
-                    <td>@examTaken.Exam.ExamDate</td>
+                    <td>@examTaken.CourseName</td>
+                    <td>@examTaken.ExamDate</td>
                     <td>@examTaken.Grade</td>
                     <td>
                         <a class="btn info" asp-action="Answers" asp-route-stId="@examTaken.StudentId" asp-route-examId="@examTaken.ExamId">Answers</a>

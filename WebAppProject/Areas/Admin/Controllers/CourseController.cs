@@ -1,8 +1,10 @@
-﻿using DataAccessLibrary.Interfaces;
+﻿using AutoMapper;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using WebAppProject.Areas.Admin.ViewModels;
+using WebAppProject.ViewModels;
 
 
 
@@ -14,20 +16,32 @@ namespace WebAppProject.Areas.Admin.Controllers
     {
 
         private readonly ICourseRepository courseRepository;
+        private readonly IMapper _mapper;
 
-        public CourseController(ICourseRepository courseRepository)
+        public CourseController(ICourseRepository courseRepository, IMapper mapper)
         {
             this.courseRepository = courseRepository;
+            _mapper = mapper;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Course> model = courseRepository.GetAll();
+            List<Course> courses = await courseRepository.GetAllAsync();
+            var model = _mapper.Map<IEnumerable<CourseViewModel>>(courses);
             return View(model);
         }
-        public IActionResult Details(int Id)
+        public async Task<IActionResult> Details(int Id)
         {
-            Course? model = courseRepository.GetById(Id);
-            IActionResult actionResult = model != null ? View(model) : BadRequest();
+            IActionResult actionResult;
+            Course? course = await courseRepository.GetByIdAsync(Id);
+            if (course != null)
+            {
+                var model = _mapper.Map<CourseViewModel>(course);
+                actionResult = View(model);
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
             return actionResult;
         }
         public IActionResult Create()
@@ -35,43 +49,88 @@ namespace WebAppProject.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Course Course)
+        public async Task<IActionResult> Create(CourseViewModel model)
         {
-
-            int res = courseRepository.Add(Course);
-            IActionResult actionResult = res > 0 ? RedirectToAction("Index") : RedirectToAction("Create");
+            IActionResult actionResult;
+            if (ModelState.IsValid)
+            {
+                var course = _mapper.Map<Course>(model);
+                int res = await courseRepository.AddAsync(course);
+                actionResult = res > 0 ? RedirectToAction("Index") : RedirectToAction("Create");
+            }
+            else
+            {
+                actionResult = View(model);
+            }
             return actionResult;
         }
 
-        public IActionResult Edit(int Id)
+        public async Task<IActionResult> Edit(int Id)
         {
-            Course? model = courseRepository.GetById(Id);
-            IActionResult actionResult = model != null ? View(model) : BadRequest();
+            IActionResult actionResult;
+            Course? course = await courseRepository.GetByIdAsync(Id);
+            if (course != null)
+            {
+                var model = _mapper.Map<CourseViewModel>(course);
+                actionResult = View(model);
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
             return actionResult;
         }
         [HttpPost]
-        public IActionResult Edit(Course Course)
+        public async Task<IActionResult> Edit(CourseViewModel model)
         {
-            bool res = courseRepository.Update(Course);
-            IActionResult actionResult = res ? RedirectToAction("Index") : RedirectToAction("Edit");
+            IActionResult actionResult;
+            if (ModelState.IsValid)
+            {
+                var course = _mapper.Map<Course>(model);
+                bool res = await courseRepository.UpdateAsync(course);
+                actionResult = res ? RedirectToAction("Index") : RedirectToAction("Edit", model.Id);
+            }
+            else
+            {
+                actionResult = RedirectToAction("Edit", model.Id);
+            }
             return actionResult;
         }
 
-        public IActionResult Delete(int Id)
+        public async Task<IActionResult> Delete(int Id)
         {
 
-            Course? model = courseRepository.GetById(Id);
-            IActionResult actionResult = model != null ? View(model) : BadRequest();
+            IActionResult actionResult;
+            Course? course = await courseRepository.GetByIdAsync(Id);
+            if (course != null)
+            {
+                var model = _mapper.Map<CourseViewModel>(course);
+                actionResult = View(model);
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
             return actionResult;
-        }
+        }   
         [HttpPost]
-        public IActionResult Delete(Course Course)
+        public async Task<IActionResult> Delete(CourseViewModel model)
         {
-            Debug.WriteLine(Course.Id);
-            courseRepository.Delete(Course.Id);
-            return RedirectToAction("Index");
+            IActionResult actionResult;
+            Course? course = await courseRepository.GetByIdAsync(model.Id);
+            if (course != null)
+            {
+                await courseRepository.DeleteAsync(course.Id);
+                actionResult = RedirectToAction("Index");
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
+            return actionResult;
         }
-
-
     }
+
+
+    
 }

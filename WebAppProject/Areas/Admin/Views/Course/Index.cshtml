@@ -1,4 +1,4 @@
-﻿@model List<Course>
+﻿@model List<CourseViewModel>
 @{
     ViewData["Title"] = "Courses";
     Layout = "_DesignLayout";
@@ -20,7 +20,7 @@
         <tbody>
             @if (Model?.Count > 0)
             {
-                foreach (Course crs in Model)
+                foreach (var crs in Model)
                 {
                     <tr>
                         <td>@crs.Id</td>

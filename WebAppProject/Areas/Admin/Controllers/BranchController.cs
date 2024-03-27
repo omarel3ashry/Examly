@@ -3,7 +3,6 @@ using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using WebAppProject.Areas.Admin.ViewModels;
 
 
@@ -30,10 +29,19 @@ namespace WebAppProject.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult Details(int Id)
+        public async Task<IActionResult> Details(int Id)
         {
-            Branch? model = branchRepository.GetById(Id);
-            IActionResult actionResult = model != null ? View(model) : BadRequest();
+            IActionResult actionResult;
+            Branch? branch = await branchRepository.GetByIdAsync(Id);
+            if (branch != null)
+            {
+                var model = _mapper.Map<BranchViewModel>(branch);
+                actionResult = View(model);
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
             return actionResult;
         }
 
@@ -43,13 +51,13 @@ namespace WebAppProject.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(BranchViewModel model)
+        public async Task<IActionResult> Create(BranchViewModel model)
         {
             IActionResult actionResult;
             if (ModelState.IsValid)
             {
-                var branchDto = _mapper.Map<Branch>(model);
-                int res = branchRepository.AddAsync(branchDto).Result;
+                var branch = _mapper.Map<Branch>(model);
+                int res = await branchRepository.AddAsync(branch);
                 actionResult = res > 0 ? RedirectToAction("Index", "Manage") : RedirectToAction("Create");
             }
             else
@@ -59,42 +67,71 @@ namespace WebAppProject.Areas.Admin.Controllers
             return actionResult;
         }
 
-        public IActionResult Edit(int Id)
+        public async Task<IActionResult> Edit(int Id)
         {
-            Branch? model = branchRepository.GetById(Id);
-            IActionResult actionResult = model != null ? View(model) : BadRequest();
+            IActionResult actionResult;
+            Branch? branch = await branchRepository.GetByIdAsync(Id);
+            if (branch != null)
+            {
+                var model = _mapper.Map<BranchViewModel>(branch);
+                actionResult = View(model);
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
             return actionResult;
         }
 
         [HttpPost]
-        public IActionResult Edit(Branch Branch)
+        public async Task<IActionResult> Edit(BranchViewModel model)
         {
             IActionResult actionResult;
             if (ModelState.IsValid)
             {
-                bool res = branchRepository.Update(Branch);
-                actionResult = res ? RedirectToAction("Index", "Manage") : RedirectToAction("Edit", Branch.Id);
+                var branch = _mapper.Map<Branch>(model);
+                bool res = await branchRepository.UpdateAsync(branch);
+                actionResult = res ? RedirectToAction("Index", "Manage") : RedirectToAction("Edit", model.Id);
             }
             else
             {
-                actionResult = RedirectToAction("Edit", Branch.Id);
+                actionResult = RedirectToAction("Edit", model.Id);
             }
             return actionResult;
         }
 
-        public IActionResult Delete(int Id)
+        public async Task<IActionResult> Delete(int Id)
         {
-            Branch? model = branchRepository.GetById(Id);
-            IActionResult actionResult = model != null ? View(model) : BadRequest();
+            IActionResult actionResult;
+            Branch? branch = await branchRepository.GetByIdAsync(Id);
+            if (branch != null)
+            {
+                var model = _mapper.Map<BranchViewModel>(branch);
+                actionResult = View(model);
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
             return actionResult;
         }
 
         [HttpPost]
-        public IActionResult Delete(Branch Branch)
+        public async Task<IActionResult> Delete(BranchViewModel model)
         {
-            Debug.WriteLine(Branch.Id);
-            branchRepository.Delete(Branch.Id);
-            return RedirectToAction("Index", "Manage");
+            IActionResult actionResult;
+            Branch? branch = await branchRepository.GetByIdAsync(model.Id);
+            if (branch != null)
+            {
+                await branchRepository.DeleteAsync(branch.Id);
+                actionResult = RedirectToAction("Index", "Manage");
+            }
+            else
+            {
+                actionResult = BadRequest();
+            }
+            return actionResult;
+
         }
 
 
