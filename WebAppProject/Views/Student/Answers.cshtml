@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<StudentAnswersViewModel>
-@{  
+@{
     ViewData["Title"] = "E-Exam | Answers";
 }
 
@@ -17,27 +17,30 @@
     <tbody>
         @foreach (var examChoice in Model)
         {
+            string choiceClass = examChoice.IsCorrect ? "text-success" : "text-danger";
             <tr>
                 <td>@examChoice.QuestionText (@examChoice.QuestionGrade)</td>
-                <td class="@(examChoice.IsCorrect ? "correct" : "incorrect")">
-                    @foreach (var choice in examChoice.StudentChoices)
-                    {
-                        <span>@choice.Text</span>
-                        <br />
-                    }
+                <td>
+                    <ul class="mb-0">
+                        @foreach (var choice in examChoice.StudentChoices)
+                        {
+                            <li class="@choiceClass">@choice.Text</li>
+                        }
+                    </ul>
                 </td>
                 <td>
-                    @foreach (var choice in examChoice.CorrectChoices)
-                    {
-                        <span>@choice.Text </span>
-                        <br />
-                    }
+                    <ul class="mb-0">
+                        @foreach (var choice in examChoice.CorrectChoices)
+                        {
+                            <li>@choice.Text</li>
+                        }
+                    </ul>
                 </td>
                 <td>
-                    
-                        <span>@(examChoice.IsCorrect ? "✔" : "❌") </span>
-                        <br />
-         
+
+                    <span>@(examChoice.IsCorrect ? "✔" : "❌") </span>
+                    <br />
+
                 </td>
             </tr>
         }
