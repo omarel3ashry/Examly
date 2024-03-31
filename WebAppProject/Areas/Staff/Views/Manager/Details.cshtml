@@ -3,38 +3,46 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="text">
-    <h2 data-text="Course_Details">Course Details</h2>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">Course Details</p>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td class="col-4"><strong>Id</strong></td>
+                                    <td>@Model.CourseId</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Name</strong></td>
+                                    <td>@Model.Name</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Description</strong></td>
+                                    <td>@Model.Description</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Instructor Name</strong></td>
+                                    <td>@(Model.InstructorName != null ? Model.InstructorName : "N/A")</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Department</strong></td>
+                                    <td>@Model.DepartmentName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Branch</strong></td>
+                                    <td>@(Model.BranchName != null ? Model.BranchName : "N/A")</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="card data-icon-card-primary">
-    <div class="card-body">
-<table class="table display expandable-table">
-    <tbody style="color:white">
-        <tr>
-            <td class="col-4"><strong>Id</strong></td>
-            <td>@Model.CourseId</td>
-        </tr>
-        <tr>
-            <td><strong>Name</strong></td>
-            <td>@Model.Name</td>
-        </tr>
-        <tr>
-            <td><strong>Description</strong></td>
-            <td>@Model.Description</td>
-        </tr>
-        <tr>
-            <td><strong>Instructor Name</strong></td>
-            <td>@(Model.InstructorName != null ? Model.InstructorName : "N/A")</td>
-        </tr>
-        <tr>
-            <td><strong>Department</strong></td>
-            <td>@Model.DepartmentName</td>
-        </tr>
-        <tr>
-            <td><strong>Branch</strong></td>
-            <td>@(Model.BranchName != null? Model.BranchName : "N/A")</td>
-        </tr>
-    </tbody>
-</table>
-</div>
-  </div>
+
+

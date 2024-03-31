@@ -6,93 +6,188 @@
     SelectList DepartmentsItems = new SelectList(Model.Departments, "Id", "Name");
 }
 
-<div class="text">
-    <h2 data-text="Dashboard">Dashboard</h2>
-</div>
+ @* <div class="card">
+    <div class="card-body">
+        <p class="card-title">DashBoard</p>
+        <div class="d-flex align-items-center m-4">
+            <div class="sel branch-sel mr-5">
+               <span class="sel__placeholder branch-sel__placeholder mr-5"></span> 
+                <select asp-for="BranchId" asp-items="BranchesItems" >
+                    <option value="-1">Branch</option>
+                </select>
+            </div>
+            <div class="ml-5">
+                <a type="button"
+                   asp-action="Create" asp-controller="Branch" type="button" class="btn btn-inverse-success btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-plus"></i>
+                </a>
+                 
+              
+                <a type="button"
+                   class="btn btn-inverse-info btn-rounded btn-icon-md ml-4" >
 
-<h1>Branch</h1>
-<div class="container row m-1">
-    <div class="form-group col-3">
-        <label class="control-label"> Name </label>
-        <select asp-for="BranchId" class="form-control" asp-items="BranchesItems">
-            <option value="-1">Select Branch</option>
-        </select>
+                    <i class="mdi mdi-information-variant"></i>
+                </a>
+                <a  id="BranchEditBtn"  type="button"
+                    class="btn btn-inverse-primary btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-pencil"></i>
+                </a>
+                <a type="button" id="BranchDeleteBtn" class="btn btn-inverse-danger btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-delete"></i>
+                </a>
+            </div>
+        </div>
+        <div class="d-flex align-items-center m-4">
+            <div class="sel inst-sel mr-5">
+                <span class="sel__placeholder inst-sel__placeholder mr-5"></span>
+                <select asp-for="InstructorId" asp-items="InstructorsItems" name="select-profession" id="select-profession" style="display: none;">
+                        <option value="-1"> Instructor</option>
+                </select>
+            </div>
+            <div class="ml-5">
+                <button type="button" class="btn btn-inverse-success btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-plus"></i>
+                </button>
+                <button type="button" class="btn btn-inverse-info btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-information-variant"></i>
+                </button>
+                <button type="button" class="btn btn-inverse-primary btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-pencil"></i>
+                </button>
+                <button type="button" class="btn btn-inverse-danger btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-delete"></i>
+                </button>
+            </div>
+        </div>
+        <div class="d-flex align-items-center m-4">
+            <div class="sel dept-sel mr-5">
+                <span class="sel__placeholder dept-sel__placeholder mr-5" data-placeholder="Profession"></span>
+                <select asp-for="DepartmentId"  asp-items="DepartmentsItems" name="select-profession" id="select-profession" style="display: none;">
+                                                        <option value="-1">Select Department</option>
+                </select>
+            </div>
+            <div class="ml-5">
+                <a type="button"  asp-action="Create" asp-controller="Department" class="btn btn-inverse-success btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-plus"></i>
+                </a>
+                <button type="button" class="btn btn-inverse-info btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-information-variant"></i>
+                </button>
+                <button type="button" class="btn btn-inverse-primary btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-pencil"></i>
+                </button>
+                <button type="button" class="btn btn-inverse-danger btn-rounded btn-icon-md ml-4">
+                    <i class="mdi mdi-delete"></i>
+                </button>
+            </div>
+        </div>
     </div>
-        <div class="col-auto mt-3">
-            <a asp-action="Create" asp-controller="Branch" class="btn success btn-lg m-2">Add</a>
-        </div>
-        <div class="col-auto mt-3">
-            <a id="BranchDetailsBtn" class="btn info btn-lg m-2">Info</a>
-        </div>
-        <div class="col-auto mt-3">
-            <a id="BranchEditBtn" class="btn success btn-lg m-2">Edit</a>
-        </div>
-        <div class="col-auto mt-3">
-            <a id="BranchDeleteBtn" class="btn danger btn-lg m-2">Delete</a>
-        </div>
 </div>
-<h1>Instructor</h1>
-<div class="container row m-1">
-    <div class="form-group col-3">
-        <label class="control-label"> Name </label>
-        <select asp-for="InstructorId" class="form-control" asp-items="InstructorsItems">
-            <option value="-1">Select Instructor</option>
-        </select>
-    </div>
-        <div class="col-auto mt-3">
-            <a asp-action="Create" asp-controller="Instructor" class="btn success btn-lg m-2">Add</a>
-        </div>
-        <div class="col-auto mt-3">
-            <a id="InstructorDetailsBtn" class="btn info btn-lg m-2">Info</a>
-        </div>
-        <div class="col-auto mt-3">
-            <a id="InstructorEditBtn" class="btn success btn-lg m-2">Edit</a>
-        </div>
-        <div class="col-auto mt-3">
-            <a id="InstructorDeleteBtn" class="btn danger btn-lg m-2">Delete</a>
-        </div>
-</div>
-<h1>Department</h1>
-<div class="container row m-0">
-    <div class="form-group col-3">
-        <label class="control-label"> Name </label>
-        <select asp-for="DepartmentId" class="form-control" asp-items="DepartmentsItems">
-            <option value="-1">Select Department</option>
-        </select>
-    </div>
-        <div class="col-auto mt-3">
-            <a asp-action="Create" asp-controller="Department" class="btn success btn-lg m-2">Add</a>
-        </div>
-        <div class="col-auto mt-3">
-            <a id="DepartmentDetailsBtn" class="btn info btn-lg m-2">Info</a>
-        </div>
-        <div class="col-auto mt-3">
-            <a id="DepartmentEditBtn" class="btn success btn-lg m-2">Edit</a>
-        </div>
-        <div class="col-auto mt-3">
-            <a id="DepartmentDeleteBtn" class="btn danger btn-lg m-2">Delete</a>
-        </div>
-</div>
-<div class="container row m-0 mt-3">
-    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="ModalLabel">Instructors List</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="content">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn info" data-bs-dismiss="modal">Close</button>
+ *@ 
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">Dashboard</p>
+                <div class="row">
+                    <div class="col-12">
+                        <h1>Branch</h1>
+                        <div class="container row m-1">
+                            <div class="form-group col-3">
+
+                                <select asp-for="BranchId" class="form-control" asp-items="BranchesItems">
+                                    <option value="-1">Select Branch</option>
+                                </select>
+                            </div>
+                            <div class=" mt-4 col-1">
+
+                                <a type="button"
+                                   asp-action="Create" asp-controller="Branch"
+                                   class="btn btn-inverse-primary btn-sm ml-1">
+                                    <div class="d-flex">
+                                        <i class="mdi mdi-plus btn-icon-prepend d-inline-block"></i>
+                                        <div class="mt-1">Add</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a id="BranchDetailsBtn" class="btn info btn-lg m-2">Info</a>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a id="BranchEditBtn" class="btn success btn-lg m-2">Edit</a>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a id="BranchDeleteBtn" class="btn danger btn-lg m-2">Delete</a>
+                            </div>
+                        </div>
+                        <h1>Instructor</h1>
+                        <div class="container row m-1">
+                            <div class="form-group col-3">
+                                <label class="control-label"> Name </label>
+                                <select asp-for="InstructorId" class="form-control" asp-items="InstructorsItems">
+                                    <option value="-1">Select Instructor</option>
+                                </select>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a asp-action="Create" asp-controller="Instructor" class="btn success btn-lg m-2">Add</a>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a id="InstructorDetailsBtn" class="btn info btn-lg m-2">Info</a>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a id="InstructorEditBtn" class="btn success btn-lg m-2">Edit</a>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a id="InstructorDeleteBtn" class="btn danger btn-lg m-2">Delete</a>
+                            </div>
+                        </div>
+                        <h1>Department</h1>
+                        <div class="container row m-0">
+                            <div class="form-group col-3">
+                                <label class="control-label"> Name </label>
+                                <select asp-for="DepartmentId" class="form-control" asp-items="DepartmentsItems">
+                                    <option value="-1">Select Department</option>
+                                </select>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a asp-action="Create" asp-controller="Department" class="btn success btn-lg m-2">Add</a>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a id="DepartmentDetailsBtn" class="btn info btn-lg m-2">Info</a>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a id="DepartmentEditBtn" class="btn success btn-lg m-2">Edit</a>
+                            </div>
+                            <div class="col-auto mt-3">
+                                <a id="DepartmentDeleteBtn" class="btn danger btn-lg m-2">Delete</a>
+                            </div>
+                        </div>
+                        <div class="container row m-0 mt-3">
+                            <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="ModalLabel">Instructors List</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" id="content">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn info" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="btn success" id="ManageManagertBtn">Department Manager</a>
+                            <a class="btn alert-success mt-4" id="ManageStudentsBtn">Manage Students</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <a class="btn success" id="ManageManagertBtn">Department Manager</a>
-    <a class="btn alert-success mt-4" id="ManageStudentsBtn">Manage Students</a>
 </div>
-
 
 @section Scripts {
     <script>

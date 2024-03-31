@@ -19460,10 +19460,7 @@ h2, .h2 {
   font-size: 2.187rem;
   
 }
-.text {
-    text-align: center !important;
-    color: #4B49AC;
-}
+
 
 h3, .h3 {
   font-size: 1.525rem;
@@ -20900,6 +20897,9 @@ code {
 
 .btn i, .fc button i, .ajax-upload-dragdrop .ajax-file-upload i, .swal2-modal .swal2-buttonswrapper .swal2-styled i, .swal2-modal .swal2-buttonswrapper .swal2-styled.swal2-confirm i, .swal2-modal .swal2-buttonswrapper .swal2-styled.swal2-cancel i, .wizard > .actions a i {
   font-size: 1rem;
+  display:block;
+  height:100%;
+  align-content:center;
 }
 
 .btn.btn-rounded, .fc button.btn-rounded, .ajax-upload-dragdrop .btn-rounded.ajax-file-upload, .swal2-modal .swal2-buttonswrapper .btn-rounded.swal2-styled, .wizard > .actions a.btn-rounded {
