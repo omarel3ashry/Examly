@@ -4,31 +4,43 @@
     ViewData["Title"] = "Edit Question";
 }
 
-<div class="text">
-    <h2 data-text="Edit_Question">Edit_Question</h2>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">Edit Question</p>
+                <div class="row">
+                    <div class="col-12">
+                        <form asp-action="EditQuestion" asp-controller="Instructor" method="post">
+                            <input type="hidden" asp-for="Id" value="@Model.Id" />
+                            <input type="hidden" asp-for="InstructorId" value="@Model.InstructorId" />
+                            <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
+                            <input type="hidden" asp-for="Type" value="@Model.Type" />
+
+                            @if (Model.Choices.Count > 2)
+                            {
+                                <partial name="QuestionPartial" />
+                                <div class="row m-1">
+                                    <div class="col-md-4">
+                                        <partial name="MCQChoicesPartial" />
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <partial name="QuestionPartial" />
+                                <div class="row m-1">
+                                    <div class="col-md-4">
+                                        <partial name="TFChoicesPartial" />
+                                    </div>
+                                </div>
+                            }
+
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<form asp-action="EditQuestion" asp-controller="Instructor" method="post">
-    <input type="hidden" asp-for="Id" value="@Model.Id" />
-    <input type="hidden" asp-for="InstructorId" value="@Model.InstructorId" />
-    <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
-    <input type="hidden" asp-for="Type" value="@Model.Type" />
-
-    <h1>Type: </h1>
-    @if (Model.Choices.Count > 2)
-    {
-        <h3>MCQ Question</h3>
-        <partial name="QuestionPartial" />
-        <partial name="MCQChoicesPartial" />
-    }
-    else
-    {
-        <h3>TF Question</h3>
-        <partial name="QuestionPartial" />
-        <partial name="TFChoicesPartial" />
-    }
-
-    <button type="submit" class="btn success">Save Changes</button>
-</form>
-
-

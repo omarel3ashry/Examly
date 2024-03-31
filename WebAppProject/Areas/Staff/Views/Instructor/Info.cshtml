@@ -3,13 +3,46 @@
     ViewData["Title"] = "Info";
 }
 
-<h1>Course Information</h1>
-
-<div>
-    <br />
-    <p><strong>Department:</strong> @Model.DeptName</p>
-    <p><strong>Name:</strong> @Model.CourseName</p>
-    <p><strong>Description:</strong> @Model.CourseDescription</p>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">Course Info</p>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table  table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td class="col-2">
+                                            <p class="text-black font-weight-bold">Name</p>
+                                        </td>
+                                        <td>
+                                            <p> @Model.CourseName</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-2">
+                                            <p class="text-black font-weight-bold">Description</p>
+                                        </td>
+                                        <td>
+                                            <p> @Model.CourseDescription</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col-2">
+                                            <p class="text-black font-weight-bold">Department</p>
+                                        </td>
+                                        <td>
+                                            <p> @Model.DeptName</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-

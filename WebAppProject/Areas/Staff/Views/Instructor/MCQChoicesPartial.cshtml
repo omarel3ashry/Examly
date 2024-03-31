@@ -3,28 +3,59 @@
 }
 <div id="multipleChoicesContainer">
     <div class="form-group">
-        <label>Choice 1</label>
-        <input asp-for="Choices[0].Id" value="@Model.Choices[0].Id" hidden />
-        <input asp-for="Choices[0].Text" value="@Model.Choices[0].Text" />
-        <input type="checkbox" asp-for="Choices[0].IsCorrect" />
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">1</span>
+            </div>
+            <input asp-for="Choices[0].Id" value="@Model.Choices[0].Id" hidden />
+            <input asp-for="Choices[0].Text" value="@Model.Choices[0].Text" class="form-control" />
+            <div class="input-group-append">
+                <div class="bg-inverse-success rounded-right d-flex align-items-center">
+                    <input type="checkbox" class="form-check-input m-2 position-relative shadow-none" asp-for="Choices[0].IsCorrect" />
+                </div>
+            </div>
+        </div>
     </div>
     <div class="form-group">
-        <label>Choice 2</label>
-        <input asp-for="Choices[1].Id" value="@Model.Choices[1].Id" hidden />
-        <input asp-for="Choices[1].Text" value="@Model.Choices[1].Text" />
-        <input type="checkbox" asp-for="Choices[1].IsCorrect" />
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">2</span>
+            </div>
+            <input asp-for="Choices[1].Id" value="@Model.Choices[1].Id" hidden />
+            <input asp-for="Choices[1].Text" value="@Model.Choices[1].Text" class="form-control" />
+            <div class="input-group-append">
+                <div class="bg-inverse-success rounded-right d-flex align-items-center">
+                    <input type="checkbox" class="form-check-input m-2 position-relative shadow-none" asp-for="Choices[1].IsCorrect" />
+                </div>
+            </div>
+        </div>
     </div>
     <div class="form-group">
-        <label>Choice 3</label>
-        <input asp-for="Choices[2].Id" value="@Model.Choices[2].Id" hidden />
-        <input asp-for="Choices[2].Text" value="@Model.Choices[2].Text" />
-        <input type="checkbox" asp-for="Choices[2].IsCorrect" />
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">3</span>
+            </div>
+            <input asp-for="Choices[2].Id" value="@Model.Choices[2].Id" hidden />
+            <input asp-for="Choices[2].Text" value="@Model.Choices[2].Text" class="form-control" />
+            <div class="input-group-append">
+                <div class="bg-inverse-success rounded-right d-flex align-items-center">
+                    <input type="checkbox" class="form-check-input m-2 position-relative shadow-none" asp-for="Choices[2].IsCorrect" />
+                </div>
+            </div>
+        </div>
     </div>
     <div class="form-group">
-        <label>Choice 4</label>
-        <input asp-for="Choices[3].Id" value="@Model.Choices[3].Id" hidden />
-        <input asp-for="Choices[3].Text" value="@Model.Choices[3].Text" />
-        <input type="checkbox" asp-for="Choices[3].IsCorrect" />
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">4</span>
+            </div>
+            <input asp-for="Choices[3].Id" value="@Model.Choices[3].Id" hidden />
+            <input asp-for="Choices[3].Text" value="@Model.Choices[3].Text" class="form-control" />
+            <div class="input-group-append">
+                <div class="bg-inverse-success rounded-right d-flex align-items-center">
+                    <input type="checkbox" class="form-check-input m-2 position-relative shadow-none" asp-for="Choices[3].IsCorrect" />
+                </div>
+            </div>
+        </div>
     </div>
-    <br />
 </div>

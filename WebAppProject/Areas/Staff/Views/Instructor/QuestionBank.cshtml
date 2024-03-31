@@ -3,37 +3,72 @@
     ViewData["Title"] = "QuestionBank";
 }
 
-<div class="d-flex justify-content-between align-items-center">
-    <h1>Question Bank</h1>
-    <a asp-action="AddQuestion" asp-route-courseId="@ViewBag.CourseId" class="btn success col-2">Add</a></td>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p class="card-title m-0">Question Bank</p>
+                    <a type="button"
+                       asp-action="AddQuestion" asp-route-courseId="@ViewBag.CourseId"
+                       class="btn btn-inverse-primary btn-icon-text">
+                        <i class="mdi mdi-plus btn-icon-prepend d-inline-block"></i>
+                        Add Question
+                    </a>
+                </div>
+               
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="">
+                                    <tr>
+                                        <th>Question</th>
+                                        <th>Type</th>
+                                        <th>Difficulty</th>
+                                        <th>Grade</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var question in Model)
+                                    {
+                                        string badgeColor = question.Difficulty == QVMDifficulty.Easy ? "badge-success" :
+                                        question.Difficulty == QVMDifficulty.Medium ? "badge-warning" :
+                                        "badge-danger";
+                                        <tr>
+                                            <td>@question.Text</td>
+                                            <td>@(question.Type == QVMType.TrueFalse ? "True/False" : "MCQ")</td>
+                                            <td><label class="badge @badgeColor">@question.Difficulty</label></td>
+                                            <td>@question.Grade</td>
+
+                                            <td class="col-1">
+                                                <a type="button"
+                                                   asp-action="QuestionInfo" asp-route-id="@question.Id"
+                                                   class="btn btn-inverse-dark btn-rounded btn-icon ml-1">
+                                                    <i class="mdi mdi-information-variant"></i>
+                                                </a>
+                                                <a type="button"
+                                                   asp-action="EditQuestion" asp-route-id="@question.Id"
+                                                   class="btn btn-inverse-primary btn-rounded btn-icon ml-1">
+                                                    <i class="mdi mdi-pencil"></i>
+                                                </a>
+                                                <a type="button"
+                                                   asp-action="DeleteQuestion" onclick="return confirm(' Are you sure ')"
+                                                   asp-route-id="@question.CourseId" asp-route-qId="@question.Id"
+                                                   class="btn btn-inverse-danger btn-rounded btn-icon ml-1">
+                                                    <i class="mdi mdi-delete"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>Question</th>
-            <th>Type</th>
-            <th>Difficulty</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var question in Model)
-        {
-            <tr>
-                <td>@question.Text</td>
-                <td>@(question.Type == QVMType.TrueFalse ? "True/False" : "MCQ")</td>
-                <td>@question.Difficulty</td>
-                <td>
-                    <a asp-action="QuestionInfo" asp-route-id="@question.Id" class="btn info">Info</a>
-                    <a asp-action="EditQuestion" asp-route-id="@question.Id" class="btn success">Edit</a>
-                    <a asp-action="DeleteQuestion" onclick="return confirm(' Are you sure ')" asp-route-id="@question.CourseId" asp-route-qId="@question.Id" class="btn danger">Delete</a>
-
-                </td>
-
-            </tr>
-        }
-    </tbody>
-</table>
-<br />
 
