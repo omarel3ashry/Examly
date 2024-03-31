@@ -7,7 +7,7 @@
     <h2 data-text="Add_Course">Add_Course</h2>
 </div>
 <form asp-action="AddCourses" method="post">
-    <table class="table">
+    <table class="table display expandable-table">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -36,7 +36,7 @@
                         </td>
                         <td>
                             <input type="checkbox" class="btn-check" id="btn-check-outlined@(i)" asp-for="@Model[i].WantToAdd">
-                            <label class="btn btn-outline-info" for="btn-check-outlined@(i)" asp-for="@Model[i].WantToAdd">Add</label>
+                            <label class="btn btn-secondary" for="btn-check-outlined@(i)" asp-for="@Model[i].WantToAdd">Add to courses</label>
                             <br />
                         </td>
                     </tr>
@@ -45,5 +45,5 @@
         </tbody>
     </table>
     <br />
-    <button type="submit" asp-route-id="@ViewBag.DepartmentId" class="btn btn-success">Add Course</button>
+    <button type="submit" asp-route-id="@ViewBag.DepartmentId" class="btn btn-primary">Add Course</button>
 </form>
