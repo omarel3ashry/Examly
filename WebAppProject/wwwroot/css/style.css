@@ -19458,6 +19458,11 @@ h1, .h1 {
 
 h2, .h2 {
   font-size: 2.187rem;
+  
+}
+.text {
+    text-align: center !important;
+    color: #4B49AC;
 }
 
 h3, .h3 {

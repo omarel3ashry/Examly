@@ -1,7 +1,7 @@
 ﻿@model StaffDepartmentViewModel
 
 <div class="text">
-    <h2 data-text="Courses">Courses</h2>
+    <h2  data-text="Courses">Courses</h2>
 </div>
 <table class="table display expandable-table">
     <thead>
@@ -24,8 +24,8 @@
                     <td>@deptCourse.Name</td>
                     <td>@(deptCourse.InstructorName ?? "Not Assigned")</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@deptCourse.CourseId" class="btn btn-info">Info</a>
-                        <button onclick="showDialog(@deptCourse.CourseId)" class="btn btn-secondary">Assign Instructor</button>
+                        <a asp-action="Details" asp-route-id="@deptCourse.CourseId" class="btn btn-secondary">Info</a>
+                        <button onclick="showDialog(@deptCourse.CourseId)" class="btn btn-primary">Assign Instructor</button>
                         @* <a asp-action="AssignInstructor" asp-route-id="@deptCourse.Id" class="btn btn-primary">Assign Instructor</a> *@
                         <a asp-action="DeleteCourse" onclick="return confirm('Are you sure?')" asp-route-id="@deptCourse.CourseId" class="btn btn-danger">Remove</a>
                     </td>
