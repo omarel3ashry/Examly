@@ -43,7 +43,7 @@ namespace WebAppProject.Controllers
             var model = mapper.Map<IList<CourseViewModel>>(courses);
             return View(model);
         }
-
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Exams()
         {
             Student? st = await studentRepository.GetByIdAsync(_stdId);
@@ -68,8 +68,13 @@ namespace WebAppProject.Controllers
         public async Task<IActionResult> TakeExam(int examId)
         {
             Student? st = await studentRepository.GetByIdAsync(_stdId);
-            var exam = await examRepository.GetByIdWithIncludesAsync(examId)!;
-            if (exam != null)
+            var exam = await examRepository.GetByIdWithIncludesAsync(examId);
+            var examTaken = await examTakenRepository.GetExamTakenWithIncludesAsync(_stdId, examId);
+            if (exam != null
+                && examTaken==null
+                && exam.ExamDate <= DateTime.Now 
+                && exam.ExamDate.AddMinutes(exam.DurationInMinutes) >= DateTime.Now
+                )
             {
                 var departmentCourse = await departmentCourseRepository.GetByDeptAndCrsIdWithIncludesAsync(exam.CourseId, st!.DepartmentId!.Value)!;
                 var model = new TakeExamViewModel();
@@ -83,20 +88,28 @@ namespace WebAppProject.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitExam(List<Choice> mcqChoices, List<Choice> tfChoices, int examId)
         {
-            int grade = 0;
-            await studentRepository.AddStudentAnswersAsync(examId, _stdId, mcqChoices.Concat(tfChoices).ToList());
-            List<ExamChoices> examChoices = await studentRepository.GetStudentAnswersAsync(_stdId, examId);
-            foreach (var examChoice in examChoices)
-                if (examChoice.IsCorrect)
-                    grade += examChoice.Question.Grade;
-            ExamTaken examTaken = new ExamTaken { ExamId = examId, StudentId = _stdId, Grade = grade };
-            await examTakenRepository.AddAsync(examTaken);
-            return RedirectToAction("Answers", new { examId });
+            var exam = await examRepository.GetByIdWithIncludesAsync(examId);
+            if (exam != null
+                && exam.ExamDate <= DateTime.Now
+                && exam.ExamDate.AddMinutes(exam.DurationInMinutes).AddSeconds(30) >= DateTime.Now
+                )
+            {           
+                int grade = 0;
+                await studentRepository.AddStudentAnswersAsync(examId, _stdId, mcqChoices.Concat(tfChoices).ToList());
+                List<ExamChoices> examChoices = await studentRepository.GetStudentAnswersAsync(_stdId, examId);
+                foreach (var examChoice in examChoices)
+                    if (examChoice.IsCorrect)
+                        grade += examChoice.Question.Grade;
+                ExamTaken examTaken = new ExamTaken { ExamId = examId, StudentId = _stdId, Grade = grade };
+                await examTakenRepository.AddAsync(examTaken);
+                return RedirectToAction("Answers", new { examId });
+            }
+            return RedirectToAction("Exams");
         }
 
         public async Task<IActionResult> Answers(int examId)
         {
-            var examTaken = await examTakenRepository.GetByStudentIdWithIncludesAsync(_stdId);
+            var examTaken = await examTakenRepository.GetExamTakenWithIncludesAsync(_stdId,examId);
             var studentAnswers = await studentRepository.GetStudentAnswersAsync(_stdId, examId);
             if (examTaken == null || studentAnswers == null)
             {
@@ -105,7 +118,7 @@ namespace WebAppProject.Controllers
             IEnumerable<StudentAnswersViewModel> model =
                     mapper.Map<IEnumerable<StudentAnswersViewModel>>(studentAnswers);
             ViewBag.StudentGrade = examTaken.Grade;
-            ViewBag.TotalGrade = examTaken.Exam.TotalGrade;
+            ViewBag.Exam = examTaken.Exam;
             return View(model);
         }
     }
