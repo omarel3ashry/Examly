@@ -43,12 +43,12 @@
         </nav>
     </div>
     <div class="container-fluid page-body-wrapper">
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
+        <nav class="sidebar sidebar-offcanvas"  id="sidebar">
                 @if (User.Identity.IsAuthenticated)
                 {
                     if (role == "Admin")
                     {
+                        <ul class="nav">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Manage" asp-action="Index">
                                 <i class="icon-grid menu-icon"></i>
@@ -57,73 +57,86 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Course" asp-action="Index">
-                                <i class="icon-grid menu-icon"></i>
+                                <i class="mdi mdi-library  menu-icon"></i>
                                 <span class="menu-title">Courses</span>
                             </a>
                         </li>
+                        </ul>
                     }
                     else if (role == "Manager" || role == "Instructor")
                     {
+                        <ul class="nav">
                         if (role == "Manager")
                         {
+
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Staff" asp-controller="Manager" asp-action="Index">
-                                    <i class="icon-grid menu-icon"></i>
+                                    <i class="mdi mdi-bank menu-icon"></i>
                                     <span class="menu-title">Manage Department</span>
                                 </a>
                             </li>
                         }
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Staff" asp-controller="Instructor" asp-action="Index">
-                                <i class="icon-grid menu-icon"></i>
+                                <i class="mdi mdi-library menu-icon"></i>
                                 <span class="menu-title">Courses</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Staff" asp-controller="Instructor" asp-action="ShowExams">
-                                <i class="icon-grid menu-icon"></i>
+                                <i class="mdi mdi-file-document-box menu-icon"></i>
                                 <span class="menu-title">Exams</span>
                             </a>
                         </li>
+                        </ul>
                     }
                     else if (role == "Student")
                     {
+                        <ul class="nav">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Student" asp-action="Index">
-                                <i class="icon-grid menu-icon"></i>
+                                <i class="mdi mdi-library menu-icon"></i>
                                 <span class="menu-title">Courses</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Exams">
-                                <i class="icon-grid menu-icon"></i>
+                                <i class="mdi mdi-file-document-box menu-icon"></i>
                                 <span class="menu-title">Exams</span>
                             </a>
                         </li>
+                        </ul>
                     }
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">
-                            <i class="icon-grid menu-icon"></i>
-                            <span class="menu-title">Logout</span>
-                        </a>
-                    </li>
+                <div class="align-self-end">
+                    <ul class="nav align-self-end">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">
+                                <i class="mdi mdi-logout-variant menu-icon"></i>
+                                <span class="menu-title">Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                    </div>
+                
                 }
                 else
                 {
+                    <ul class="nav">
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">
-                            <i class="icon-grid menu-icon"></i>
+                            <i class="mdi mdi-login-variant menu-icon"></i>
                             <span class="menu-title">Login</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">
-                            <i class="icon-grid menu-icon"></i>
+                            <i class="mdi mdi-open-in-new menu-icon"></i>
                             <span class="menu-title">Register</span>
                         </a>
                     </li>
+                    </ul>
                 }
-            </ul>
+
         </nav>
         <div class="main-panel">
             <div class="content-wrapper">
