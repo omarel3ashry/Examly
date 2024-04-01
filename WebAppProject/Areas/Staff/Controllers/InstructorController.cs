@@ -180,14 +180,14 @@ namespace WebAppProject.Areas.Staff.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MakeExam(int id, int deptId)
+        public async Task<IActionResult> MakeExam(int courseId, int deptId)
         {
-            if (id == 0)
+            if (courseId == 0)
             {
                 // TODO: user proper page
                 return NotFound();
             }
-            var questions = await _questionRepo.GetInstQuestionsAsync(id, _instId);
+            var questions = await _questionRepo.GetInstQuestionsAsync(courseId, _instId);
             var mcqDifficultyG = questions.Where(e => e.Type == QType.MCQ)
                                       .GroupBy(q => q.Difficulty)
                                       .OrderBy(q => (int)q.Key)
@@ -217,7 +217,7 @@ namespace WebAppProject.Areas.Staff.Controllers
 
             var model = new InstExamViewModel()
             {
-                CourseId = id,
+                CourseId = courseId,
                 TotalMCQ = mcqDifficultyCounts,
                 TotalTF = tfDifficultyCounts,
                 NoOfMCQ = new int[3],

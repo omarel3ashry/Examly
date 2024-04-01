@@ -4,51 +4,77 @@
     ViewData["Title"] = "Exam Info";
 }
 
-
-<div class="text">
-    <h2 data-text="Exam_Info">Exam_Info</h2>
-</div>
-<div>
-    <div class="infocon">
-        <p><strong>Course:</strong> @Model.CourseName</p>
-        <p><strong>Title:</strong> @Model.Title</p>
-        <p><strong>Duration in Minutes:</strong> @Model.DurationInMinutes</p>
-        <p><strong>Date:</strong> @Model.ExamDate</p>
-        <p><strong>Total Grade:</strong> @Model.TotalGrade</p>
-    </div>
-</div>
-<h1>Questions</h1>
-<br />
-@foreach (var question in Model.Questions)
-{
-    <div>
-            <div class="infocon">
-                <p class="mb-0"><strong>Question:</strong> @question.Text</p>
-                <p class="mb-0"><strong>Difficulty:</strong> @question.Difficulty</p>
-                <p class="mb-0"><strong>Grade:</strong> @question.Grade</p>
-            </div>
-        @if (question.Choices.Count > 1)
-        {
-            <label>Choices</label>
-            @foreach (var choice in question.Choices)
-            {
-                <div class="row m-1">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" value="@choice.Text" readonly />
-                        <span class="@(@choice.IsCorrect ? "text-success" : "text-danger")">@(choice.IsCorrect ? "correct" : "incorrect")</span>
-                        <br />
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">Exam Info</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="font-weight-bold">Course</p>
+                        <p>@Model.CourseName</p>
+                        <p class="font-weight-bold">Title</p>
+                        <p>@Model.Title</p>
+                        <p class="font-weight-bold">Total Grade</p>
+                        <p>@Model.TotalGrade</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="font-weight-bold">Date</p>
+                        <p>@Model.ExamDate</p>
+                        <p class="font-weight-bold">Duration in Minutes</p>
+                        <p>@Model.DurationInMinutes</p>
                     </div>
                 </div>
-            }
-        }
-        else
-        {
-
-            <h5>Choice</h5>
-            <input type="text" class="form-control" value="@question.Choices[0].Text" readonly />
-            <br />
-        }
-        <br />
-        <br />
+            </div>
+        </div>
     </div>
+</div>
+@if (Model.Questions != null)
+{
+    for (int i = 0; i < Model.Questions.Count; i++)
+    {
+        var question = Model.Questions[i];
+        string badgeColor = question.Difficulty == QVMDifficulty.Easy ? "badge-success" :
+                        question.Difficulty == QVMDifficulty.Medium ? "badge-warning" :
+                        "badge-danger";
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title">Q @(i + 1)</p>
+                        <div class="row">
+                            <div class="col-md-6 align-content-center">
+                                <p class="font-weight-bold">Question</p>
+                                <p>@question.Text</p>
+                                <p class="font-weight-bold">Difficulty</p>
+                                <label class="badge @badgeColor">@question.Difficulty</label>
+                                <p class="font-weight-bold">Type</p>
+                                <p>@(question.Type == QVMType.MCQ ? "Multiple Choices" : " Ture / False")</p>
+                                <p class="font-weight-bold">Grade</p>
+                                <p>@question.Grade</p>
+                            </div>
+
+                            <div class="col-md-6">
+                                <p class="font-weight-bold pt-3">Choices</p>
+                                @foreach (var choice in question.Choices)
+                                {
+
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="@choice.Text" readonly />
+                                            <div class="input-group-append">
+                                                <button disabled class="btn btn-sm @(@choice.IsCorrect ? "btn-success" : "btn-danger")">
+                                                    <i class="mdi @(choice.IsCorrect ? "mdi-check" : "mdi-close")"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 }

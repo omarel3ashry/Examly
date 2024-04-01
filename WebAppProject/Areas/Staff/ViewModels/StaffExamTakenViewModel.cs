@@ -5,6 +5,7 @@
         public int StudentId { get; set; }
         public int ExamId { get; set; }
         public int Grade { get; set; }
+        public int TotalGrade { get; set; }
         public string StudentName { get; set; }
         public string ExamTitle { get; set; }
     }
