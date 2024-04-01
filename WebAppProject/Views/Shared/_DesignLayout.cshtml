@@ -49,13 +49,13 @@
                 {
                     if (role == "Admin")
                     {
-                        <li class="nav-item">
+                        <li id="admin-dash" class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Manage" asp-action="Index">
                                 <i class="icon-grid menu-icon"></i>
                                 <span class="menu-title">Dashboard</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li id="admin-courses" class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Course" asp-action="Index">
                                 <i class="icon-grid menu-icon"></i>
                                 <span class="menu-title">Courses</span>
@@ -66,20 +66,20 @@
                     {
                         if (role == "Manager")
                         {
-                            <li class="nav-item">
+                            <li id="inst-manage" class="nav-item">
                                 <a class="nav-link" asp-area="Staff" asp-controller="Manager" asp-action="Index">
                                     <i class="icon-grid menu-icon"></i>
                                     <span class="menu-title">Manage Department</span>
                                 </a>
                             </li>
                         }
-                        <li class="nav-item">
+                        <li id="inst-courses" class="nav-item">
                             <a class="nav-link" asp-area="Staff" asp-controller="Instructor" asp-action="Index">
                                 <i class="icon-grid menu-icon"></i>
                                 <span class="menu-title">Courses</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li id="inst-exams" class="nav-item">
                             <a class="nav-link" asp-area="Staff" asp-controller="Instructor" asp-action="ShowExams">
                                 <i class="icon-grid menu-icon"></i>
                                 <span class="menu-title">Exams</span>
@@ -88,13 +88,13 @@
                     }
                     else if (role == "Student")
                     {
-                        <li class="nav-item">
+                        <li id="std-courses" class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Student" asp-action="Index">
                                 <i class="icon-grid menu-icon"></i>
                                 <span class="menu-title">Courses</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li id="std-exams" class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Exams">
                                 <i class="icon-grid menu-icon"></i>
                                 <span class="menu-title">Exams</span>
