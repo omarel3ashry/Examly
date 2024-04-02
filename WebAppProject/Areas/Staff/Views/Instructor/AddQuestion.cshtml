@@ -3,31 +3,40 @@
 @{
     ViewData["Title"] = "Add Question";
 }
+<indicator hidden>inst-courses</indicator>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">New Question</p>
+                <div class="row">
+                    <div class="col-12">
+                        <form asp-action="AddQuestion" asp-controller="Instructor" method="post">
 
-<div class="text">
-    <h2 data-text="Add_Question">Add_Question</h2>
-</div>
+                            <input type="hidden" asp-for="InstructorId" value="@Model.InstructorId" />
+                            <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
 
-<form asp-action="AddQuestion" asp-controller="Instructor" method="post">
+                            <div class="row m-1 mb-0">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Type">Question Type</label>
+                                        <select asp-for="Type" id="questionType" class="form-control"
+                                                asp-items="Html.GetEnumSelectList<QVMType>()">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
-    <input type="hidden" asp-for="InstructorId" value="@Model.InstructorId" />
-    <input type="hidden" asp-for="CourseId" value="@Model.CourseId" />
+                            <partial name="QuestionPartial" />
 
-    <div class="row m-1">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="Type">Question Type</label>
-                <select asp-for="Type" id="questionType" class="form-control"
-                        asp-items="Html.GetEnumSelectList<QVMType>()">
-                </select>
+                            <button type="submit" asp-route-courseId="@Model.CourseId" class="btn btn-primary">Add Question</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <partial name="QuestionPartial" />
-
-    <button type="submit" asp-route-courseId="@Model.CourseId" class="btn success">Add Question</button>
-</form>
+</div>
 
 <script src="/lib/jquery/dist/jquery.js"></script>
 @section Scripts {
@@ -46,6 +55,4 @@
             });
         });
     </script>
-
 }
-

@@ -218,7 +218,8 @@ namespace DataAccessLibrary.Repository
 
         public Task<List<Exam>> GetInstructorExamsAsync(int instructorId)
         {
-            return _context.Exams.Include(e => e.Questions)
+            return _context.Exams.Include(e => e.Course)
+                                 .Include(e => e.Questions)
                 .Where(e => !e.IsDeleted && e.Questions.ElementAt(0).InstructorId == instructorId)
                 .ToListAsync();
         }
