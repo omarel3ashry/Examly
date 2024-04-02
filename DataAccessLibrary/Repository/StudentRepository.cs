@@ -178,7 +178,7 @@ namespace DataAccessLibrary.Repository
             var studentChoicesForQuestion = new List<Choice>();
             var result = new List<ExamChoices>();
             bool isQuestionCorrect;
-            if (student != null && exam!=null)
+            if (student != null && exam != null)
             {
                 var listOfChoices = student.StudentAnswers.Select(e => e.Choice);
                 foreach (var choice in listOfChoices)

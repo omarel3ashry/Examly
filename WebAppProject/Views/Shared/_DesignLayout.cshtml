@@ -50,13 +50,13 @@
                     if (role == "Admin")
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Manage" asp-action="Index">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Manage" asp-action="Index">
                                 <i class="icon-grid menu-icon"></i>
                                 <span class="menu-title">Dashboard</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Course" asp-action="Index">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Course" asp-action="Index">
                                 <i class="mdi mdi-library  menu-icon"></i>
                                 <span class="menu-title">Courses</span>
                             </a>
@@ -67,20 +67,20 @@
                         if (role == "Manager")
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Staff" asp-controller="Manager" asp-action="Index">
+                                <a class="nav-link text-dark" asp-area="Staff" asp-controller="Manager" asp-action="Index">
                                     <i class="mdi mdi-bank menu-icon"></i>
                                     <span class="menu-title">Manage Department</span>
                                 </a>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Staff" asp-controller="Instructor" asp-action="Index">
+                            <a class="nav-link text-dark" asp-area="Staff" asp-controller="Instructor" asp-action="Index">
                                 <i class="mdi mdi-library menu-icon"></i>
                                 <span class="menu-title">Courses</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Staff" asp-controller="Instructor" asp-action="ShowExams">
+                            <a class="nav-link text-dark" asp-area="Staff" asp-controller="Instructor" asp-action="ShowExams">
                                 <i class="mdi mdi-book-open menu-icon"></i>
                                 <span class="menu-title">Exams</span>
                             </a>
@@ -89,22 +89,22 @@
                     else if (role == "Student")
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Student" asp-action="Index">
-                                <i class="mdi mdi-24px mdi-bulletin-board menu-icon"></i>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Index">
+                                <i class="mdi mdi-bulletin-board menu-icon"></i>
                                 
                                 <span class="menu-title">Courses</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Exams">
-                                <i class="mdi mdi-24px mdi-book-open menu-icon"></i>
+                                <i class="mdi mdi-book-open menu-icon"></i>
                                 <span class="menu-title">Exams</span>
                             </a>
                         </li>
                     }
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">
-                            <i class="mdi mdi-24px mdi-exit-to-app menu-icon"></i>
+                            <i class="mdi mdi-exit-to-app menu-icon"></i>
                             <span class="menu-title">Logout</span>
                         </a>
                     </li>

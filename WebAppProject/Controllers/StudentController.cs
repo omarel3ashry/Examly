@@ -71,8 +71,8 @@ namespace WebAppProject.Controllers
             var exam = await examRepository.GetByIdWithIncludesAsync(examId);
             var examTaken = await examTakenRepository.GetExamTakenWithIncludesAsync(_stdId, examId);
             if (exam != null
-                && examTaken==null
-                && exam.ExamDate <= DateTime.Now 
+                && examTaken == null
+                && exam.ExamDate <= DateTime.Now
                 && exam.ExamDate.AddMinutes(exam.DurationInMinutes) >= DateTime.Now
                 )
             {
@@ -93,7 +93,7 @@ namespace WebAppProject.Controllers
                 && exam.ExamDate <= DateTime.Now
                 && exam.ExamDate.AddMinutes(exam.DurationInMinutes).AddSeconds(30) >= DateTime.Now
                 )
-            {           
+            {
                 int grade = 0;
                 await studentRepository.AddStudentAnswersAsync(examId, _stdId, mcqChoices.Concat(tfChoices).ToList());
                 List<ExamChoices> examChoices = await studentRepository.GetStudentAnswersAsync(_stdId, examId);
@@ -109,7 +109,7 @@ namespace WebAppProject.Controllers
 
         public async Task<IActionResult> Answers(int examId)
         {
-            var examTaken = await examTakenRepository.GetExamTakenWithIncludesAsync(_stdId,examId);
+            var examTaken = await examTakenRepository.GetExamTakenWithIncludesAsync(_stdId, examId);
             var studentAnswers = await studentRepository.GetStudentAnswersAsync(_stdId, examId);
             if (examTaken == null || studentAnswers == null)
             {

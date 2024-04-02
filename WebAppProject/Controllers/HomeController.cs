@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Net;
 using System.Security.Claims;
 using WebAppProject.Models;
 
