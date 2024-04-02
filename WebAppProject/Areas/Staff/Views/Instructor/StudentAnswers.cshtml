@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <p class="card-title m-0">Answers</p>
+                    <p class="card-title m-0">Exam Grade: @ViewBag.StudentGrade/@ViewBag.ExamGrade</p>
                     <a type="button"
                        asp-action="ShowExams"
                        class="btn btn-inverse-primary">
@@ -21,7 +21,8 @@
                             <table class="table display expandable-table">
                                 <thead>
                                     <tr>
-                                        <th>Question (grade)</th>
+                                        <th>Question</th>
+                                        <th>Question Grade</th>
                                         <th>Answer</th>
                                         <th>Correct Answer</th>
                                         <th>Mark</th>
@@ -31,7 +32,8 @@
                                     @foreach (var examChoice in Model)
                                     {
                                         <tr>
-                                            <td>@examChoice.QuestionText (@examChoice.QuestionGrade)</td>
+                                            <td>@examChoice.QuestionText</td>
+                                            <td>@examChoice.QuestionGrade</td>
                                             <td>
                                                 <ul class="mb-0">
                                                     @foreach (var choice in examChoice.StudentChoices)

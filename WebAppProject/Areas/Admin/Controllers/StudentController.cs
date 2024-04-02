@@ -50,9 +50,16 @@ namespace WebAppProject.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Answers(int stId, int examId)
         {
+            var examTaken = await examTakenRepo.GetExamTakenWithIncludesAsync(stId, examId);
             var studentAnswers = await studentRepository.GetStudentAnswersAsync(stId, examId);
-            var model = _mapper.Map<IEnumerable<StudentAnswersViewModel>>(studentAnswers);
-            ViewBag.StId = stId;
+            if (examTaken == null || studentAnswers == null)
+            {
+                return NotFound();
+            }
+            IEnumerable<StudentAnswersViewModel> model =
+                    _mapper.Map<IEnumerable<StudentAnswersViewModel>>(studentAnswers);
+            ViewBag.StudentGrade = examTaken.Grade;
+            ViewBag.ExamGrade = examTaken.Exam.TotalGrade;
             return View(model);
         }
 

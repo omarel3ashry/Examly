@@ -17,7 +17,7 @@
           integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
-    <link rel="shortcut icon" href="images/favicon.png" />
+    <link rel="shortcut icon" href="~/images/logo-mini.svg" />
 </head>
 <body>
 
@@ -25,10 +25,11 @@
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a class="navbar-brand brand-logo mr-5" asp-action="index">
-                    <img src="/images/exlogo.svg" class="mr-2" alt="logo" />
+                    <img src="/images/logo.svg" class=" mb-1" alt="logo" />
+                    <h3 class="d-inline-block font-weight-bold">Examly</h3>
                 </a>
-                <a class="navbar-brand brand-logo-mini" asp-action="index">
-                    <img src="/images/Blue_Modern_Education_Logo.png" alt="logo" />
+                <a class="navbar-brand brand-logo-mini ml-2" asp-action="index">
+                    <img src="/images/logo.svg" alt="logo" />
                 </a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -139,7 +140,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <partial name="_ValidationScriptsPartial" />
     <script src="~/scripts/site.js"></script>
-    <script src="~/scripts/script.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">

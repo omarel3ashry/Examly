@@ -11,37 +11,12 @@ document.addEventListener('DOMContentLoaded', function () {
     //Active class can be hard coded directly in html file also as required
 
     function addActiveClass(element) {
-        var current = location.pathname.split("/").slice(-1)[0].replace(/^\/|\/$/g, '');
         let indicator = document.querySelector('indicator').innerText;
         console.log('indicator = ' + indicator);
         console.log('nav-item id = ' + element.closest('.nav-item').getAttribute('id'));
         if (element.closest('.nav-item').getAttribute('id') == indicator) {
                 element.closest('.nav-item').classList.add('active');
         }
-        /*   if (current === "") {
-             //for root url
-             if (element.getAttribute('href').indexOf("index.html") !== -1) {
-               element.closest('.nav-item').classList.add('active');
-               *//*if (element.closest('.sub-menu')) {
-   element.closest('.collapse').classList.add('show');
-   element.classList.add('active');
- }*//*
-      }
-    } else {
-      //for other url
-        if (element.getAttribute('href').split('/').pop()==current) {
-            console.log(current);
-        element.closest('.nav-item').classList.add('active');
-        
-        *//*if (element.closest('.sub-menu')) {
-          element.closest('.collapse').classList.add('show');
-          element.classList.add('active');
-        }
-        if (element.closest('.submenu-item')) {
-          element.classList.add('active');
-        }*//*
-      }
-    }*/
     }
 
     document.querySelectorAll('.nav li a', sidebar).forEach(function (item) {

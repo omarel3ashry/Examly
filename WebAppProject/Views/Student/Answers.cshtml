@@ -2,11 +2,12 @@
 @{
     ViewData["Title"] = "E-Exam | Answers";
 }
+<indicator hidden>std-exams</indicator>
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <p class="card-title">Exam Grade: @ViewBag.StudentGrade/@ViewBag.Exam.TotalGrade</p>
+                <p class="card-title">Exam Grade: @ViewBag.StudentGrade/@ViewBag.ExamGrade</p>
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">

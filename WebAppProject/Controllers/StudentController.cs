@@ -118,7 +118,7 @@ namespace WebAppProject.Controllers
             IEnumerable<StudentAnswersViewModel> model =
                     mapper.Map<IEnumerable<StudentAnswersViewModel>>(studentAnswers);
             ViewBag.StudentGrade = examTaken.Grade;
-            ViewBag.Exam = examTaken.Exam;
+            ViewBag.ExamGrade = examTaken.Exam.TotalGrade;
             return View(model);
         }
     }
