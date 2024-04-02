@@ -4,6 +4,7 @@ using DataAccessLibrary.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using WebAppProject.Areas.Staff.ViewModels;
 using WebAppProject.ViewModels;
 
@@ -19,6 +20,7 @@ namespace WebAppProject.Areas.Staff.Controllers
         private readonly IExamRepository _examRepo;
         private readonly IQuestionRepository _questionRepo;
         private readonly IStudentRepository _studentRepo;
+        private readonly IExamTakenRepository _examTakenRepo;
         private readonly IMapper _mapper;
         private Random _random;
         private readonly int _instId;
@@ -27,6 +29,7 @@ namespace WebAppProject.Areas.Staff.Controllers
                                     IExamRepository examRepo,
                                     IQuestionRepository questionRepo,
                                     IStudentRepository studentRepo,
+                                    IExamTakenRepository examTakenRepo,
                                     IHttpContextAccessor accessor,
                                     IMapper mapper)
         {
@@ -34,6 +37,7 @@ namespace WebAppProject.Areas.Staff.Controllers
             _examRepo = examRepo;
             _questionRepo = questionRepo;
             _studentRepo = studentRepo;
+            _examTakenRepo = examTakenRepo;
             _mapper = mapper;
             _random = new Random();
             _instId = int.Parse(accessor.HttpContext!.User.Claims.FirstOrDefault(c => c.Type == "id")!.Value);
@@ -180,14 +184,14 @@ namespace WebAppProject.Areas.Staff.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MakeExam(int id, int deptId)
+        public async Task<IActionResult> MakeExam(int courseId, int deptId)
         {
-            if (id == 0)
+            if (courseId == 0)
             {
                 // TODO: user proper page
                 return NotFound();
             }
-            var questions = await _questionRepo.GetInstQuestionsAsync(id, _instId);
+            var questions = await _questionRepo.GetInstQuestionsAsync(courseId, _instId);
             var mcqDifficultyG = questions.Where(e => e.Type == QType.MCQ)
                                       .GroupBy(q => q.Difficulty)
                                       .OrderBy(q => (int)q.Key)
@@ -217,7 +221,7 @@ namespace WebAppProject.Areas.Staff.Controllers
 
             var model = new InstExamViewModel()
             {
-                CourseId = id,
+                CourseId = courseId,
                 TotalMCQ = mcqDifficultyCounts,
                 TotalTF = tfDifficultyCounts,
                 NoOfMCQ = new int[3],
@@ -360,10 +364,19 @@ namespace WebAppProject.Areas.Staff.Controllers
 
         public async Task<IActionResult> StudentAnswers(int examId, int stdId)
         {
+            var examTaken = await _examTakenRepo.GetExamTakenWithIncludesAsync(stdId, examId);
             List<ExamChoices> studentAnswers = await _studentRepo.GetStudentAnswersAsync(stdId, examId);
+
+            if (examTaken == null || studentAnswers.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
 
             IEnumerable<StudentAnswersViewModel> studentAnswersVM =
                 _mapper.Map<IEnumerable<StudentAnswersViewModel>>(studentAnswers);
+
+            ViewBag.StudentGrade = examTaken.Grade;
+            ViewBag.ExamGrade = examTaken.Exam.TotalGrade;
 
             return View(studentAnswersVM);
         }

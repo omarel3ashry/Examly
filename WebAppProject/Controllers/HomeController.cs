@@ -13,7 +13,7 @@ namespace WebAppProject.Controllers
         {
             _logger = logger;
         }
-
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
@@ -30,6 +30,18 @@ namespace WebAppProject.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        [Route("/Error/{statusCode}")]
+        public IActionResult Error(int statusCode)
+        {
+            ViewBag.StatusCode = statusCode;
+            if (statusCode == 404)
+                ViewBag.StatusCodeMsg = "The page you’re looking for was not found.";
+            else if (statusCode == 401)
+                ViewBag.StatusCodeMsg = "You don’t have access to this page.";
+            else
+                ViewBag.StatusCodeMsg = "";
+            return View("HttpError");
         }
     }
 }

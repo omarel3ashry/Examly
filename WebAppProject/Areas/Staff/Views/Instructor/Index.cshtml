@@ -2,31 +2,55 @@
 @{
     ViewData["Title"] = "Index";
 }
-<div class="text">
-    <h2 data-text="Courses_Taught">Courses_Taught</h2>
+<indicator hidden>inst-courses</indicator>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">Courses Taught</p>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table display expandable-table">
+                                <thead>
+                                    <tr>
+                                        <th>Department Name</th>
+                                        <th>Course Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.DeptName</td>
+                                            <td>@item.CourseName</td>
+
+                                            <td class="col-1">
+                                                <a type="button"
+                                                        asp-action="Info" asp-route-id="@item.CourseId"
+                                                        class="btn btn-inverse-dark btn-rounded btn-icon ml-1">
+                                                    <i class="mdi mdi-information-variant"></i>
+                                                </a>
+                                                <a type="button"
+                                                        asp-action="QuestionBank" asp-route-id="@item.CourseId"
+                                                   class="btn btn-inverse-primary btn-sm ml-1">
+                                                    Questions
+                                                </a>
+                                                <a type="button"
+                                                        asp-action="MakeExam" asp-route-deptId="@item.DepartmentId" asp-route-courseId="@item.CourseId"
+                                                   class="btn btn-inverse-primary btn-sm ml-1">
+                                                   Make Exam
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>Department Name</th>
-            <th>Course Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.DeptName</td>
-                <td>@item.CourseName</td>
-                <td>
-                    <a asp-action="Info" asp-route-id="@item.CourseId" class="btn info">Info</a>
-                    <a asp-action="QuestionBank" asp-route-id="@item.CourseId" class="btn success">Question Bank</a>
-                    <a asp-action="MakeExam" asp-route-deptId="@item.DepartmentId" asp-route-id="@item.CourseId" class="btn primary">Make Exam</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-

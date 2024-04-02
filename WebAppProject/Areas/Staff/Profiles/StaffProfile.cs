@@ -37,7 +37,8 @@ namespace WebAppProject.Areas.Staff.Profiles
 
             CreateMap<ExamTaken, StaffExamTakenViewModel>()
                 .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.Student.Name))
-                .ForMember(dest => dest.ExamTitle, opt => opt.MapFrom(src => src.Exam.Title));
+                .ForMember(dest => dest.ExamTitle, opt => opt.MapFrom(src => src.Exam.Title))
+                .ForMember(dest => dest.TotalGrade, opt => opt.MapFrom(src => src.Exam.TotalGrade));
 
             // department manager mapping
 

@@ -3,99 +3,111 @@
 @{
     ViewData["Title"] = "Make Exam";
 }
+<indicator hidden>inst-courses</indicator>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">Make Exam</p>
+                <div class="row">
+                    <div class="col-12">
+                        <form asp-action="MakeExam" method="post">
 
-<div class="text">
-    <h2 data-text="Make_Exam">Make_Exam</h2>
+                            <partial name="ExamEditPartial" />
+                            <br />
+
+                            <div class="col-md-4 d-inline-block m-2 text-center">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr><th colspan="3">MCQ Questions</th></tr>
+                                        <tr>
+                                            <th>Easy (@Model.TotalMCQ[0])</th>
+                                            <th>Medium (@Model.TotalMCQ[1])</th>
+                                            <th>Hard (@Model.TotalMCQ[2])</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="col-3">
+                                                <input asp-for="TotalMCQ[0]" value="@Model.TotalMCQ[0]" hidden />
+                                                <input asp-for="NoOfMCQ[0]" value="@Model.NoOfMCQ[0]"
+                                                       min="0"
+                                                       max="@Model.TotalMCQ[0]"
+                                                       onkeyup=enforceMinMax(this) />
+                                                <span asp-validation-for="NoOfMCQ[0]" class="text-danger"></span>
+                                            </td>
+                                            <td class="col-3">
+                                                <input asp-for="TotalMCQ[1]" value="@Model.TotalMCQ[1]" hidden />
+                                                <input asp-for="NoOfMCQ[1]" value="@Model.NoOfMCQ[1]"
+                                                       min="0"
+                                                       max="@Model.TotalMCQ[1]"
+                                                       onkeyup=enforceMinMax(this) />
+                                                <span asp-validation-for="NoOfMCQ[1]" class="text-danger"></span>
+                                            </td>
+                                            <td class="col-3">
+                                                <input asp-for="TotalMCQ[2]" value="@Model.TotalMCQ[2]" hidden />
+                                                <input asp-for="NoOfMCQ[2]" value="@Model.NoOfMCQ[2]"
+                                                       min="0"
+                                                       max="@Model.TotalMCQ[2]"
+                                                       onkeyup=enforceMinMax(this) />
+                                                <span asp-validation-for="NoOfMCQ[2]" class="text-danger"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-4 d-inline-block m-2 text-center">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr><th colspan="3">True/False Questions</th></tr>
+                                        <tr>
+                                            <th>Easy (@Model.TotalTF[0])</th>
+                                            <th>Medium (@Model.TotalTF[1])</th>
+                                            <th>Hard (@Model.TotalTF[2])</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="col-3">
+                                                <input asp-for="TotalTF[0]" value="@Model.TotalTF[0]" hidden />
+                                                <input asp-for="NoOfTF[0]" value="@Model.NoOfTF[0]"
+                                                       min="0"
+                                                       max="@Model.TotalTF[0]"
+                                                       onkeyup=enforceMinMax(this) />
+                                                <span asp-validation-for="NoOfTF[0]" class="text-danger"></span>
+                                            </td>
+                                            <td class="col-3">
+                                                <input asp-for="TotalTF[1]" value="@Model.TotalTF[1]" hidden />
+                                                <input asp-for="NoOfTF[1]" value="@Model.NoOfTF[1]"
+                                                       min="0"
+                                                       max="@Model.TotalTF[1]"
+                                                       onkeyup=enforceMinMax(this) />
+                                                <span asp-validation-for="NoOfTF[1]" class="text-danger"></span>
+                                            </td>
+                                            <td class="col-3">
+                                                <input asp-for="TotalTF[2]" value="@Model.TotalTF[2]" hidden />
+                                                <input asp-for="NoOfTF[2]" value="@Model.NoOfTF[2]"
+                                                       min="0"
+                                                       max="@Model.TotalTF[2]"
+                                                       onkeyup=enforceMinMax(this) />
+                                                <span asp-validation-for="NoOfTF[2]" class="text-danger"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br />
+                            <div class="d-flex justify-content-end">
+                            <a asp-action="Index" class="btn btn-inverse-dark m-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary m-2">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<form asp-action="MakeExam" method="post">
-    
-    <partial name="ExamEditPartial" />
-    <br />
-    
-    <div class="col-md-4 d-inline-block m-2 text-center">
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr><th colspan="3">MCQ Questions</th></tr>
-                <tr>
-                    <th>Easy (@Model.TotalMCQ[0])</th>
-                    <th>Medium (@Model.TotalMCQ[1])</th>
-                    <th>Hard (@Model.TotalMCQ[2])</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="col-3">
-                        <input asp-for="TotalMCQ[0]" value="@Model.TotalMCQ[0]" hidden />
-                        <input asp-for="NoOfMCQ[0]" value="@Model.NoOfMCQ[0]"
-                               min="0"
-                               max="@Model.TotalMCQ[0]"
-                               onkeyup=enforceMinMax(this) />
-                        <span asp-validation-for="NoOfMCQ[0]" class="text-danger"></span>
-                    </td>
-                    <td class="col-3">
-                        <input asp-for="TotalMCQ[1]" value="@Model.TotalMCQ[1]" hidden />
-                        <input asp-for="NoOfMCQ[1]" value="@Model.NoOfMCQ[1]"
-                               min="0"
-                               max="@Model.TotalMCQ[1]"
-                               onkeyup=enforceMinMax(this) />
-                        <span asp-validation-for="NoOfMCQ[1]" class="text-danger"></span>
-                    </td>
-                    <td class="col-3">
-                        <input asp-for="TotalMCQ[2]" value="@Model.TotalMCQ[2]" hidden />
-                        <input asp-for="NoOfMCQ[2]" value="@Model.NoOfMCQ[2]"
-                               min="0"
-                               max="@Model.TotalMCQ[2]"
-                               onkeyup=enforceMinMax(this) />
-                        <span asp-validation-for="NoOfMCQ[2]" class="text-danger"></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="col-md-4 d-inline-block m-2 text-center">
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr><th colspan="3">True/False Questions</th></tr>
-                <tr>
-                    <th>Easy (@Model.TotalTF[0])</th>
-                    <th>Medium (@Model.TotalTF[1])</th>
-                    <th>Hard (@Model.TotalTF[2])</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="col-3">
-                        <input asp-for="TotalTF[0]" value="@Model.TotalTF[0]" hidden />
-                        <input asp-for="NoOfTF[0]" value="@Model.NoOfTF[0]"
-                               min="0"
-                               max="@Model.TotalTF[0]"
-                               onkeyup=enforceMinMax(this) />
-                        <span asp-validation-for="NoOfTF[0]" class="text-danger"></span>
-                    </td>
-                    <td class="col-3">
-                        <input asp-for="TotalTF[1]" value="@Model.TotalTF[1]" hidden />
-                        <input asp-for="NoOfTF[1]" value="@Model.NoOfTF[1]"
-                               min="0"
-                               max="@Model.TotalTF[1]"
-                               onkeyup=enforceMinMax(this) />
-                        <span asp-validation-for="NoOfTF[1]" class="text-danger"></span>
-                    </td>
-                    <td class="col-3">
-                        <input asp-for="TotalTF[2]" value="@Model.TotalTF[2]" hidden />
-                        <input asp-for="NoOfTF[2]" value="@Model.NoOfTF[2]"
-                               min="0"
-                               max="@Model.TotalTF[2]"
-                               onkeyup=enforceMinMax(this) />
-                        <span asp-validation-for="NoOfTF[2]" class="text-danger"></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <br />
-    <button type="submit" asp-route-id="@ViewBag.Courseid"  class="btn success">Submit</button>
-</form>
 
 @section Scripts {
     <script>

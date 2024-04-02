@@ -1,13 +1,7 @@
 ﻿
 @{
     ViewData["Title"] = "Edit";
+    ViewData["FormTitle"] = "Edit Course";
 }
-
-<div class="text">
-    <h2 data-text="Edit">Edit</h2>
-</div>
+<indicator hidden>admin-courses</indicator>
 <partial name="CourseForm" />
-
-<div>
-    <a asp-action="Index" asp-controller="Course" class="btn info">Back to List</a>
-</div>

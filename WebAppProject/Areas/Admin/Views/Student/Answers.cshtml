@@ -1,41 +1,74 @@
 ﻿@model IEnumerable<StudentAnswersViewModel>
-@{  
+@{
     ViewData["Title"] = "E-Exam | Answers";
 }
-<a class="btn success" asp-action="Grades" asp-route-stId="@ViewBag.StId">Back</a>
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Question (grade)</th>
-                <th>Answer</th>
-                <th>Correct Answer</th>
-                <th>Mark</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var examChoice in Model)
-            {
-                <tr>
-                    <td>@examChoice.QuestionText (@examChoice.QuestionGrade)</td>
-                    <td class="@(examChoice.IsCorrect ? "correct" : "incorrect")">
-                        @foreach (var choice in examChoice.StudentChoices)
-                        {
-                            <span>@choice.Text</span>
-                            <br />
-                        }
-                    </td>
-                    <td>
-                        @foreach (var choice in examChoice.CorrectChoices)
-                        {
-                            <span>@choice.Text </span>
-                            <br />
-                        }
-                    </td>
-                    <td>              
-                            <span>@(examChoice.IsCorrect ? "✔" : "❌") </span>
-                            <br />
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<indicator hidden>admin-dash</indicator>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">Exam Grade: @ViewBag.StudentGrade/@ViewBag.ExamGrade</p>
+                <div class="row">
+                    <div c lass="col-12">
+                        <div class="table-responsive">
+                            <table class="table display expandable-table">
+                                <thead>
+                                    <tr>
+                                        <th>Question</th>
+                                        <th>Question Grade</th>
+                                        <th>Answer</th>
+                                        <th>Correct Answer</th>
+                                        <th>Mark</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var examChoice in Model)
+                                    {
+                                        string choiceClass = examChoice.IsCorrect ? "text-success" : "text-danger";
+                                        <tr>
+                                            <td>@examChoice.QuestionText</td>
+                                            <td>@examChoice.QuestionGrade</td>
+                                            <td>
+                                                @if (examChoice.StudentChoices.Count > 0)
+                                                {
+                                                    <ul class="mb-0">
+                                                        @foreach (var choice in examChoice.StudentChoices)
+                                                        {
+                                                            <li class="@choiceClass">@choice.Text</li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <p>Unanswered</p>
+                                                }
+                                            </td>
+                                            <td>
+                                                <ul class="mb-0">
+                                                    @foreach (var choice in examChoice.CorrectChoices)
+                                                    {
+                                                        <li>@choice.Text</li>
+                                                    }
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                @if (examChoice.IsCorrect)
+                                                {
+                                                    <i class="mdi mdi-24px mdi-check-circle text-success"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="mdi mdi-24px mdi-close-circle text-danger"></i>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

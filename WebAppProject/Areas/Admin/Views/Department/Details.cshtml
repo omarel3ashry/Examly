@@ -4,30 +4,36 @@
     string managerName = Model.ManagerName ?? "No Manager";
     string managerDate = Model.HireDate?.ToString() ?? "No Hire Date";
 }
-
-<h1>Details</h1>
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3 mt-4">
-            <div class="card">
-                <div class="card-body">
-                    <p class="card-text">ID: <strong> @Model.Id</strong> </p>
-                    <p class="card-text">Name: <strong>@Model.Name </strong></p>
-                    <p class="card-text">Name: <strong>@Model.BranchName </strong></p>
-                    <p class="card-text">Manager Name: <strong>@managerName</strong></p>
-                    <p class="card-text">Manager Hiring date: <strong>@managerDate</strong></p>
-
+<indicator hidden>admin-dash</indicator>
+<div class="row justify-content-center">
+    <div class="col-md-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p class="card-title m-0">Department Details</p>
+                    <div>
+                        <a asp-action="Edit" asp-controller="Department" asp-route-Id="@Model.Id" class="btn btn-inverse-primary btn-rounded btn-icon ml-1 align-content-center">
+                            <i class="mdi mdi-pencil"></i>
+                        </a>
+                        <a asp-action="Delete" asp-controller="Department" asp-route-Id="@Model.Id" class="btn btn-inverse-danger btn-rounded btn-icon ml-1 align-content-center">
+                            <i class="mdi mdi-delete"></i>
+                        </a>
+                        <a asp-action="Index" asp-controller="Manage"
+                           class="btn btn-inverse-dark btn-rounded btn-icon ml-1 align-content-center">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p class="card-text">ID: <strong> @Model.Id</strong> </p>
+                        <p class="card-text">Name: <strong>@Model.Name </strong></p>
+                        <p class="card-text">Name: <strong>@Model.BranchName </strong></p>
+                        <p class="card-text">Manager Name: <strong>@managerName</strong></p>
+                        <p class="card-text">Manager Hiring date: <strong>@managerDate</strong></p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<div>
-    <div class="row mt-3">
-        <div class="col-md-4 offset-md-0">
-            <a asp-action="Index" asp-controller="Manage" class="btn info">Back to Dashboard</a>
-            <a asp-action="Edit" asp-controller="Department" asp-route-Id="@Model.Id" class="btn success">Edit</a>
-            <a asp-action="Delete" asp-controller="Department" asp-route-Id="@Model.Id" class="btn danger">Delete</a>
         </div>
     </div>
 </div>

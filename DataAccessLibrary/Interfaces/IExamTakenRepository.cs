@@ -4,11 +4,9 @@ namespace DataAccessLibrary.Interfaces
 {
     public interface IExamTakenRepository : IRepository<ExamTaken>
     {
-        public ExamTaken? GetByStudentId(int studentId);
+        public ExamTaken? GetExamTakenWithIncludes(int studentId, int examId);
+        public Task<ExamTaken?> GetExamTakenWithIncludesAsync(int studentId, int examId);
         public List<ExamTaken> GetAllByStudentIdWithIncludes(int studentId);
         public Task<List<ExamTaken>> GetAllByStudentIdWithIncludesAsync(int studentId);
-        public Task<ExamTaken?> GetByStudentIdAsync(int studentId);
-        public ExamTaken? GetByStudentIdWithIncludes(int studentId);
-        public Task<ExamTaken?> GetByStudentIdWithIncludesAsync(int studentId);
     }
 }

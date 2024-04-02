@@ -1,22 +1,33 @@
 ﻿@model BranchViewModel
 
-<div class=" row m-1">
-    <div class="col-md-4">
-        <form method="post" >
-            <div class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">@ViewData["FormTitle"]</p>
+                <div class="row">
+                    <div class="col-12">
+                        <form method="post" class="forms-sample">
+                            <div class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Location" class="control-label"></label>
+                                <input asp-for="Location" class="form-control" />
+                                <span asp-validation-for="Location" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Confirm" class="btn btn-primary mr-2" />
+                                <a asp-action="Index" asp-controller="Manage" class="btn btn-light">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Confirm" class="btn success" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+
