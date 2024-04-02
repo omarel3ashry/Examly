@@ -175,20 +175,20 @@ namespace DataAccessLibrary.Repository
                      .ToListAsync();
         }
 
-        public ExamTaken? GetByStudentIdWithIncludes(int studentId)
+        public ExamTaken? GetExamTakenWithIncludes(int studentId,int examId)
         {
             return _context.ExamsTaken
                     .Include(e => e.Student)
                     .Include(e => e.Exam)
-                    .FirstOrDefault(e => e.StudentId == studentId);
+                    .FirstOrDefault(e => e.StudentId == studentId&& e.ExamId==examId);
         }
 
-        public Task<ExamTaken?> GetByStudentIdWithIncludesAsync(int studentId)
+        public Task<ExamTaken?> GetExamTakenWithIncludesAsync(int studentId,int examId)
         {
             return _context.ExamsTaken
                     .Include(e => e.Student)
                     .Include(e => e.Exam)
-                    .FirstOrDefaultAsync(e => e.StudentId == studentId);
+                    .FirstOrDefaultAsync(e => e.StudentId == studentId && e.ExamId== examId);
         }
     }
 }

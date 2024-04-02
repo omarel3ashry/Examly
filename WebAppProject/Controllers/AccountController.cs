@@ -84,6 +84,13 @@ namespace WebAppProject.Controllers
 
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                string role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)!.Value;
+                string controller = role == "Admin" ? "Manage" : role == "Student" ? "Student" : "Instructor";
+                string area = role == "Admin" ? "Admin" : role == "Instructor" || role == "Manager" ? "Staff" : "";
+                return RedirectToAction("Index", controller, new { area });
+            }
             return View();
         }
 
@@ -134,6 +141,10 @@ namespace WebAppProject.Controllers
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+        public IActionResult AccessDenied()
+        {
+            return StatusCode(401);
         }
     }
 }

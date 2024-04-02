@@ -24,11 +24,11 @@
     <div class="container-scroller">
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo mr-5" href="index.html">
-                    <img src="images/exlogo.png" class="mr-2" alt="logo" />
+                <a class="navbar-brand brand-logo mr-5" asp-action="index">
+                    <img src="/images/exlogo.svg" class="mr-2" alt="logo" />
                 </a>
-                <a class="navbar-brand brand-logo-mini" href="index.html">
-                    <img src="images/Blue_Modern_Education_Logo.png" alt="logo" />
+                <a class="navbar-brand brand-logo-mini" asp-action="index">
+                    <img src="/images/Blue_Modern_Education_Logo.png" alt="logo" />
                 </a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -43,12 +43,12 @@
         </nav>
     </div>
     <div class="container-fluid page-body-wrapper">
-        <nav class="sidebar sidebar-offcanvas"  id="sidebar">
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <ul class="nav">
                 @if (User.Identity.IsAuthenticated)
                 {
                     if (role == "Admin")
                     {
-                        <ul class="nav">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Manage" asp-action="Index">
                                 <i class="icon-grid menu-icon"></i>
@@ -61,14 +61,11 @@
                                 <span class="menu-title">Courses</span>
                             </a>
                         </li>
-                        </ul>
                     }
                     else if (role == "Manager" || role == "Instructor")
                     {
-                        <ul class="nav">
-                        @if (role == "Manager")
+                        if (role == "Manager")
                         {
-
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Staff" asp-controller="Manager" asp-action="Index">
                                     <i class="mdi mdi-bank menu-icon"></i>
@@ -88,40 +85,32 @@
                                 <span class="menu-title">Exams</span>
                             </a>
                         </li>
-                        </ul>
                     }
                     else if (role == "Student")
                     {
-                        <ul class="nav">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Student" asp-action="Index">
-                                <i class="mdi mdi-library menu-icon"></i>
+                                <i class="mdi mdi-24px mdi-bulletin-board menu-icon"></i>
+                                
                                 <span class="menu-title">Courses</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="Exams">
-                                <i class="mdi mdi-file-document-box menu-icon"></i>
+                                <i class="mdi mdi-24px mdi-book-open menu-icon"></i>
                                 <span class="menu-title">Exams</span>
                             </a>
                         </li>
-                        </ul>
                     }
-                <div class="align-self-end">
-                    <ul class="nav align-self-end">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">
-                                <i class="mdi mdi-logout-variant menu-icon"></i>
-                                <span class="menu-title">Logout</span>
-                            </a>
-                        </li>
-                    </ul>
-                    </div>
-                
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">
+                            <i class="mdi mdi-24px mdi-exit-to-app menu-icon"></i>
+                            <span class="menu-title">Logout</span>
+                        </a>
+                    </li>
                 }
                 else
                 {
-                    <ul class="nav">
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">
                             <i class="mdi mdi-login-variant menu-icon"></i>
@@ -134,9 +123,8 @@
                             <span class="menu-title">Register</span>
                         </a>
                     </li>
-                    </ul>
                 }
-
+            </ul>
         </nav>
         <div class="main-panel">
             <div class="content-wrapper">

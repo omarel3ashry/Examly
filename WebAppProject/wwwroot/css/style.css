@@ -30619,6 +30619,9 @@ div.tagsinput span.tag a {
   cursor: pointer;
 }
 
+.gender-sel {
+    z-index: 4;
+}
 .branch-sel {
   z-index: 3;
 }
@@ -30632,14 +30635,14 @@ div.tagsinput span.tag a {
 }
 
 .sel::before {
-  position: absolute;
-  /* content: '\f063'; */
-  /* just for testing */
-  content: '^';
-  font-family: "Font Awesome 5 Free";
-  color: #FFF;
-  right: 20px;
-  top: calc(50% - 0.5em);
+    position: absolute;
+    /* content: '\f063'; */
+    /* just for testing */
+    content: '^';
+    font-family: "Font Awesome 5 Free";
+    color: #FFF;
+    right: 20px;
+    top: calc(50% - 0.5em);
 }
 
 .sel.active::before {

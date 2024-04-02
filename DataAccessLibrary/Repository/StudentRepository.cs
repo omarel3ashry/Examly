@@ -170,12 +170,15 @@ namespace DataAccessLibrary.Repository
                 .ThenInclude(e => e.Choice)
                 .ThenInclude(e => e.Question)
                 .FirstOrDefaultAsync(e => e.Id == studentId);
-
+            var exam = await _context.Exams
+                .Include(e => e.Questions)
+                .FirstOrDefaultAsync(e => e.Id == examId);
+            var answeredQuestions = new List<Question>();
             var questionCorrectChoices = new List<Choice>();
             var studentChoicesForQuestion = new List<Choice>();
             var result = new List<ExamChoices>();
             bool isQuestionCorrect;
-            if (student != null)
+            if (student != null && exam!=null)
             {
                 var listOfChoices = student.StudentAnswers.Select(e => e.Choice);
                 foreach (var choice in listOfChoices)
@@ -183,6 +186,7 @@ namespace DataAccessLibrary.Repository
                     if (!result.Select(r => r.Question).Contains(choice.Question))
                     {
                         Question question = choice.Question;
+                        answeredQuestions.Add(question);
                         questionCorrectChoices = await _context.Choices.Where(e => e.QuestionId == question.Id && e.IsCorrect).ToListAsync();
                         studentChoicesForQuestion = listOfChoices.Where(e => e.QuestionId == question.Id).ToList();
                         isQuestionCorrect = questionCorrectChoices.Count == studentChoicesForQuestion.Count
@@ -194,6 +198,22 @@ namespace DataAccessLibrary.Repository
                             StudentChoices = studentChoicesForQuestion,
                             IsCorrect = isQuestionCorrect
                         });
+                    }
+                }
+                if (exam.Questions.Count != answeredQuestions.Count)
+                {
+                    foreach (var question in exam.Questions)
+                    {
+                        if (!answeredQuestions.Contains(question))
+                        {
+                            result.Add(new ExamChoices
+                            {
+                                Question = question,
+                                CorrectChoices = await _context.Choices.Where(e => e.QuestionId == question.Id && e.IsCorrect).ToListAsync(),
+                                StudentChoices = new List<Choice>(),
+                                IsCorrect = false
+                            });
+                        }
                     }
                 }
             }

@@ -51,8 +51,8 @@ namespace WebAppProject
             }
 
             app.UseHttpsRedirection();
+            app.UseStatusCodePagesWithRedirects("/Error/{0}");
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
