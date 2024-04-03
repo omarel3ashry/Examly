@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -59,10 +60,29 @@ namespace DataAccessLibrary.Repository
             return question?.ToList() ?? new List<Question>();
         }
 
+        public async Task<List<Question>> GetCourseQuestionsAsync(int instId, int courseId)
+        {
+            var instructor = await _context.Instructors
+                .Include(e => e.Questions.Where(e => !e.IsDeleted && e.CourseId == courseId))
+                .ThenInclude(e => e.Choices)
+                .FirstOrDefaultAsync(e => !e.IsDeleted && e.Id == instId);
+
+            var questions = instructor?.Questions.ToList() ?? new List<Question>();
+
+            return questions;
+        }
+
         public int AddQuestion(Question entity)
         {
             _context.Questions.Add(entity);
             _context.SaveChanges();
+            return entity.Id;
+        }
+
+        public async Task<int> AddQuestionAsync(Question entity)
+        {
+            await _context.Questions.AddAsync(entity);
+            await _context.SaveChangesAsync();
             return entity.Id;
         }
 
@@ -115,9 +135,9 @@ namespace DataAccessLibrary.Repository
             return _context.Instructors.Find(id);
         }
 
-        public async Task<Instructor?> GetByIdAsync(int id)
+        public ValueTask<Instructor?> GetByIdAsync(int id)
         {
-            return await _context.Instructors.FindAsync(id);
+            return _context.Instructors.FindAsync(id);
         }
 
         public Instructor? GetByIdWithIncludes(int id)
@@ -145,6 +165,10 @@ namespace DataAccessLibrary.Repository
         public Instructor? GetByUserId(int userId)
         {
             return _context.Instructors.FirstOrDefault(e => e.UserId == userId);
+        }
+        public Task<Instructor?> GetByUserIdAsync(int userId)
+        {
+            return _context.Instructors.FirstOrDefaultAsync(e => e.UserId == userId);
         }
 
         public int Add(Instructor entity)
@@ -189,9 +213,9 @@ namespace DataAccessLibrary.Repository
                 int? userId = instructor.UserId;
                 if (userId != null && userId != 0)
                 {
-                    _context.Users.Where(e => e.Id == userId).ExecuteDelete() ;
+                    _context.Users.Where(e => e.Id == userId).ExecuteDelete();
                 }
-                    _context.Instructors.Remove(instructor);
+                _context.Instructors.Remove(instructor);
 
                 _context.SaveChanges();
                 return true;
@@ -213,12 +237,12 @@ namespace DataAccessLibrary.Repository
 
         public Instructor? Select(Expression<Func<Instructor, bool>> predicate)
         {
-            return _context.Instructors.Where(predicate).FirstOrDefault();
+            return _context.Instructors.Where(e => !e.IsDeleted).Where(predicate).FirstOrDefault();
         }
 
         public Task<Instructor?> SelectAsync(Expression<Func<Instructor, bool>> predicate)
         {
-            return _context.Instructors.Where(predicate).FirstOrDefaultAsync();
+            return _context.Instructors.Where(e => !e.IsDeleted).Where(predicate).FirstOrDefaultAsync();
         }
 
         public List<Instructor> SelectAll(Expression<Func<Instructor, bool>> predicate)
@@ -228,7 +252,7 @@ namespace DataAccessLibrary.Repository
 
         public Task<List<Instructor>> SelectAllAsync(Expression<Func<Instructor, bool>> predicate)
         {
-            return _context.Instructors.Where(predicate).ToListAsync();
+            return _context.Instructors.Where(e => !e.IsDeleted).Where(predicate).ToListAsync();
         }
     }
 }

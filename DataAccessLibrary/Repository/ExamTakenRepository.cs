@@ -1,7 +1,7 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace DataAccessLibrary.Repository
@@ -46,9 +46,9 @@ namespace DataAccessLibrary.Repository
             return _context.ExamsTaken.Find(examId);
         }
 
-        public async Task<ExamTaken?> GetByIdAsync(int examId)
+        public ValueTask<ExamTaken?> GetByIdAsync(int examId)
         {
-            return await _context.ExamsTaken.FindAsync(examId);
+            return _context.ExamsTaken.FindAsync(examId);
         }
 
         public ExamTaken? GetByIdWithIncludes(int examId)
@@ -127,22 +127,22 @@ namespace DataAccessLibrary.Repository
 
         public ExamTaken? Select(Expression<Func<ExamTaken, bool>> predicate)
         {
-            return _context.ExamsTaken.Where(predicate).FirstOrDefault();
+            return _context.ExamsTaken.Where(e => !e.IsDeleted).Where(predicate).FirstOrDefault();
         }
 
         public Task<ExamTaken?> SelectAsync(Expression<Func<ExamTaken, bool>> predicate)
         {
-            return _context.ExamsTaken.Where(predicate).FirstOrDefaultAsync();
+            return _context.ExamsTaken.Where(e => !e.IsDeleted).Where(predicate).FirstOrDefaultAsync();
         }
 
         public List<ExamTaken> SelectAll(Expression<Func<ExamTaken, bool>> predicate)
         {
-            return _context.ExamsTaken.Where(predicate).ToList();
+            return _context.ExamsTaken.Where(e => !e.IsDeleted).Where(predicate).ToList();
         }
 
         public Task<List<ExamTaken>> SelectAllAsync(Expression<Func<ExamTaken, bool>> predicate)
         {
-            return _context.ExamsTaken.Where(predicate).ToListAsync();
+            return _context.ExamsTaken.Where(e => !e.IsDeleted).Where(predicate).ToListAsync();
         }
 
         public ExamTaken? GetByStudentId(int studentId)
@@ -161,7 +161,7 @@ namespace DataAccessLibrary.Repository
                         .Include(e => e.Student)
                         .Include(e => e.Exam)
                         .ThenInclude(e => e.Course)
-                        .Where(e => e.StudentId == studentId)
+                        .Where(e => !e.IsDeleted && e.StudentId == studentId)
                         .ToList();
         }
 
@@ -171,24 +171,24 @@ namespace DataAccessLibrary.Repository
                      .Include(e => e.Student)
                      .Include(e => e.Exam)
                      .ThenInclude(e => e.Course)
-                     .Where(e => e.StudentId == studentId)
+                     .Where(e => !e.IsDeleted && e.StudentId == studentId)
                      .ToListAsync();
         }
 
-        public ExamTaken? GetByStudentIdWithIncludes(int studentId)
+        public ExamTaken? GetExamTakenWithIncludes(int studentId, int examId)
         {
             return _context.ExamsTaken
                     .Include(e => e.Student)
                     .Include(e => e.Exam)
-                    .FirstOrDefault(e => e.StudentId == studentId);
+                    .FirstOrDefault(e => !e.IsDeleted && e.StudentId == studentId && e.ExamId == examId);
         }
 
-        public Task<ExamTaken?> GetByStudentIdWithIncludesAsync(int studentId)
+        public Task<ExamTaken?> GetExamTakenWithIncludesAsync(int studentId, int examId)
         {
             return _context.ExamsTaken
                     .Include(e => e.Student)
                     .Include(e => e.Exam)
-                    .FirstOrDefaultAsync(e => e.StudentId == studentId);
+                    .FirstOrDefaultAsync(e => !e.IsDeleted && e.StudentId == studentId && e.ExamId == examId);
         }
     }
 }

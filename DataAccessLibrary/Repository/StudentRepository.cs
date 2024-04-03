@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Data;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -49,9 +50,9 @@ namespace DataAccessLibrary.Repository
             return _context.Students.Find(id);
         }
 
-        public async Task<Student?> GetByIdAsync(int id)
+        public ValueTask<Student?> GetByIdAsync(int id)
         {
-            return await _context.Students.FindAsync(id);
+            return _context.Students.FindAsync(id);
         }
 
         public Student? GetByIdWithIncludes(int id)
@@ -132,7 +133,7 @@ namespace DataAccessLibrary.Repository
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var student = _context.Students.Find(id);
+            var student = await _context.Students.FindAsync(id);
             if (student != null)
             {
                 student.IsDeleted = true;
@@ -154,59 +155,71 @@ namespace DataAccessLibrary.Repository
 
         public List<Student> SelectAll(Expression<Func<Student, bool>> predicate)
         {
-            return _context.Students.Where(predicate).ToList();
+            return _context.Students.Where(e => !e.IsDeleted).Where(predicate).ToList();
         }
 
         public Task<List<Student>> SelectAllAsync(Expression<Func<Student, bool>> predicate)
         {
-            return _context.Students.Where(predicate).ToListAsync();
+            return _context.Students.Where(e => !e.IsDeleted).Where(predicate).ToListAsync();
         }
 
-        public List<ExamChoices> GetStudentAnswers(int studentId, int examId)
+        public async Task<List<ExamChoices>> GetStudentAnswersAsync(int studentId, int examId)
         {
-            var student = _context.Students
-                .Include(e => e.StudentAnswers.Where(e => e.ExamId == examId))
-                .ThenInclude(e => e.Choice)
-                .ThenInclude(e => e.Question)
-                .FirstOrDefault(e => e.Id == studentId);
+            var examQuestions = await _context.Exams.Where(e => !e.IsDeleted && e.Id == examId)
+                   .Include(e => e.Questions)
+                        .ThenInclude(e => e.Choices)
+                   .Select(e => e.Questions)
+                   .FirstOrDefaultAsync();
 
-            var questionCorrectChoices = new List<Choice>();
-            var studentChoicesForQuestion = new List<Choice>();
+            var studentAnswers = await _context.StudentAnswers
+                    .Where(e => e.StudentId == studentId && e.ExamId == examId)
+                    .Include(e => e.Choice)
+                    .Select(e => e.Choice)
+                    .ToListAsync();
+
+            var answersLookUp = studentAnswers.ToLookup(e => e.QuestionId);
+
             var result = new List<ExamChoices>();
-            bool isQuestionCorrect;
-            if (student != null)
+
+            foreach (var question in examQuestions)
             {
-                var listOfChoices = student.StudentAnswers.Select(e => e.Choice);
-                foreach (var choice in listOfChoices)
+                var correctChoicesForQuestion = question.Choices.Where(e => e.IsCorrect).ToList();
+                var stdChoicesForQuestion = answersLookUp[question.Id].ToList();
+                result.Add(new ExamChoices()
                 {
-                    if (!result.Select(r => r.Question).Contains(choice.Question))
-                    {
-                        Question question = choice.Question;
-                        questionCorrectChoices = _context.Choices.Where(e => e.QuestionId == question.Id && e.IsCorrect).ToList();
-                        studentChoicesForQuestion = listOfChoices.Where(e => e.QuestionId == question.Id).ToList();
-                        isQuestionCorrect = questionCorrectChoices.Count == studentChoicesForQuestion.Count
-                                         && questionCorrectChoices.Count == studentChoicesForQuestion.FindAll(e => e.IsCorrect).Count;
-                        result.Add(new ExamChoices
-                        {
-                            Question = choice.Question,
-                            CorrectChoices = questionCorrectChoices,
-                            StudentChoices = studentChoicesForQuestion,
-                            IsCorrect = isQuestionCorrect
-                        });
-                    }
-                }
+                    Question = question,
+                    CorrectChoices = correctChoicesForQuestion,
+                    StudentChoices = stdChoicesForQuestion,
+                    IsCorrect = stdChoicesForQuestion.All(e => e.IsCorrect) &&
+                    stdChoicesForQuestion.Count == correctChoicesForQuestion.Count
+                });
             }
+
+
             return result;
         }
+
         public void AddStudentAnswers(int examId, int studentId, List<Choice> choices)
         {
-            
+
             foreach (Choice choice in choices)
             {
-                StudentAnswer studentAnswer = new StudentAnswer { ExamId = examId, StudentId = studentId,ChoiceId=choice.Id };
+                StudentAnswer studentAnswer = new StudentAnswer { ExamId = examId, StudentId = studentId, ChoiceId = choice.Id };
                 _context.StudentAnswers.Add(studentAnswer);
             }
             _context.SaveChanges();
+        }
+
+        public async Task<bool> AddStudentAnswersAsync(int examId, int studentId, List<Choice> choices)
+        {
+            var studentAnswers = new List<StudentAnswer>();
+            foreach (Choice choice in choices)
+            {
+                StudentAnswer studentAnswer = new StudentAnswer { ExamId = examId, StudentId = studentId, ChoiceId = choice.Id };
+                studentAnswers.Add(studentAnswer);
+            }
+            await _context.StudentAnswers.AddRangeAsync(studentAnswers);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

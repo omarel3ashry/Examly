@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DataAccessLibrary.Model.Branch" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAIAAAAAAACIAAAQAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Model\Branch.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.Choice" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAQAAAAAAAAAAAAAAAEAAIACQQAAAA=</HashCode>
+      <FileName>Model\Choice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.Course" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAAQAAAAAAAAEAAAAASBgAAA=</HashCode>
+      <FileName>Model\Course.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.Department" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICAAAAAAAAAAAAAAAJAAQAACAABAgAAAAAAQBgAAA=</HashCode>
+      <FileName>Model\Department.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.DepartmentCourse" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAgAAAAIAAAAAAECAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Model\DepartmentCourse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.Exam" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAIGAAAEAAAAgEAQAIAAAAAAEAAAAAAEAAAAAQAAAgA=</HashCode>
+      <FileName>Model\Exam.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.ExamChoices" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAAAAAAAAQAEAAIAAAAAAAA=</HashCode>
+      <FileName>Model\ExamChoices.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.ExamQuestion" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAA=</HashCode>
+      <FileName>Model\ExamQuestion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.ExamTaken" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAABAAAAAAQGCAAA=</HashCode>
+      <FileName>Model\ExamTaken.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.Instructor" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAACAAEABAAwAAEAAAAgGAAAAIQBAAAA=</HashCode>
+      <FileName>Model\Instructor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.Question" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAAAAAAAAQAABIAAAAAAACAAAAAAAQQACQEgAAA=</HashCode>
+      <FileName>Model\Question.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.Role" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.Student" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAgACQAEAAAAwAEAAAAAACAAAAIQAgAAA=</HashCode>
+      <FileName>Model\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.StudentAnswer" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAQAAAAAAAAAAAAAAAAAAACABAAAAAAACCAAA=</HashCode>
+      <FileName>Model\StudentAnswer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.Topic" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAARAAAAA=</HashCode>
+      <FileName>Model\Topic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataAccessLibrary.Model.User" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAIAQCAAAAAAEAAAAAAAAAAAAAACAAQAAAAAAAA=</HashCode>
+      <FileName>Model\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="DataAccessLibrary.Model.QType" Collapsed="true">
+    <Position X="2.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAEAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Question.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DataAccessLibrary.Model.QDifficulty" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkAAA=</HashCode>
+      <FileName>Model\Question.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

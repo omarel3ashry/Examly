@@ -1,36 +1,47 @@
-﻿@model IEnumerable<ExamTaken>
+﻿@model IEnumerable<AdminExamTakenViewModel>
 @{
-    ViewData["Title"] = "Dashboard | Grades";
 }
-<a class="btn success" asp-action="Index" asp-route-deptId="@ViewBag.DeptId">Back</a>
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>Course Namee</th>
-            <th>Date Taken</th>
-            <th>Grade</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Count() > 0)
-            foreach (var examTaken in Model)
-            {
-                <tr>
-                    <td>@examTaken.Exam.Course.Name</td>
-                    <td>@examTaken.Exam.ExamDate</td>
-                    <td>@examTaken.Grade</td>
-                    <td>
-                        <a class="btn info" asp-action="Answers" asp-route-stId="@examTaken.StudentId" asp-route-examId="@examTaken.ExamId">Answers</a>
-                    </td>
-                </tr>
-            }
-        else
-        {
-            <tr>
-                <td colspan="4">No Exams for this Student </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
+<indicator hidden>admin-dash</indicator>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title">Grades</p>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table display expandable-table">
+                            <thead>
+                                <tr>
+                                    <th>Course Namee</th>
+                                    <th>Date Taken</th>
+                                    <th>Grade</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Count() > 0)
+                                    foreach (var examTaken in Model)
+                                    {
+                                        <tr>
+                                            <td>@examTaken.CourseName</td>
+                                            <td>@examTaken.ExamDate</td>
+                                            <td>@examTaken.Grade</td>
+                                            <td>
+                                                <a class="btn btn-primary" asp-action="Answers" asp-route-stId="@examTaken.StudentId" asp-route-examId="@examTaken.ExamId">Answers</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4">No Exams for this Student </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

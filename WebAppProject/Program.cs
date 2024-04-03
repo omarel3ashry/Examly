@@ -1,9 +1,8 @@
 using DataAccessLibrary.Data;
-using DataAccessLibrary.Model;
+using DataAccessLibrary.Interfaces;
 using DataAccessLibrary.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using WebAppProject.Models;
 
 
 namespace WebAppProject
@@ -38,6 +37,9 @@ namespace WebAppProject
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             builder.Services.AddHttpContextAccessor();
 
+            builder.Services.AddAutoMapper(typeof(Program));
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -49,8 +51,8 @@ namespace WebAppProject
             }
 
             app.UseHttpsRedirection();
+            app.UseStatusCodePagesWithRedirects("/Error/{0}");
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
