@@ -165,58 +165,37 @@ namespace DataAccessLibrary.Repository
 
         public async Task<List<ExamChoices>> GetStudentAnswersAsync(int studentId, int examId)
         {
-            var student = await _context.Students
-                .Include(e => e.StudentAnswers.Where(e => e.ExamId == examId))
-                .ThenInclude(e => e.Choice)
-                .ThenInclude(e => e.Question)
-                .FirstOrDefaultAsync(e => e.Id == studentId);
-            var exam = await _context.Exams
-                .Include(e => e.Questions)
-                .FirstOrDefaultAsync(e => e.Id == examId);
-            var answeredQuestions = new List<Question>();
-            var questionCorrectChoices = new List<Choice>();
-            var studentChoicesForQuestion = new List<Choice>();
+            var examQuestions = await _context.Exams.Where(e => !e.IsDeleted && e.Id == examId)
+                   .Include(e => e.Questions)
+                        .ThenInclude(e => e.Choices)
+                   .Select(e => e.Questions)
+                   .FirstOrDefaultAsync();
+
+            var studentAnswers = await _context.StudentAnswers
+                    .Where(e => e.StudentId == studentId && e.ExamId == examId)
+                    .Include(e => e.Choice)
+                    .Select(e => e.Choice)
+                    .ToListAsync();
+
+            var answersLookUp = studentAnswers.ToLookup(e => e.QuestionId);
+
             var result = new List<ExamChoices>();
-            bool isQuestionCorrect;
-            if (student != null && exam != null)
+
+            foreach (var question in examQuestions)
             {
-                var listOfChoices = student.StudentAnswers.Select(e => e.Choice);
-                foreach (var choice in listOfChoices)
+                var correctChoicesForQuestion = question.Choices.Where(e => e.IsCorrect).ToList();
+                var stdChoicesForQuestion = answersLookUp[question.Id].ToList();
+                result.Add(new ExamChoices()
                 {
-                    if (!result.Select(r => r.Question).Contains(choice.Question))
-                    {
-                        Question question = choice.Question;
-                        answeredQuestions.Add(question);
-                        questionCorrectChoices = await _context.Choices.Where(e => e.QuestionId == question.Id && e.IsCorrect).ToListAsync();
-                        studentChoicesForQuestion = listOfChoices.Where(e => e.QuestionId == question.Id).ToList();
-                        isQuestionCorrect = questionCorrectChoices.Count == studentChoicesForQuestion.Count
-                                         && questionCorrectChoices.Count == studentChoicesForQuestion.FindAll(e => e.IsCorrect).Count;
-                        result.Add(new ExamChoices
-                        {
-                            Question = choice.Question,
-                            CorrectChoices = questionCorrectChoices,
-                            StudentChoices = studentChoicesForQuestion,
-                            IsCorrect = isQuestionCorrect
-                        });
-                    }
-                }
-                if (exam.Questions.Count != answeredQuestions.Count)
-                {
-                    foreach (var question in exam.Questions)
-                    {
-                        if (!answeredQuestions.Contains(question))
-                        {
-                            result.Add(new ExamChoices
-                            {
-                                Question = question,
-                                CorrectChoices = await _context.Choices.Where(e => e.QuestionId == question.Id && e.IsCorrect).ToListAsync(),
-                                StudentChoices = new List<Choice>(),
-                                IsCorrect = false
-                            });
-                        }
-                    }
-                }
+                    Question = question,
+                    CorrectChoices = correctChoicesForQuestion,
+                    StudentChoices = stdChoicesForQuestion,
+                    IsCorrect = stdChoicesForQuestion.All(e => e.IsCorrect) &&
+                    stdChoicesForQuestion.Count == correctChoicesForQuestion.Count
+                });
             }
+
+
             return result;
         }
 

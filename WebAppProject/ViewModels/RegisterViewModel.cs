@@ -11,7 +11,7 @@ namespace WebAppProject.ViewModels
         [RegularExpression(@"[a-zA-Z-]+", ErrorMessage = "Name must contain only characters")]
         public string Name { get; set; }
         [Required(ErrorMessage = "*")]
-        [RegularExpression("[a-zA-Z0-9_]+@[a-zA-Z]+.[a-zA-Z]{2,4}", ErrorMessage = "Invalid mail")]
+        [RegularExpression(@"^[\w-]+(\.[\w-]+)*@([\w -]+\.)+[a-zA-Z]{2,7}$", ErrorMessage = "Invalid mail")]
         [Remote("CheckEmail", "Account", ErrorMessage = "Email already exists")]
         public string Email { get; set; }
         [Required(ErrorMessage = "*")]

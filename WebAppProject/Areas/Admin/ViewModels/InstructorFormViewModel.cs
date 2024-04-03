@@ -13,7 +13,7 @@ namespace WebAppProject.Areas.Admin.ViewModels
 
         [RegularExpression(@"^[\w-]+(\.[\w-]+)*@([\w -]+\.)+[a-zA-Z]{2,7}$", ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
-        [MinLength(4, ErrorMessage = "Password must be at least 4 characters.")]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters.")]
         public string Password { get; set; }
 
         [MinLength(7, ErrorMessage = "Phone must be at least 7 Numbers.")]

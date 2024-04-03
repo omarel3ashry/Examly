@@ -1,6 +1,6 @@
 ﻿@model StudentExamsViewModel
 @{
-    ViewData["Title"] = "E-Exam | Exams";
+    ViewData["Title"] = "Exams List - Examly";
 }
 <indicator hidden>std-exams</indicator>
 <div class="row">
@@ -27,9 +27,9 @@
                                                 <td>@commingExam.CourseName | @commingExam.Title | @commingExam.TotalGrade</td>
                                                 <td class="datestr">@commingExam.ExamDate</td>
                                                 <td>
-                                                    
-                                                        <a class="btn btn-primary takeBtn" asp-action="TakeExam" asp-controller="Student" asp-route-examId="@commingExam.Id">Take Exam</a>
-                                                    
+
+                                                    <a class="btn btn-primary takeBtn" asp-action="TakeExam" asp-controller="Student" asp-route-examId="@commingExam.Id">Take Exam</a>
+
                                                 </td>
                                             </tr>
                                         }
@@ -61,6 +61,7 @@
                                     <tr>
                                         <th>Exam Name</th>
                                         <th>Date</th>
+                                        <th></th>
                                         <th>Grades</th>
                                         <th>Answers</th>
                                     </tr>
@@ -69,23 +70,30 @@
                                     @if (Model.ExamsTaken.Count() > 0)
                                         foreach (var examTaken in Model.ExamsTaken)
                                         {
+                                            int percentage = (int)(((double)examTaken.Grade / examTaken.Exam.TotalGrade ?? 1) * 100);
+                                            string progressColor = percentage <= 49 ? "bg-danger" : percentage <= 79 ? "bg-warning" : "bg-success";
                                             <tr>
-                                                <td>@examTaken.Exam.CourseName | @examTaken.Exam.Title</td>
-                                                <td>@examTaken.Exam.ExamDate</td>
-                                                <td>@examTaken.Grade/@examTaken.Exam.TotalGrade</td>
-                                                <td>
+                                                <td class="col-md-3">@examTaken.Exam.CourseName | @examTaken.Exam.Title</td>
+                                                <td class="col-md-3">@examTaken.Exam.ExamDate</td>
+                                                <td >
+                                                    <div class="progress">
+                                                        <div class="progress-bar @progressColor" role="progressbar" style="width: @(percentage)%" aria-valuemax="100"></div>
+                                                    </div>
+                                                </td>
+                                                <td class="col-md-2">@examTaken.Grade/@examTaken.Exam.TotalGrade</td>
+                                                <td class="col-1">
                                                     <a asp-action="Answers" asp-controller="Student" asp-route-examId="@examTaken.ExamId">
-                                                        <button type="button"class="btn btn-inverse-primary btn-rounded btn-icon-md ml-4">
-                                                                <i class="mdi mdi-table-large"></i>
+                                                        <button type="button" class="btn btn-inverse-primary btn-rounded btn-icon-md ml-4">
+                                                            <i class="mdi mdi-table-large"></i>
                                                         </button>
-                                                    </a>                                                                                                       
+                                                    </a>
                                                 </td>
                                             </tr>
                                         }
                                     else
                                     {
                                         <tr>
-                                            <td colspan="4" class="text-center">No Exams Taken</td>
+                                            <td colspan="5" class="text-center">No Exams Taken</td>
                                         </tr>
                                     }
                                 </tbody>

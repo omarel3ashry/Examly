@@ -201,12 +201,12 @@ namespace DataAccessLibrary.Repository
 
         public List<Exam> SelectAll(Expression<Func<Exam, bool>> predicate)
         {
-            return _context.Exams.Where(predicate).ToList();
+            return _context.Exams.Where(e => !e.IsDeleted).Where(predicate).ToList();
         }
 
         public Task<List<Exam>> SelectAllAsync(Expression<Func<Exam, bool>> predicate)
         {
-            return _context.Exams.Where(predicate).ToListAsync();
+            return _context.Exams.Where(e => !e.IsDeleted).Where(predicate).ToListAsync();
         }
 
         public List<Exam> GetInstructorExams(int instructorId)

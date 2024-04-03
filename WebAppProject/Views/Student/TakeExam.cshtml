@@ -1,7 +1,7 @@
 ﻿@model TakeExamViewModel
 @{
     Layout = "_Layout";
-    ViewData["Title"] = $"{@Model.DepartmentCourse.CourseName} Exam";
+    ViewData["Title"] = $"{@Model.DepartmentCourse.CourseName} Exam - Examly";
     var mcqQuestions = Model.Exam.Questions.Where(e => e.Type == QVMType.MCQ).ToList();
     var tfQuestions = Model.Exam.Questions.Where(e => e.Type == QVMType.TrueFalse).ToList();
 }

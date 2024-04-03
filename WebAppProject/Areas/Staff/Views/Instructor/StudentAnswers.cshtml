@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<StudentAnswersViewModel>
 @{
-    ViewData["Title"] = "E-Exam | Answers";
+    ViewData["Title"] = "Student Answers - Examly";
 }
 <indicator hidden>inst-exams</indicator>
 <div class="row">
@@ -31,16 +31,24 @@
                                 <tbody>
                                     @foreach (var examChoice in Model)
                                     {
+                                        string choiceClass = examChoice.IsCorrect ? "text-success" : "text-danger";
                                         <tr>
                                             <td>@examChoice.QuestionText</td>
                                             <td>@examChoice.QuestionGrade</td>
                                             <td>
-                                                <ul class="mb-0">
-                                                    @foreach (var choice in examChoice.StudentChoices)
-                                                    {
-                                                        <li class="@(choice.IsCorrect?"text-success" :"text-danger")">@choice.Text</li>
-                                                    }
-                                                </ul>
+                                                @if (examChoice.StudentChoices.Count > 0)
+                                                {
+                                                    <ul class="mb-0">
+                                                        @foreach (var choice in examChoice.StudentChoices)
+                                                        {
+                                                            <li class="@choiceClass">@choice.Text</li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <p class="text-danger">Unanswered</p>
+                                                }
                                             </td>
                                             <td>
                                                 <ul class="mb-0">

@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<StaffExamTakenViewModel>
 
 @{
-    ViewData["Title"] = "Exam Grades";
+    ViewData["Title"] = "Exam Grades - Examly";
     string examTitle = Model != null && Model.Count() > 0 ? " - " + @Model.ElementAt(0).ExamTitle : string.Empty;
 }
 <indicator hidden>inst-exams</indicator>

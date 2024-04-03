@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<StudentAnswersViewModel>
 @{
-    ViewData["Title"] = "E-Exam | Answers";
+    ViewData["Title"] = "Answers - Examly";
 }
 <indicator hidden>std-exams</indicator>
 <div class="row">
@@ -31,16 +31,16 @@
                                             <td>
                                                 @if (examChoice.StudentChoices.Count > 0)
                                                 {
-                                                    <ul class="mb-0">                                                       
-                                                    @foreach (var choice in examChoice.StudentChoices)
-                                                    {
-                                                        <li class="@choiceClass">@choice.Text</li>
-                                                    }
+                                                    <ul class="mb-0">
+                                                        @foreach (var choice in examChoice.StudentChoices)
+                                                        {
+                                                            <li class="@choiceClass">@choice.Text</li>
+                                                        }
                                                     </ul>
                                                 }
                                                 else
                                                 {
-                                                    <p>Unanswered</p>
+                                                    <p class="text-danger">Unanswered</p>
                                                 }
                                             </td>
                                             <td>
@@ -53,13 +53,13 @@
                                             </td>
                                             <td>
                                                 @if (examChoice.IsCorrect)
-                                                {                                                    
+                                                {
                                                     <i class="mdi mdi-24px mdi-check-circle text-success"></i>
                                                 }
                                                 else
-                                                {               
+                                                {
                                                     <i class="mdi mdi-24px mdi-close-circle text-danger"></i>
-                                                }                                                
+                                                }
                                             </td>
                                         </tr>
                                     }

@@ -105,7 +105,6 @@ namespace WebAppProject.Areas.Staff.Controllers
                 if (questionVM.Choices.Count == 2)
                 {
                     questionVM.Choices[0].IsCorrect = true;
-                    questionVM.Choices[1].Text = questionVM.Choices[0].Text.Equals("True") ? "False" : "True";
                 }
 
                 var questionDto = _mapper.Map<Question>(questionVM);
@@ -155,6 +154,10 @@ namespace WebAppProject.Areas.Staff.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (questionVM.Choices.Count == 2)
+                {
+                    questionVM.Choices[0].IsCorrect = true;
+                }
                 var questionDto = _mapper.Map<Question>(questionVM);
                 await _questionRepo.UpdateAsync(questionDto);
                 return RedirectToAction("QuestionBank", new { id = questionVM.CourseId });

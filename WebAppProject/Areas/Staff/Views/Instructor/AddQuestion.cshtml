@@ -1,7 +1,7 @@
 ﻿@model QuestionViewModel
 
 @{
-    ViewData["Title"] = "Add Question";
+    ViewData["Title"] = "Add Question - Examly";
 }
 <indicator hidden>inst-courses</indicator>
 <div class="row">
@@ -53,6 +53,14 @@
                     $("#choicesContainer").load("/Staff/Instructor/AddChoices/2");
                 }
             });
+        });
+        document.querySelector('form').addEventListener("submit", function () {
+            if (document.querySelector('#trueFalseContainer') !== undefined) {
+                console.log(document.querySelector('input[type=radio]:not(:checked)').value);
+
+                document.querySelector('#incorrectChoice').value =
+                document.querySelector('input[type=radio]:not(:checked)').value;
+            }
         });
     </script>
 }

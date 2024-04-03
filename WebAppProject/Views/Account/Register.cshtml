@@ -2,6 +2,7 @@
 
 @{
     Layout = "_LoginLayout";
+    ViewData["Title"] = "Register - Examly";
     Dictionary<int, string> branches = ViewBag.Branches;
     SelectList BranchList = new SelectList(branches.Select(x => new { Value = x.Key, Text = x.Value }),"Value","Text");
     SelectList GenderItems = new SelectList(Model.GenderOptions, "Value", "Text");

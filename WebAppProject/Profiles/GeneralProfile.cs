@@ -8,7 +8,7 @@ namespace WebAppProject.Profiles
     {
         public GeneralProfile()
         {
-            CreateMap<Course, CourseViewModel>();
+            CreateMap<Course, CourseViewModel>().ReverseMap();
 
             CreateMap<ExamChoices, StudentAnswersViewModel>()
                 .ForMember(dest => dest.QuestionText, opt => opt.MapFrom(src => src.Question.Text))

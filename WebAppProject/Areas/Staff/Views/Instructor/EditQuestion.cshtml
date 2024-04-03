@@ -1,7 +1,7 @@
 ﻿@model QuestionViewModel
 
 @{
-    ViewData["Title"] = "Edit Question";
+    ViewData["Title"] = "Edit Question - Examly";
 }
 <indicator hidden>inst-courses</indicator>
 <div class="row">
@@ -44,3 +44,16 @@
         </div>
     </div>
 </div>
+<script src="/lib/jquery/dist/jquery.js"></script>
+@section Scripts {
+    <script>
+        document.querySelector('form').addEventListener("submit", function () {
+            if (document.querySelector('#trueFalseContainer') !== undefined) {
+                console.log(document.querySelector('input[type=radio]:not(:checked)').value);
+
+                document.querySelector('#incorrectChoice').value =
+                    document.querySelector('input[type=radio]:not(:checked)').value;
+            }
+        });
+    </script>
+}
