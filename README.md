@@ -13,6 +13,8 @@
 
 # Examly
 
+Examly is built with a focus on best practices in software design. We employ the Dependency Inversion Principle and Dependency Injection pattern to promote loose coupling and facilitate easier testing and maintainability. Additionally, we've separated the data access layer into a dedicated library for clearer code organization and maintenance. These architectural decisions ensure a scalable, maintainable, and flexible solution for online examinations.
+
 Examly is an Online Examination Web Application, a comprehensive platform designed to facilitate educational institutions in conducting exams efficiently. It offers a range of features tailored to meet the needs of administrators, instructors, and students.
 
 ## Features
