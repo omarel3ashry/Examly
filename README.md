@@ -48,6 +48,7 @@ Examly is an Online Examination Web Application, a comprehensive platform design
 The dedicated developers whose hard work and expertise brought this project to life.
 <table>
   <tr>
+    <td align="center" valign="top" width="15%"><a href="https://github.com/omarel3ashry" style:"border-radius:50%;"><img src="https://avatars.githubusercontent.com/u/32119955?v=4"  width="100px;" /><br /><sub><b>Omar Elashry</b></sub></a><br /></td>
     <td align="center" valign="top" width="15%"><a href="https://github.com/karimalshal666" style:"border-radius:50%;"><img src="https://avatars.githubusercontent.com/u/157370888?v=4"  width="100px;" /><br /><sub><b>Karim Alshal</b></sub></a><br /></td>
     <td align="center" valign="top" width="20%"><a href="https://github.com/Mo3bdelrahman" style:"border-radius:50%;"><img src="https://avatars.githubusercontent.com/u/61760258?v=4"  width="100px;" /><br /><sub><b>Mohamed Abdelrahman</b></sub></a><br /></td>
     <td align="center" valign="top" width="15%"><a href="https://github.com/hossameltayeb83" style:"border-radius:50%;"><img src="https://avatars.githubusercontent.com/u/96459585?v=4"  width="100px;" /><br /><sub><b>Hossam Eltayeb</b></sub></a><br /></td>
